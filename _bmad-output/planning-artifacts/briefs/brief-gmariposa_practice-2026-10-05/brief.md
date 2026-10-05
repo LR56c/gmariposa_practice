@@ -46,8 +46,8 @@ Un repositorio público con `flutter_app/` y `angular_app/`, `README.md` y `RESP
 **Dentro (apoyo):** dirección visual con `bmad-ux` y un Stitch pequeño (listado, detalle, carrito y panel de pedidos), sin sobreinvertir.
 
 **Deseables y bonus, con regla de corte.** Cada uno solo empieza cuando los obligatorios de su parte están cerrados, probados y con `analyze` limpio:
-- Deseables de Flutter: paginación infinita, filtro por categoría, persistencia del carrito, `go_router`, errores tipados y tema claro/oscuro.
-- Deseables de Angular: ruta de detalle con lazy loading, signals, control flow nuevo, pipe propio y OnPush.
+- Deseables de Flutter: paginación infinita, filtro por categoría, persistencia del carrito, `go_router` y tema claro/oscuro. Los errores tipados pasaron a obligatorios por decisión del candidato (FR-12 del PRD).
+- Deseables de Angular, priorizados: ruta de detalle con lazy loading, signals, control flow nuevo, pipe propio y OnPush. Se abren apenas se cierran los obligatorios de Angular, antes que cualquier deseable o bonus de Flutter (PRD §6.1).
 - Bonus: `riverpod_generator` (decidido desde el inicio para evitar migrar al final), prueba de integración del flujo buscar → detalle → carrito, y GitHub Action con `analyze` y `test`.
 
 **Fuera:** backend propio, autenticación, despliegue, compliance de datos personales y diseño visual elaborado.
