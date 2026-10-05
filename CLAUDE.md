@@ -18,11 +18,29 @@ Checklist general del usuario: `E:\dev\Projects\project-checklist.md` (aplicar s
   (scope = `flutter`, `angular`, `docs`, `repo`). Commits pequeños y frecuentes dentro de la rama.
 - Cada story BMAD debe incluir en sus tareas: crear rama, commits convencionales, merge.
 
+## Estructura y convenciones por carpeta
+- `flutter_app/` (Flutter/Dart): crear con `flutter create`; `snake_case` en archivos, `UpperCamelCase` en tipos,
+  Effective Dart, `flutter_lints`/`very_good_analysis`, `dart format`, widgets `const` y pequeños, capas
+  data/domain/presentation por feature (estructura sugerida del PDF). Skills: `flutter-apply-architecture-best-practices`,
+  `flutter-add-widget-test`, `flutter-implement-json-serialization`, `flutter-use-http-package`,
+  `flutter-setup-declarative-routing`, `flutter-fix-layout-issues`, `ecc:dart-flutter-patterns`, `ecc:flutter-dart-code-review`.
+- `angular_app/` (Angular 17+): crear con `ng new` (standalone, TS `strict`); guía de estilo oficial de Angular
+  (archivos `*.component.ts`, `*.service.ts`, kebab-case), `inject()`, signals, `@if/@for` con `track`, OnPush en
+  presentacionales. Skills: `angular-developer`, `angular-new-app`, `angular-component`, `angular-signals`, `angular-forms`,
+  `angular-http`, `angular-routing`, `angular-di`, `angular-testing`.
+- Cada carpeta es independiente (su propio lint/test/CI); no mezclar convenciones entre ambas.
+
+## UX / Diseño (incluido, alcance pequeño)
+- Usar `bmad-ux` (DESIGN.md + EXPERIENCE.md) con revisión de **direcciones visuales** antes de construir UI.
+- Hacer un **Stitch pequeño**: pocas pantallas clave (listado, detalle, carrito; panel de pedidos Angular) y un
+  índice pantalla ↔ story (checklist §6) usado como gate en las stories de UI.
+- El PDF no exige diseño elaborado: UI ordenada y consistente; no sobreinvertir.
+
 ## Aplicación del checklist a este proyecto
 Aplican: §4 Flutter (solo lo compatible con el PDF), §5 patrón de errores (como `Failure`/`Result`),
-§7 mantenimiento (indexar con codebase-memory-mcp al haber código).
+§6 Stitch + índice (versión mínima), §7 mantenimiento (indexar con codebase-memory-mcp al haber código).
 No aplican (prueba técnica sin datos personales ni deploy): compliance Chile/ARCO, Clerk, Sevalla/Neon,
-Stitch, security-auditor por epic (opcional al final).
+security-auditor por epic (opcional al final).
 
 ### Tensiones checklist vs PDF (decidir con coaching)
 - PDF exige estado **solo con Riverpod** (2.x/3.x): NO usar `flutter_hooks` para estado de negocio.
