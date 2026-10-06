@@ -7,7 +7,7 @@ import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/page.dart';
-import 'package:flutter_app/features/products/data/product_repository_impl.dart';
+import 'package:flutter_app/features/products/data/dio_product_data.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -50,9 +50,8 @@ ResponseBody _json(Object body, {int status = 200}) => ResponseBody.fromString(
   },
 );
 
-ProductRepositoryImpl _repo(
-  Future<ResponseBody> Function(RequestOptions) handler,
-) => ProductRepositoryImpl(Dio()..httpClientAdapter = _FakeAdapter(handler));
+DioProductData _repo(Future<ResponseBody> Function(RequestOptions) handler) =>
+    DioProductData(Dio()..httpClientAdapter = _FakeAdapter(handler));
 
 Map<String, Object> _product({Object price = 9.99}) => {
   'id': 1,

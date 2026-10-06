@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_repository_impl.dart';
+part of 'product_repository_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -8,12 +8,9 @@ part of 'product_repository_impl.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The only `data` import allowed from `presentation` (AD-2).
 
 @ProviderFor(productRepository)
 final productRepositoryProvider = ProductRepositoryProvider._();
-
-/// The only `data` import allowed from `presentation` (AD-2).
 
 final class ProductRepositoryProvider
     extends
@@ -23,7 +20,6 @@ final class ProductRepositoryProvider
           ProductRepository
         >
     with $Provider<ProductRepository> {
-  /// The only `data` import allowed from `presentation` (AD-2).
   ProductRepositoryProvider._()
     : super(
         from: null,
@@ -58,4 +54,4 @@ final class ProductRepositoryProvider
   }
 }
 
-String _$productRepositoryHash() => r'ca17317a9d3f912040c4653ad4043f2737717317';
+String _$productRepositoryHash() => r'86fd70154d8f5920f60302f1fa4bc4b66df00c0b';
