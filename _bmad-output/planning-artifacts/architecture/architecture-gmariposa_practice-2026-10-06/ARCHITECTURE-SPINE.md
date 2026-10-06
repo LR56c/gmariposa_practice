@@ -101,13 +101,13 @@ flowchart LR
   - "Reintentar" de la carga inicial es siempre `ref.invalidate(catalogProvider)`. El de `loadMore` vuelve a llamar a `loadMore()`.
   - El gatillo de `loadMore()` es el `ScrollController` de la UI.
 
-### AD-7 — Cart sin red y con lógica pura [ADOPTED]
+### AD-7 — Cart sin red y con la lógica en su Notifier [ADOPTED]
 
 - **Binds:** FR-6, FR-7, FR-8, FR-9
 - **Prevents:** lógica de negocio en widgets; un contador distinto del total; un Cart que se vacía al navegar; dos definiciones de `CartItem`.
 - **Rule:**
-  - `CartItem { Product product, int quantity }` se define una sola vez en `cart/domain/`. Agregar, cambiar cantidad, quitar y total son funciones puras en ese mismo `domain/`. Una cantidad nunca baja de 1 al disminuir.
-  - El `Notifier` del Cart vive en `presentation/`, con `keepAlive`, y es el único dueño del estado.
+  - `CartItem { Product product, int quantity }` se define una sola vez en `cart/domain/`. Una cantidad nunca baja de 1 al disminuir.
+  - El `Notifier` del Cart vive en `presentation/`, con `keepAlive`, es el único dueño del estado y contiene la lógica de agregar, cambiar cantidad y quitar (sin archivo de lógica aparte; decisión de Mauri). `cartTotalProvider` es derivado.
   - `cartCountProvider` se deriva de ese estado (suma de unidades). El total es la suma de precio × cantidad en `double`, y solo se redondea al mostrarlo, con dos decimales y sin símbolo de moneda.
   - El detalle del Product siempre consulta por `id`, sin reutilizar datos del Catalog.
 
@@ -191,7 +191,7 @@ flowchart LR
   - La constitución (`extended-sdd/templates/constitution-ddd.md`) se adopta como referencia, con las desviaciones de esta tabla. Su sección 1 define al cliente como capa delgada sin lógica de dominio.
   - **Aplican:** `error-handling` (cubierta por AD-4 y AD-12), `no-unsafe-type-escapes` (ni `as` ni `!` para forzar tipos; se estrecha con `is`, `switch` o guardas) y `no-dynamic-imports`. Excepción documentada: `loadComponent` de las rutas lazy de Angular es code-splitting de cliente.
   - **No aplican (no hay backend propio):** `module-structure` con use cases, `service-layer`, `repository` como DAO, `mapper`, `error-envelope` (T-1), `shared-module`, `auth`, `audit` y `transactional-state`.
-  - **Value Objects: ninguno.** Los modelos son `freezed` (Flutter) o tipos inferidos del esquema (Angular), con primitivos. La invariante de cantidad mínima 1 del Cart es una función pura de `cart/domain/` (AD-7).
+  - **Value Objects: ninguno.** Los modelos son `freezed` (Flutter) o tipos inferidos del esquema (Angular), con primitivos. La invariante de cantidad mínima 1 del Cart la aplica el Notifier del Cart (AD-7).
 
 ### AD-16 — Angular: store manual, sin NgRx [ADOPTED]
 
@@ -286,7 +286,7 @@ flutter_app/lib/
     products/{data,domain}      # Product, ProductRepository (único dueño); Page<T> está en core/
     catalog/presentation
     product_detail/presentation
-    cart/{domain,presentation}  # CartItem y lógica pura en domain
+    cart/{domain,presentation}  # CartItem en domain; lógica en el Notifier
 angular_app/src/app/
   core/            # errors, tipos compartidos, OrdersService
   features/orders/ # components/, store/ (servicio-store manual, AD-16)

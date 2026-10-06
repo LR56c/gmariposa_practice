@@ -1,7 +1,7 @@
 import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
-import 'package:flutter_app/features/products/presentation/provider/product_repository_provider.dart';
+import 'package:flutter_app/features/products/presentation/providers/product_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'product_detail_provider.g.dart';

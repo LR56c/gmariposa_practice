@@ -5,8 +5,21 @@
   "retry": "Retry",
   "noMoreProducts": "No more products",
   "addToCart": "Add to cart",
+  "addedToCart": "Added to cart",
   "backToCatalog": "Back to catalog",
   "noPhoto": "No photo",
+  "cart": "Cart",
+  "cartEmpty": "Your cart is empty",
+  "cartLabelEmpty": "Empty cart",
+  "cartLabelUnits": "Cart, $units",
+  "remove": "Remove",
+  "decreaseQuantity": "Decrease quantity of $title",
+  "increaseQuantity": "Increase quantity of $title",
+  "units(plural, param=n)": {
+    "one": "$n unit",
+    "other": "$n units"
+  },
+  "total": "Total $amount",
   "errors": {
     "network": "Couldn't connect. Check your connection.",
     "server": "Something went wrong. Please try again.",

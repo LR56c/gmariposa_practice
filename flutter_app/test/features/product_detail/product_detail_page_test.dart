@@ -3,15 +3,17 @@ import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
-import 'package:flutter_app/features/product_detail/presentation/product_detail_page.dart';
+import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:flutter_app/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/domain/product_repository.dart';
-import 'package:flutter_app/features/products/presentation/provider/product_repository_provider.dart';
+import 'package:flutter_app/features/products/presentation/providers/product_repository_provider.dart';
 import 'package:flutter_app/presentation/router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:toastification/toastification.dart';
 
 final Translations _t = AppLocale.es.buildSync();
 
@@ -30,7 +32,7 @@ Widget _app(_MockRepository repository, Widget home) => TranslationProvider(
   child: ProviderScope(
     retry: (_, _) => null,
     overrides: [productRepositoryProvider.overrideWithValue(repository)],
-    child: MaterialApp(home: home),
+    child: ToastificationWrapper(child: MaterialApp(home: home)),
   ),
 );
 
@@ -44,7 +46,7 @@ void main() {
       when(() => repository.getById(id, cancel: any(named: 'cancel')))
           .thenAnswer((_) async => result());
 
-  testWidgets('shows the product and an inactive "Agregar al carrito"', (
+  testWidgets('shows the product and an active "Agregar al carrito"', (
     tester,
   ) async {
     answer(1, () => Right(_product(1)));
@@ -56,8 +58,31 @@ void main() {
     expect(find.text('9.50'), findsOneWidget);
     expect(find.text('★ 4.5'), findsOneWidget);
     final button = tester.widget<FilledButton>(find.byType(FilledButton));
-    expect(button.onPressed, isNull);
+    expect(button.onPressed, isNotNull);
     expect(find.text(_t.addToCart), findsOneWidget);
+  });
+
+  testWidgets('tapping "Agregar al carrito" adds the product and toasts', (
+    tester,
+  ) async {
+    answer(1, () => Right(_product(1)));
+    await tester.pumpWidget(_app(repository, const ProductDetailPage(id: 1)));
+    await tester.pump();
+
+    await tester.tap(find.text(_t.addToCart));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 400));
+
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(ProductDetailPage)),
+    );
+    expect(container.read(cartProvider).single.product.id, 1);
+    expect(find.text(_t.addedToCart), findsOneWidget);
+
+    // Let the toast auto-close so no timer stays pending.
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('shows the error and "Reintentar" reloads the product', (
