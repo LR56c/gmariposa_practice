@@ -57,6 +57,6 @@ void main() {
       ..increase(2)
       ..increase(2);
     expect(container.read(cartTotalProvider), 36);
-    expect(container.read(cartUnitsProvider), 5);
+    expect(container.read(cartCountProvider), 5);
   });
 }

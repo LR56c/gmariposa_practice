@@ -113,27 +113,27 @@ String _$cartTotalHash() => r'3381930fe11c75d5be325687c8c948e73a4341c3';
 
 /// Sum of quantities, not the number of distinct items.
 
-@ProviderFor(cartUnits)
-final cartUnitsProvider = CartUnitsProvider._();
+@ProviderFor(cartCount)
+final cartCountProvider = CartCountProvider._();
 
 /// Sum of quantities, not the number of distinct items.
 
-final class CartUnitsProvider extends $FunctionalProvider<int, int, int>
+final class CartCountProvider extends $FunctionalProvider<int, int, int>
     with $Provider<int> {
   /// Sum of quantities, not the number of distinct items.
-  CartUnitsProvider._()
+  CartCountProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'cartUnitsProvider',
+        name: r'cartCountProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$cartUnitsHash();
+  String debugGetCreateSourceHash() => _$cartCountHash();
 
   @$internal
   @override
@@ -142,7 +142,7 @@ final class CartUnitsProvider extends $FunctionalProvider<int, int, int>
 
   @override
   int create(Ref ref) {
-    return cartUnits(ref);
+    return cartCount(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -154,4 +154,4 @@ final class CartUnitsProvider extends $FunctionalProvider<int, int, int>
   }
 }
 
-String _$cartUnitsHash() => r'9707a4b1d1c97469f62e8c4138a6db0a1048ed2d';
+String _$cartCountHash() => r'fcac4132ad375a9b01fa3d9723a09494b8212bc5';
