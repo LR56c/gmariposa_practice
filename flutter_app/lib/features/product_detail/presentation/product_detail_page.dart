@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
+import 'package:flutter_app/core/widgets/not_found_view.dart';
 import 'package:flutter_app/features/catalog/presentation/product_thumbnail.dart';
 import 'package:flutter_app/features/product_detail/presentation/product_detail_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
@@ -28,10 +30,13 @@ class ProductDetailPage extends ConsumerWidget {
             // A retry from an error goes back to the loading state.
             skipLoadingOnRefresh: false,
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => ErrorView(
-              error: error,
-              onRetry: () => ref.invalidate(productDetailProvider(id)),
-            ),
+            // A missing product stays missing: offer the way back, not a retry.
+            error: (error, _) => error is Errors && error.isNotFound
+                ? const NotFoundView()
+                : ErrorView(
+                    error: error,
+                    onRetry: () => ref.invalidate(productDetailProvider(id)),
+                  ),
             data: (product) => _DetailBody(product: product),
           ),
     );
