@@ -6,14 +6,12 @@ import 'package:fpdart/fpdart.dart';
 
 /// Source of [Product]s.
 abstract interface class ProductRepository {
-  /// Lists a page of products.
   Future<Either<Errors, Page<Product>>> list({
     int limit = 20,
     int skip = 0,
     CancelSignal? cancel,
   });
 
-  /// Searches products by [query].
   Future<Either<Errors, Page<Product>>> search(
     String query, {
     int limit = 20,

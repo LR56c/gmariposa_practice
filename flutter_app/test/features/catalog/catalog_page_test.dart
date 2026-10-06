@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Page;
 import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
+import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/features/catalog/presentation/catalog_page.dart';
 import 'package:flutter_app/features/products/data/product_repository_impl.dart';
 import 'package:flutter_app/features/products/domain/page.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+
+final Translations _t = AppLocale.es.buildSync();
 
 class _MockRepository extends Mock implements ProductRepository;
 
@@ -31,10 +34,12 @@ Future<_MockRepository> _pump(
   when(() => repository.list(cancel: any(named: 'cancel')))
       .thenAnswer((_) async => answer());
   await tester.pumpWidget(
-    ProviderScope(
-      retry: (_, _) => null,
-      overrides: [productRepositoryProvider.overrideWithValue(repository)],
-      child: const MaterialApp(home: CatalogPage()),
+    TranslationProvider(
+      child: ProviderScope(
+        retry: (_, _) => null,
+        overrides: [productRepositoryProvider.overrideWithValue(repository)],
+        child: const MaterialApp(home: CatalogPage()),
+      ),
     ),
   );
   return repository;
@@ -52,14 +57,14 @@ void main() {
     expect(find.text('Essence Mascara'), findsOneWidget);
     expect(find.text('9.99'), findsOneWidget);
     expect(find.text('★ 4.5'), findsOneWidget);
-    expect(find.text('Sin foto'), findsOneWidget);
+    expect(find.text(_t.noPhoto), findsOneWidget);
   });
 
   testWidgets('shows "No hay productos" for an empty page', (tester) async {
     await _pump(tester, () => const Right(Page(items: [], total: 0)));
     await tester.pump();
 
-    expect(find.text('No hay productos'), findsOneWidget);
+    expect(find.text(_t.emptyCatalog), findsOneWidget);
   });
 
   testWidgets('shows the error and "Reintentar" reloads the Catalog', (
@@ -74,13 +79,10 @@ void main() {
     );
     await tester.pump();
 
-    expect(
-      find.text('No se pudo conectar. Revisa tu conexión.'),
-      findsOneWidget,
-    );
+    expect(find.text(_t.errors.network), findsOneWidget);
 
     fail = false;
-    await tester.tap(find.text('Reintentar'));
+    await tester.tap(find.text(_t.retry));
     await tester.pump();
     await tester.pump();
 

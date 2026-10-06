@@ -9,7 +9,6 @@ part 'product.g.dart';
 /// A catalog product.
 @freezed
 abstract class Product with _$Product {
-  /// Creates a product.
   const factory Product({
     required int id,
     required String title,
@@ -18,7 +17,6 @@ abstract class Product with _$Product {
     @JsonKey(name: 'thumbnail') required String imageUrl,
   }) = _Product;
 
-  /// Parses a DummyJSON product.
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 }

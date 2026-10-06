@@ -15,7 +15,6 @@ part 'product_repository_impl.g.dart';
 
 /// The only place that catches [DioException] (AD-3).
 class ProductRepositoryImpl implements ProductRepository {
-  /// Creates a repository over [_dio].
   const new(this._dio);
 
   final Dio _dio;
