@@ -49,6 +49,8 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get noPhoto => 'No photo';
 	@override String get cart => 'Cart';
 	@override String get cartEmpty => 'Your cart is empty';
+	@override String get cartLabelEmpty => 'Empty cart';
+	@override String cartLabelUnits({required Object units}) => 'Cart, ${units}';
 	@override String get remove => 'Remove';
 	@override String decreaseQuantity({required Object title}) => 'Decrease quantity of ${title}';
 	@override String increaseQuantity({required Object title}) => 'Increase quantity of ${title}';
@@ -93,6 +95,8 @@ extension on TranslationsEn {
 			'noPhoto' => 'No photo',
 			'cart' => 'Cart',
 			'cartEmpty' => 'Your cart is empty',
+			'cartLabelEmpty' => 'Empty cart',
+			'cartLabelUnits' => ({required Object units}) => 'Cart, ${units}',
 			'remove' => 'Remove',
 			'decreaseQuantity' => ({required Object title}) => 'Decrease quantity of ${title}',
 			'increaseQuantity' => ({required Object title}) => 'Increase quantity of ${title}',

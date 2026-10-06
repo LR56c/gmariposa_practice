@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:flutter_app/features/cart/presentation/widgets/cart_badge.dart';
 import 'package:flutter_app/features/cart/presentation/widgets/cart_footer.dart';
 import 'package:flutter_app/features/cart/presentation/widgets/cart_item_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,10 @@ class CartPage extends ConsumerWidget {
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.t.cart),
+        // Not a button: we are already on /cart.
+        actions: const [
+          SizedBox.square(dimension: 48, child: Center(child: CartBadge())),
+        ],
       ),
       body: SafeArea(
         top: false,
