@@ -27,3 +27,7 @@ fvm dart format --set-exit-if-changed .
 fvm flutter analyze
 fvm flutter test
 ```
+
+## Extra dependencies
+
+- `toastification`: the brief "Agregado al carrito" toast (UX-DR9). It shows from the button callback via `ToastificationWrapper`, with no provider and no `SnackBar`.

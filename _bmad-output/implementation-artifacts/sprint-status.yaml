@@ -48,10 +48,10 @@ development_status:
   2-2-abrir-un-producto-desde-un-deep-link: done
   epic-2-retrospective: optional
 
-  epic-3: backlog
-  3-1-agregar-productos-al-carrito-desde-el-detalle: backlog
-  3-2-revisar-y-editar-el-carrito: backlog
-  3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: backlog
+  epic-3: in-progress
+  3-1-agregar-productos-al-carrito-desde-el-detalle: done
+  3-2-revisar-y-editar-el-carrito: done
+  3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: done
   epic-3-retrospective: optional
 
   epic-4: backlog
