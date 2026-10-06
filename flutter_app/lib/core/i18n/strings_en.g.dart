@@ -42,6 +42,7 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get emptyCatalog => 'No products';
 	@override String get searchHint => 'Search products';
 	@override String get retry => 'Retry';
+	@override String get noMoreProducts => 'No more products';
 	@override String get noPhoto => 'No photo';
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 }
@@ -71,6 +72,7 @@ extension on TranslationsEn {
 			'emptyCatalog' => 'No products',
 			'searchHint' => 'Search products',
 			'retry' => 'Retry',
+			'noMoreProducts' => 'No more products',
 			'noPhoto' => 'No photo',
 			'errors.network' => 'Couldn\'t connect. Check your connection.',
 			'errors.server' => 'Something went wrong. Please try again.',

@@ -54,6 +54,9 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Reintentar'
 	String get retry => 'Reintentar';
 
+	/// es: 'No hay más productos'
+	String get noMoreProducts => 'No hay más productos';
+
 	/// es: 'Sin foto'
 	String get noPhoto => 'Sin foto';
 
@@ -93,6 +96,7 @@ extension on Translations {
 			'emptyCatalog' => 'No hay productos',
 			'searchHint' => 'Buscar productos',
 			'retry' => 'Reintentar',
+			'noMoreProducts' => 'No hay más productos',
 			'noPhoto' => 'Sin foto',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
 			'errors.server' => 'Algo salió mal. Inténtalo de nuevo.',
