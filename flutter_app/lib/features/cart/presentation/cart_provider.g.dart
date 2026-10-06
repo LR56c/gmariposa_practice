@@ -8,14 +8,14 @@ part of 'cart_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Sole owner of the Cart state; all logic lives in `cart_logic.dart` (AD-7).
+/// Sole owner of the Cart state: an immutable list, replaced on each change.
 
 @ProviderFor(Cart)
 final cartProvider = CartProvider._();
 
-/// Sole owner of the Cart state; all logic lives in `cart_logic.dart` (AD-7).
+/// Sole owner of the Cart state: an immutable list, replaced on each change.
 final class CartProvider extends $NotifierProvider<Cart, List<CartItem>> {
-  /// Sole owner of the Cart state; all logic lives in `cart_logic.dart` (AD-7).
+  /// Sole owner of the Cart state: an immutable list, replaced on each change.
   CartProvider._()
     : super(
         from: null,
@@ -43,9 +43,9 @@ final class CartProvider extends $NotifierProvider<Cart, List<CartItem>> {
   }
 }
 
-String _$cartHash() => r'af9523f95ffb6385f12bfa7aa48e7cb20414d257';
+String _$cartHash() => r'62a7cbc64bf594c10730f0c054f159ea19891b0b';
 
-/// Sole owner of the Cart state; all logic lives in `cart_logic.dart` (AD-7).
+/// Sole owner of the Cart state: an immutable list, replaced on each change.
 
 abstract class _$Cart extends $Notifier<List<CartItem>> {
   List<CartItem> build();
@@ -64,3 +64,94 @@ abstract class _$Cart extends $Notifier<List<CartItem>> {
     return element.handleCreate(ref, build);
   }
 }
+
+/// Sum of price × quantity, unrounded (round only when displaying).
+
+@ProviderFor(cartTotal)
+final cartTotalProvider = CartTotalProvider._();
+
+/// Sum of price × quantity, unrounded (round only when displaying).
+
+final class CartTotalProvider
+    extends $FunctionalProvider<double, double, double>
+    with $Provider<double> {
+  /// Sum of price × quantity, unrounded (round only when displaying).
+  CartTotalProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cartTotalProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cartTotalHash();
+
+  @$internal
+  @override
+  $ProviderElement<double> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  double create(Ref ref) {
+    return cartTotal(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(double value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<double>(value),
+    );
+  }
+}
+
+String _$cartTotalHash() => r'3381930fe11c75d5be325687c8c948e73a4341c3';
+
+/// Sum of quantities, not the number of distinct items.
+
+@ProviderFor(cartUnits)
+final cartUnitsProvider = CartUnitsProvider._();
+
+/// Sum of quantities, not the number of distinct items.
+
+final class CartUnitsProvider extends $FunctionalProvider<int, int, int>
+    with $Provider<int> {
+  /// Sum of quantities, not the number of distinct items.
+  CartUnitsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cartUnitsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cartUnitsHash();
+
+  @$internal
+  @override
+  $ProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  int create(Ref ref) {
+    return cartUnits(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int>(value),
+    );
+  }
+}
+
+String _$cartUnitsHash() => r'9707a4b1d1c97469f62e8c4138a6db0a1048ed2d';
