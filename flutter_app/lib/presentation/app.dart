@@ -4,7 +4,6 @@ import 'package:flutter_app/core/theme/app_theme.dart';
 import 'package:flutter_app/presentation/router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-/// Root widget of the application.
 class App extends StatelessWidget {
   const new({super.key});
 

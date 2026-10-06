@@ -1,6 +1,6 @@
 import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/errors.dart';
-import 'package:flutter_app/features/products/domain/page.dart';
+import 'package:flutter_app/core/page.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:fpdart/fpdart.dart';
 

@@ -8,7 +8,6 @@ void main() {
   LocaleSettings.useDeviceLocaleSync();
   runApp(
     TranslationProvider(
-      // No automatic retry: "Reintentar" is the only retry (AD-5).
       child: ProviderScope(retry: (_, _) => null, child: const App()),
     ),
   );

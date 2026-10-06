@@ -5,7 +5,7 @@ import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/dio_provider.dart';
 import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
-import 'package:flutter_app/features/products/domain/page.dart';
+import 'package:flutter_app/core/page.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/domain/product_repository.dart';
 import 'package:fpdart/fpdart.dart';
@@ -44,7 +44,6 @@ class ProductRepositoryImpl implements ProductRepository {
     CancelSignal? cancel,
   ) async {
     final token = CancelToken();
-    // ponytail: listener never removed; a signal lives for one request.
     if (cancel != null) {
       unawaited(cancel.whenCancelled.then((_) => token.cancel()));
     }
@@ -81,7 +80,6 @@ class ProductRepositoryImpl implements ProductRepository {
         ),
       );
     } on Object {
-      // json_serializable throws TypeError on missing or wrongly typed fields.
       return const Left(Errors([ParseException()]));
     }
   }

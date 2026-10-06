@@ -4,10 +4,6 @@ const _primary = Color(0xFF006A60);
 const _surfaceTonal = Color(0xFFEDF3F0);
 const _onSurface = Color(0xFF191C1B);
 
-/// Light theme built from the `DESIGN.md` tokens (no seed derivation, so the
-/// verified contrasts hold). Widgets read it through `Theme.of`:
-/// `tertiary` is the rating star, `secondaryContainer` the "Sin foto" block and
-/// `outlineVariant` the skeleton/divider.
 ThemeData buildAppTheme() {
   return ThemeData(
     colorScheme: const ColorScheme.light(
@@ -52,7 +48,6 @@ ThemeData buildAppTheme() {
       toolbarHeight: 64,
       centerTitle: false,
     ),
-    // The only FilledButton is the tonal "Reintentar" (button-tonal).
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(48, 48),
