@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/theme/app_theme.dart';
+import 'package:flutter_app/presentation/router.dart';
 
 /// Root widget of the application.
 class App extends StatelessWidget {
@@ -7,9 +9,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Catalog',
-      home: Scaffold(body: Center(child: Text('Catalog'))),
+    return MaterialApp.router(
+      title: 'Mini Catálogo',
+      theme: buildAppTheme(),
+      routerConfig: appRouter,
     );
   }
 }
