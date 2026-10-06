@@ -532,11 +532,15 @@ So that pueda decidir si lo agrego al carrito, sin depender de los datos de la l
 **When** el estado es `AsyncLoading`
 **Then** se muestra un indicador de progreso centrado (FR5, UX-DR12)
 
-**Given** una falla de red, una respuesta no exitosa, un JSON inválido o un `id` inexistente (404)
+**Given** una falla de red, una respuesta no exitosa o un JSON inválido
 **When** el estado es `AsyncError`
 **Then** se muestra el mensaje derivado del `Errors` y un `button-tonal` "Reintentar" (FR5, UX-DR12, UX-DR13)
-**And** un 404 muestra "No encontramos ese producto." y no el texto genérico de respuesta no exitosa (UX-DR13)
 **And** "Reintentar" ejecuta `ref.invalidate` sobre el provider del `id` y vuelve a cargar (FR5)
+
+**Given** un `id` inexistente (404)
+**When** el estado es `AsyncError`
+**Then** la capa de datos lo expresa como `NotFoundException` y se muestra "No encontramos ese producto." y no el texto genérico de respuesta no exitosa (UX-DR13)
+**And** en lugar de "Reintentar" se ofrece un `button-tonal` "Volver al catálogo" que navega a `/`, porque reintentar no puede cambiar el resultado (FR5, UX-DR13)
 
 **Given** una ruta desconocida
 **When** el `errorBuilder` del router la recibe
@@ -557,7 +561,7 @@ So that pueda decidir si lo agrego al carrito, sin depender de los datos de la l
 
 **Given** la prueba de widget de esta story, con un Repository falso (`mocktail`) por `override`
 **When** se ejecuta `flutter test`
-**Then** pasa al menos una que verifica los estados de datos y error con "Reintentar" para un `id`, y otra que verifica que un 404 muestra "No encontramos ese producto." (NFR3)
+**Then** pasa al menos una que verifica los estados de datos y error con "Reintentar" para un `id`, y otra que verifica que un 404 muestra "No encontramos ese producto." con "Volver al catálogo" y sin "Reintentar" (NFR3)
 
 ### Story 2.2: Abrir un producto desde un deep link
 
