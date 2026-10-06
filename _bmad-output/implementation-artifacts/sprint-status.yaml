@@ -51,7 +51,7 @@ development_status:
   epic-3: in-progress
   3-1-agregar-productos-al-carrito-desde-el-detalle: done
   3-2-revisar-y-editar-el-carrito: done
-  3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: backlog
+  3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: done
   epic-3-retrospective: optional
 
   epic-4: backlog
