@@ -1,5 +1,5 @@
-import 'package:flutter_app/features/catalog/presentation/catalog_page.dart';
-import 'package:flutter_app/features/product_detail/presentation/product_detail_page.dart';
+import 'package:flutter_app/features/catalog/presentation/pages/catalog_page.dart';
+import 'package:flutter_app/features/product_detail/presentation/pages/product_detail_page.dart';
 import 'package:flutter_app/presentation/not_found_page.dart';
 import 'package:go_router/go_router.dart';
 
