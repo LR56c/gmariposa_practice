@@ -7,9 +7,17 @@ Checklist general del usuario: `E:\dev\Projects\project-checklist.md` (aplicar s
 ## Modo de trabajo (BMAD)
 - **Coaching en decisiones técnicas**: ante cada decisión técnica (arquitectura, librería, patrón, trade-off),
   DETENERSE, explicar opciones y razones, y dejar que el usuario decida/entienda antes de implementar.
-  El PDF exige que el candidato explique cada línea en la entrevista.
 - Comunicación y documentos en español; código e identificadores consistentes (inglés).
 - No hay negocio real: no inventar contexto de negocio; priorizar calidad y criterio sobre cantidad.
+
+### Proceso BMAD (estado y flujo)
+- Planning completo en `_bmad-output/planning-artifacts/`: `briefs/`, `prds/`, `ux-designs/` (DESIGN.md, EXPERIENCE.md,
+  stitch-index.md), `architecture/.../ARCHITECTURE-SPINE.md` (AD-1..AD-15) y `epics.md` (5 epics, 19 stories).
+- Seguimiento en `_bmad-output/implementation-artifacts/sprint-status.yaml` (generado con `bmad-sprint-planning`;
+  re-ejecutar la skill para refrescarlo si cambian los epics). Actualizar el status de la story al empezar y al cerrar.
+- **Flujo por story: spec + implementación, SIN review por story** (decisión del usuario, para agilizar).
+  La review se hace al final, por porciones. Sigue valiendo: rama por story, commits convencionales, merge a `main`.
+- Stories 5.2–5.5 son bonus (`optional`); la 5.1 verifica el MVP.
 
 ## Git: reglas obligatorias
 - **Una rama por cada item (story) de cada epic**, desde `main`: `<tipo>/<epic>-<story>-<slug>`

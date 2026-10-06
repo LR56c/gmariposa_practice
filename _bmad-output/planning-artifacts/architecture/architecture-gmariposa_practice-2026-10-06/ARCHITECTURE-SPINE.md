@@ -3,7 +3,7 @@ name: 'gmariposa_practice'
 type: architecture-spine
 purpose: build-substrate
 altitude: initiative
-paradigm: 'Flutter: arquitectura por capas feature-first con regla de dependencia (domain puro, Repository inyectado, estado Riverpod inmutable). Angular: contenedor/presentacional con flujo unidireccional NgRx (Store clásico).'
+paradigm: 'Flutter: arquitectura por capas feature-first con regla de dependencia (domain puro, Repository inyectado, estado Riverpod inmutable). Angular: contenedor/presentacional con flujo unidireccional sobre un store manual con signals (AD-16, sin NgRx).'
 scope: 'Repo completo: flutter_app/ (Mini Catálogo) y angular_app/ (Panel de Orders) sobre la API pública DummyJSON. Sin backend propio.'
 status: final
 created: '2026-10-06'
@@ -23,7 +23,7 @@ companions: [.memlog.md]
 Dos apps independientes, sin código compartido. Cada una con su propio paradigma:
 
 - **Flutter:** capas por feature `data / domain / presentation` más `core/` transversal. `domain` es Dart puro. El estado es Riverpod con generador; el error viaja como `Either<Errors, T>` hasta el borde del notifier y de ahí como `AsyncError(Errors)`.
-- **Angular:** componentes standalone en dos roles (contenedor y presentacional) sobre NgRx Store clásico (`actions → reducer → state → selectors`, con `effects` para la E/S).
+- **Angular:** componentes standalone en dos roles (contenedor y presentacional) sobre un store manual con signals (AD-16): estado privado, lectura `readonly`, valores derivados con `computed` y la E/S dentro del propio store. Estilado con Tailwind (AD-17).
 
 Equivalencias entre apps (vocabulario de entrevista, no código compartido): `OrdersService` ≈ Repository · selector ≈ provider · componente presentacional ≈ widget sin estado.
 
@@ -128,7 +128,7 @@ flowchart LR
 - **Prevents:** declarar deep link sin haberlo probado.
 - **Rule:** `AndroidManifest.xml` declara un `intent-filter` con acción `VIEW`, categorías `DEFAULT` y `BROWSABLE`, y datos `scheme="gmariposa"` y `host="app"`. Se verifica en un emulador con `adb shell am start -a android.intent.action.VIEW -d "gmariposa://app/product/5"`. El resultado entra al README.
 
-### AD-10 — Angular: contenedor, presentacional y Store clásico [ADOPTED]
+### AD-10 — Angular: contenedor, presentacional y store [ADOPTED; Store, actions, selectors y effects sustituidos por AD-16]
 
 - **Binds:** FR-13, FR-14, FR-15, FR-16, FR-17, NFR-6
 - **Prevents:** componentes que llaman a `HttpClient`; dos dueños de un Order; suscripciones sueltas.
@@ -140,7 +140,7 @@ flowchart LR
   - Los datos se consumen con `async` pipe o `toSignal` sobre selectores, y no queda ningún `subscribe()` sin limpieza.
   - Cada story corre `ng test` y `ng build`.
 
-### AD-11 — Angular: forma del estado y rutas autosuficientes [ADOPTED]
+### AD-11 — Angular: forma del estado y rutas autosuficientes [ADOPTED; effects y registro del Store sustituidos por AD-16]
 
 - **Binds:** FR-16, DA-1
 - **Prevents:** un Order en dos lugares; un estado de carga compartido entre lista y detalle; efectos registrados dos veces.
@@ -160,7 +160,7 @@ flowchart LR
   - Solo se usan los módulos `Schema` y `Result` de `effect`; no se usa el runtime `Effect` (fibers, layers, `Effect.gen`).
   - `OrdersService` devuelve `Observable<Result<T, Errors>>`. Valida la respuesta con `Schema.decodeUnknownResult` y mapea los fallos de validación a `ParseException`.
   - El tipo `Order` se obtiene de `Schema.Schema.Type` del esquema (única fuente). `discountedTotal` es opcional.
-  - El effect de NgRx hace `match` sobre el `Result` y despacha la acción de éxito o de fallo. El mensaje que ve el Usuario viene del `ErrorInfo`.
+  - El store (AD-16) hace `match` sobre el `Result` y guarda el éxito o el `ErrorInfo`. El mensaje que ve el Usuario viene del `ErrorInfo`.
   - La story de Angular confirma los nombres de la API contra la documentación de la v4 antes de escribir código (en la v3 el tipo se llamaba `Either`).
 
 ### AD-13 — Pruebas y puerta de calidad por story [ADOPTED]
@@ -193,6 +193,31 @@ flowchart LR
   - **No aplican (no hay backend propio):** `module-structure` con use cases, `service-layer`, `repository` como DAO, `mapper`, `error-envelope` (T-1), `shared-module`, `auth`, `audit` y `transactional-state`.
   - **Value Objects: ninguno.** Los modelos son `freezed` (Flutter) o tipos inferidos del esquema (Angular), con primitivos. La invariante de cantidad mínima 1 del Cart es una función pura de `cart/domain/` (AD-7).
 
+### AD-16 — Angular: store manual, sin NgRx [ADOPTED]
+
+- **Binds:** FR-14, FR-16, FR-17, T-7. Sustituye las partes de AD-10 y AD-11 que nombran Store, actions, reducer, selectors y effects.
+- **Prevents:** un estado duplicado entre componentes y store; una dependencia instalada que parezca usada; suscripciones sueltas.
+- **Rule:**
+  - Un único servicio-store `providedIn: 'root'` (no registrado en rutas lazy) con signals: estado privado, lectura `readonly`, y valores derivados con `computed`. Guarda el mapa de Orders por `id` con `upsert`, `listStatus`/`listError`, `byIdStatus`/`byIdError` y `minTotal`.
+  - Solo el store llama a `OrdersService`. Los componentes leen signals y llaman a sus métodos (`loadOrders`, `loadOrder(id)`, `setMinTotal`); el flujo del `FormControl` al store es unidireccional.
+  - Una nueva carga de la lista se ignora si hay una en vuelo (equivale a `exhaustMap`); el detalle admite cargas concurrentes por `id` (equivale a `mergeMap`). Las suscripciones se limpian con `takeUntilDestroyed`.
+  - `@ngrx/*` queda instalado sin uso, por decisión de Mauri; se justifica en el README (choca con NFR-5, sin código muerto, y debe poder defenderse).
+
+### AD-17 — Angular: Tailwind en lugar de CSS propio [ADOPTED]
+
+- **Binds:** NFR-7, UX-DR1, UX-DR20.
+- **Prevents:** tokens de `DESIGN.md` duplicados entre CSS y clases; colores o medidas arbitrarias en las plantillas.
+- **Rule:** se instalan `tailwindcss`, `@tailwindcss/postcss` y `postcss`, con `.postcssrc.json` y `@import 'tailwindcss'` en `src/styles.css`. Los tokens de `DESIGN.md` viven en un bloque `@theme`, y las plantillas usan solo utilidades del tema, sin valores arbitrarios. Se confirma la versión instalada al hacer el scaffold.
+
+### AD-18 — Flutter: librerías de UI y persistencia [ADOPTED]
+
+- **Binds:** UX-DR9, DF-2, DF-3.
+- **Prevents:** una dependencia de generador que rompa `analyzer`; avisos acoplados al Notifier.
+- **Rule:**
+  - `toastification` para el aviso "Agregado al carrito", con `ToastificationWrapper` en el shell y la llamada desde el callback de la UI, nunca desde el Notifier.
+  - `wolt_modal_sheet` solo si se hace el bonus DF-2 (modal del selector de categoría); si no resuelve con `pub get`, se usa `showModalBottomSheet`. Su último release es de febrero de 2025.
+  - `shared_preferences` solo si se hace el bonus DF-3. `isar_community` se descartó: `isar_community_generator` 3.3.2 exige `analyzer >=8.0.0 <11.0.0` y `freezed` 4.0.2 exige `>=14.0.0 <15.0.0` (rangos de pub.dev, sin `pub get` real). `hive_ce` es clave-valor, no un ORM, y añadiría adaptadores generados.
+
 ## Consistency Conventions
 
 | Concern | Convention |
@@ -212,7 +237,9 @@ flowchart LR
 | fpdart · dio · go_router | 1.2.0 · 5.11.1 · 18.0.2 |
 | stream_transform · mocktail · very_good_analysis | 2.1.2 · 1.0.5 · 11.0.0 |
 | Angular (CLI y core) · TypeScript · Node | 22.2.1 · ~6.0 · 24.16 |
-| @ngrx/store · @ngrx/effects · @ngrx/store-devtools | 22.0.1 |
+| @ngrx/store · @ngrx/effects · @ngrx/store-devtools | 22.0.1 (instalados sin uso, AD-16) |
+| tailwindcss · @tailwindcss/postcss · postcss | confirmar al hacer el scaffold (AD-17) |
+| toastification · wolt_modal_sheet · shared_preferences | 3.2.0 · 0.11.0 (solo bonus DF-2) · confirmar (solo bonus DF-3) (AD-18) |
 | effect · Vitest | 4.0.1 · 5.0.3 |
 
 ## Structural Seed
@@ -262,7 +289,7 @@ flutter_app/lib/
     cart/{domain,presentation}  # CartItem y lógica pura en domain
 angular_app/src/app/
   core/            # errors, tipos compartidos, OrdersService
-  features/orders/ # components/, store/ (actions, reducer, effects, selectors)
+  features/orders/ # components/, store/ (servicio-store manual, AD-16)
 ```
 
 ## Capability → Architecture Map
