@@ -4,6 +4,7 @@ import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
 import 'package:flutter_app/core/widgets/not_found_view.dart';
 import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:flutter_app/features/cart/presentation/widgets/cart_icon_button.dart';
 import 'package:flutter_app/features/catalog/presentation/widgets/product_thumbnail.dart';
 import 'package:flutter_app/features/product_detail/presentation/providers/product_detail_provider.dart';
 import 'package:flutter_app/features/product_detail/presentation/widgets/added_to_cart_toast.dart';
@@ -25,6 +26,7 @@ class ProductDetailPage extends ConsumerWidget {
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.t.appTitle),
+        actions: const [CartIconButton()],
       ),
       body: ref
           .watch(productDetailProvider(id))
