@@ -1,5 +1,6 @@
 import 'package:flutter_app/features/cart/domain/cart_item.dart';
-import 'package:flutter_app/features/cart/domain/cart_logic.dart' as logic;
+import 'package:flutter_app/features/cart/presentation/cart_logic.dart'
+    as logic;
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
