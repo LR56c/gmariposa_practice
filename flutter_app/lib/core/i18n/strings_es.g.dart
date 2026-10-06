@@ -48,6 +48,9 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'No hay productos'
 	String get emptyCatalog => 'No hay productos';
 
+	/// es: 'Buscar productos'
+	String get searchHint => 'Buscar productos';
+
 	/// es: 'Reintentar'
 	String get retry => 'Reintentar';
 
@@ -88,6 +91,7 @@ extension on Translations {
 		return switch (path) {
 			'appTitle' => 'Mini Catálogo',
 			'emptyCatalog' => 'No hay productos',
+			'searchHint' => 'Buscar productos',
 			'retry' => 'Reintentar',
 			'noPhoto' => 'Sin foto',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',

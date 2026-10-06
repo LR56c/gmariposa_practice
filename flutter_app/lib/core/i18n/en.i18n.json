@@ -1,6 +1,7 @@
 {
   "appTitle": "Mini Catalog",
   "emptyCatalog": "No products",
+  "searchHint": "Search products",
   "retry": "Retry",
   "noPhoto": "No photo",
   "errors": {
