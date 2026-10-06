@@ -9,9 +9,7 @@ class CancelSignal {
     if (!_completer.isCompleted) _completer.complete();
   }
 
-  /// Whether [cancel] was called.
   bool get isCancelled => _completer.isCompleted;
 
-  /// Completes when [cancel] is called.
   Future<void> get whenCancelled => _completer.future;
 }

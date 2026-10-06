@@ -6,3 +6,8 @@ analyzer:
     - android/**
     - '**/*.g.dart'
     - '**/*.freezed.dart'
+
+linter:
+  rules:
+    # App, not a library: trivial member docs add noise.
+    public_member_api_docs: false
