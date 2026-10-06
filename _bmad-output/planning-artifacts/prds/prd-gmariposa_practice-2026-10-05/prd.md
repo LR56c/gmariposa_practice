@@ -1,11 +1,11 @@
 ---
-title: "PRD: Mini Catálogo (Flutter + Riverpod) y Panel de pedidos (Angular)"
+title: "PRD: Mini Catálogo (Flutter + Riverpod) y Panel de órdenes (Angular)"
 status: final
 created: 2026-10-05
 updated: 2026-10-05
 ---
 
-# PRD: Mini Catálogo (Flutter + Riverpod) y Panel de pedidos (Angular)
+# PRD: Mini Catálogo (Flutter + Riverpod) y Panel de órdenes (Angular)
 *Título de trabajo, a confirmar.*
 
 ## 0. Propósito del documento
@@ -14,7 +14,7 @@ Este PRD traduce la prueba técnica de Grupo Mariposa en requisitos funcionales 
 
 ## 1. Visión
 
-Dos entregables pequeños y bien hechos sobre la API pública DummyJSON: una app móvil Flutter con Riverpod para explorar un catálogo y armar un carrito, y un panel web Angular que muestra pedidos con filtro. El valor no está en las funcionalidades, sino en la calidad del código, la arquitectura por capas y las pruebas, que el candidato debe poder defender línea por línea en la entrevista.
+Dos entregables pequeños y bien hechos sobre la API pública DummyJSON: una app móvil Flutter con Riverpod para explorar un catálogo y armar un carrito, y un panel web Angular que muestra órdenes con filtro. El valor no está en las funcionalidades, sino en la calidad del código, la arquitectura por capas y las pruebas, que el candidato debe poder defender línea por línea en la entrevista.
 
 El PDF reparte la nota así: Parte 2 Flutter 50 % (6 a 8 h sugeridas), Parte 3 Angular 20 % (2 a 3 h), Parte 1 preguntas 15 % (30 min) y Parte 4 code review 15 % (20 min). Documentar lo pendiente en el README es preferible a entregar código roto.
 
@@ -56,7 +56,7 @@ Clientes finales reales: no hay tienda, pagos ni cuentas. Los datos son los de D
 - **Search term** (Término de búsqueda): texto que el Usuario escribe; dispara una consulta tras 400 ms de pausa.
 - **Cart** (Carrito): colección local, solo en la app Flutter, de Cart items. Tiene un total y un contador.
 - **Cart item** (Ítem del carrito): un Product con una cantidad dentro del Cart.
-- **Order** (Pedido): registro de la API de carritos de DummyJSON (`/carts`), con `userId`, productos y totales, que el panel Angular muestra. No es un Cart.
+- **Order** (Orden): registro de la API de carritos de DummyJSON (`/carts`), con `userId`, productos y totales, que el panel Angular muestra. No es un Cart.
 - **Repository** (Repositorio de datos): único punto por el que la UI obtiene datos; en Angular es el servicio `OrdersService`.
 - **BaseException** (Excepción base): error tipado del proyecto, en el estilo common del candidato, con `message` y `code`; cada tipo de falla es una subclase.
 - **Errors** (Errores): contenedor con la lista de BaseException de una operación. Vive en `core/` (decisión T-1). La UI recibe un Errors en lugar de una excepción cruda, y los métodos pueden devolverlo como `Either<Errors, T>`.
@@ -79,7 +79,7 @@ El Usuario puede ver una lista de Products con imagen, título, precio y rating.
 - Al abrir la app se cargan los primeros 20 Products desde `GET /products?limit=20&skip=0`.
 - Cada elemento muestra los cuatro datos; si falta la imagen, se muestra un marcador visual y no un error.
 
-**Fuera de alcance:** paginación infinita y filtro por categoría (deseables, ver §6.2).
+**Fuera de alcance:** filtro por categoría (deseable, ver §6.2). La paginación infinita (DF-1) entra al MVP (ver §6.1).
 
 #### FR-2: Estados del Catalog
 El Usuario ve siempre uno de cuatro estados: cargando, datos, vacío o error. Realiza UJ-1.
@@ -101,13 +101,14 @@ El Usuario ve siempre uno de cuatro estados: cargando, datos, vacío o error. Re
 El Usuario puede escribir un Search term y ver los Products que coinciden. Realiza UJ-1.
 
 **Consecuencias (verificables):**
-- La consulta (`GET /products/search?q=…`) se dispara solo tras 400 ms sin nuevas pulsaciones.
+- La consulta (`GET /products/search?q=…&limit=20&skip=0`) se dispara solo tras 400 ms sin nuevas pulsaciones. El Search term se recorta (`trim`) antes de consultar; un término vacío o solo con espacios equivale a vaciarlo.
 - Escribir 5 caracteres seguidos con menos de 400 ms entre ellos produce una sola consulta.
 - Vaciar el Search term vuelve a mostrar el Catalog completo.
 - Los resultados usan los mismos cuatro estados que FR-2.
-- Si llega la respuesta de un Search term ya reemplazado, se descarta y no pisa la lista.
+- Si llega la respuesta de un Search term ya reemplazado, se descarta y no pisa la lista. Vaciar el Search term cancela cualquier consulta pendiente.
+- "Reintentar" repite la consulta del Search term vigente.
 
-**Notas:** `[NOTE FOR PM: cómo se implementa el debounce —Timer propio o paquete— y dónde vive se decide en el coaching de arquitectura.]`
+**Notas:** `limit` y `skip` se envían desde el MVP para que la paginación infinita (DF-1) cubra Catalog y búsqueda sin cambiar el contrato del Repository (ver FR-10). `[NOTE FOR PM: cómo se implementa el debounce —Timer propio o paquete— y dónde vive se decide en el coaching de arquitectura.]`
 
 **NFR específicos de esta funcionalidad:**
 - La búsqueda y el Catalog comparten el mismo mecanismo de estados, sin duplicar la lógica. Los widgets cumplen NFR-5.
@@ -185,6 +186,7 @@ Toda obtención de Products pasa por un Repository inyectado mediante un provide
 - Ningún widget ni notifier importa ni invoca el cliente HTTP directamente.
 - Sustituir el Repository por uno falso con un `override` cambia los datos mostrados sin tocar la UI.
 - El Repository expone el contrato en la capa de dominio y su implementación vive en la capa de datos.
+- Los métodos de listado y de búsqueda de Products reciben `limit` y `skip` (por defecto 20 y 0) y devuelven también el `total` de la API, de modo que DF-1 se añade sin cambiar el contrato.
 
 #### FR-11: Modelos inmutables con `fromJson`
 Los Products y demás modelos se construyen desde el JSON de DummyJSON y no pueden modificarse después. Realiza UJ-1.
@@ -216,7 +218,7 @@ Los errores de red, de respuesta y de parseo llegan a la UI como un Errors. Real
 El Usuario puede ver una lista de Orders, cada uno en su tarjeta. Realiza UJ-2.
 
 **Consecuencias (verificables):**
-- Un servicio `OrdersService` (`providedIn: 'root'`) obtiene los datos con `HttpClient` y los expone tipados con interfaces.
+- Un servicio `OrdersService` (`providedIn: 'root'`) obtiene los datos con `HttpClient` (`GET /carts?limit=0`, que devuelve todos los Orders) y los expone tipados con interfaces.
 - Ningún componente llama a `HttpClient` directamente.
 - `OrdersPageComponent` (contenedor) obtiene los Orders y renderiza un `OrderCardComponent` (presentacional) por cada uno.
 - Cada tarjeta muestra al menos el id del Order, su `userId` y su total, y también el total con descuento si DummyJSON lo incluye.
@@ -226,8 +228,9 @@ El Usuario puede ver una lista de Orders, cada uno en su tarjeta. Realiza UJ-2.
 El Usuario puede filtrar los Orders por un total mínimo. Realiza UJ-2.
 
 **Consecuencias (verificables):**
-- El filtro usa el campo `total` del Order (no el total con descuento) y se gestiona con un `FormControl` o un signal.
+- El filtro usa el campo `total` del Order (no el total con descuento) y se captura con un `FormControl` (o un signal) que despacha el valor al Store de NgRx, dueño del estado del filtro.
 - Al cambiar el valor del filtro, la lista se actualiza sin recargar la página ni repetir la petición, porque se aplica sobre los datos ya cargados.
+- Un Order cuyo `total` es igual al mínimo se incluye (comparación `>=`).
 - Con el filtro vacío se muestran todos los Orders.
 - Si ningún Order cumple el filtro, se muestra un mensaje de vacío y no una lista en blanco.
 
@@ -238,7 +241,7 @@ El Usuario ve un estado de carga mientras llegan los datos y un estado de error 
 
 **Consecuencias (verificables):**
 - Mientras se obtienen los Orders, se muestra un indicador de carga.
-- Si la API falla, se muestra un mensaje de error legible y no una pantalla en blanco.
+- Si la API falla, se muestra un mensaje de error legible con un botón "Reintentar" que repite la petición, y no una pantalla en blanco.
 
 #### FR-16: Ver el detalle de un Order
 El Usuario puede pedir el detalle de un Order desde su tarjeta. Realiza UJ-2.
@@ -246,9 +249,9 @@ El Usuario puede pedir el detalle de un Order desde su tarjeta. Realiza UJ-2.
 **Consecuencias (verificables):**
 - `OrderCardComponent` recibe el Order por `input()` (o `@Input()`) y emite el id del Order por `output()` (o `@Output()`) cuando se pulsa "ver detalle".
 - La tarjeta no navega ni consulta datos: el contenedor decide qué hacer con el evento.
-- Al recibir el evento, el contenedor muestra los productos del Order elegido (título, cantidad y precio de cada uno) en la misma página.
+- Al recibir el evento, el contenedor navega a `/orders/:id` (ruta con lazy loading), que muestra los productos del Order elegido (título, cantidad y precio de cada uno).
 
-**Notas:** la ruta `/orders/:id` con lazy loading (DA-1, priorizado en §6.1) reemplazará esta vista en la misma página cuando se haga.
+**Notas:** decisión de arquitectura (2026-10-06): el detalle es una ruta autosuficiente desde la URL, así que DA-1 pasa de deseable a parte del MVP.
 
 #### FR-17: Sin fugas de memoria
 Ninguna suscripción queda abierta cuando el componente se destruye. Realiza UJ-2.
@@ -329,14 +332,18 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 ### 6.1 Dentro del alcance
 - FR-1 a FR-21 y NFR-1 a NFR-9.
 - `riverpod_generator` desde el inicio (decisión T-5 del `addendum.md`).
-- Apoyo de UX: dirección visual con `bmad-ux` y un Stitch pequeño con 4 pantallas (listado, detalle, carrito y panel de pedidos), con un índice pantalla ↔ story que actúa como gate en las stories de UI.
+- Navegación con `go_router` (decisión de Mauri, 2026-10-06; antes DF-4). Rutas `/`, `/product/:id` y `/cart`.
+- Paginación infinita en el Catalog y en la búsqueda (DF-1 promovido al MVP, decisión de Mauri, 2026-10-06).
+- Deep link a `/product/:id` verificado en el emulador Android con `adb` (decisión de arquitectura AD-9).
+- Angular: estado con NgRx Store clásico, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md`. Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
+- Apoyo de UX: dirección visual con `bmad-ux` y un Stitch pequeño con 4 pantallas (listado, detalle, carrito y panel de órdenes), con un índice pantalla ↔ story que actúa como gate en las stories de UI.
 
 **Angular priorizado.** Lo que el PDF pide para Angular se prioriza. Estos deseables se hacen apenas se cierran los obligatorios de Angular, antes que cualquier deseable o bonus de Flutter:
 
 | ID | Ítem |
 |---|---|
-| DA-1 | Ruta `/orders/:id` con lazy loading (reemplaza la vista en la misma página de FR-16) |
-| DA-2 | Signals (`signal`, `computed`) para el estado del filtro |
+| DA-1 | Ruta `/orders/:id` con lazy loading (promovido al MVP, ver FR-16) |
+| DA-2 | Signals de lectura (`toSignal`, `computed`) sobre los selectores del Store |
 | DA-3 | Control flow nuevo (`@if`, `@for` con `track`) |
 | DA-4 | Pipe propio (moneda o porcentaje de descuento) |
 | DA-5 | `ChangeDetectionStrategy.OnPush` en los presentacionales |
@@ -346,10 +353,8 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 
 | ID | Parte | Ítem |
 |---|---|---|
-| DF-1 | Flutter | Paginación infinita en el listado |
 | DF-2 | Flutter | Filtro por categoría (`GET /products/categories`), combinable con la búsqueda |
 | DF-3 | Flutter | Persistencia del Cart (`shared_preferences` o `hive`) |
-| DF-4 | Flutter | Navegación declarativa con `go_router` |
 | DF-6 | Flutter | Tema claro/oscuro controlado por un provider |
 | B-1 | Flutter | Prueba de integración del flujo buscar → detalle → agregar al Cart |
 | B-2 | Repo | GitHub Action que ejecute `analyze` y `test` en cada push |
@@ -370,7 +375,7 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 - **SM-7:** la entrega ocurre dentro del plazo de 3 días calendario. Valida el objetivo de entrega del brief; ningún FR lo cubre.
 
 **Secundaria**
-- **SM-8:** cantidad de deseables y bonus completados (ver §6.1 y §6.2), contados solo si los obligatorios de su parte están cerrados. Valida DA-1 a DA-5, DF-1 a DF-4, DF-6, B-1 y B-2.
+- **SM-8:** cantidad de deseables y bonus completados (ver §6.1 y §6.2), contados solo si los obligatorios de su parte están cerrados. Valida DA-1 a DA-5, DF-1 a DF-3, DF-6, B-1 y B-2.
 
 **Contramétricas (no optimizar)**
 - **SM-C1:** deseables o bonus iniciados. Un extra a medias es peor que ninguno; contrapesa SM-8.
@@ -387,12 +392,12 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 
 1. Hora y medio exactos de entrega (el PDF fija 3 días calendario desde la recepción).
 2. Herramientas generadas (T-2, T-4 y T-5): versión de Riverpod (2.x o 3.x) y compatibilidad con `freezed`, `json_serializable` y `riverpod_generator`; si los archivos generados (`*.g.dart`, `*.freezed.dart`) se incluyen en el Repo o se generan con `build_runner`; y paquete de `Either`, su alcance y su integración con `AsyncValue`.
-3. Cliente HTTP: `http` o `dio`.
-4. Debounce: `Timer` propio o un paquete.
-5. Lints: `flutter_lints` o `very_good_analysis`.
-6. Navegación en el MVP: `Navigator` simple o `go_router` (DF-4).
-7. Versión de Angular a instalar y herramienta de pruebas (Vitest o Jasmine).
-8. Idioma de los mensajes de commit (español o inglés).
+3. Resuelta (2026-10-06): `dio`.
+4. Resuelta: paquete `stream_transform`.
+5. Resuelta: `very_good_analysis`.
+6. Resuelta (2026-10-06): navegación con `go_router` dentro del MVP (ver §6.1).
+7. Resuelta: Angular 22 y Vitest; estado con NgRx Store clásico.
+8. Resuelta: commits en inglés.
 
 ## 10. Supuestos confirmados
 
