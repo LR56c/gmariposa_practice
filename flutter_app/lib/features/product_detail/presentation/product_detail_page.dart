@@ -3,7 +3,9 @@ import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
 import 'package:flutter_app/core/widgets/not_found_view.dart';
+import 'package:flutter_app/features/cart/presentation/cart_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/product_thumbnail.dart';
+import 'package:flutter_app/features/product_detail/presentation/added_to_cart_toast.dart';
 import 'package:flutter_app/features/product_detail/presentation/product_detail_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,19 +87,21 @@ class _DetailBody extends StatelessWidget {
               ],
             ),
           ),
-          const _AddToCartBar(),
+          _AddToCartBar(product: product),
         ],
       ),
     );
   }
 }
 
-/// Full-width primary button pinned to the bottom; inactive until Epic 3.
-class _AddToCartBar extends StatelessWidget {
-  const new();
+/// Full-width primary button pinned to the bottom.
+class _AddToCartBar extends ConsumerWidget {
+  const new({required this.product});
+
+  final Product product;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
@@ -109,7 +113,10 @@ class _AddToCartBar extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: FilledButton(
-            onPressed: null,
+            onPressed: () {
+              ref.read(cartProvider.notifier).add(product);
+              showAddedToCartToast(context);
+            },
             child: Text(context.t.addToCart),
           ),
         ),

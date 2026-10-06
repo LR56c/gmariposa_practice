@@ -5,6 +5,7 @@
   "retry": "Reintentar",
   "noMoreProducts": "No hay más productos",
   "addToCart": "Agregar al carrito",
+  "addedToCart": "Agregado al carrito",
   "backToCatalog": "Volver al catálogo",
   "noPhoto": "Sin foto",
   "errors": {

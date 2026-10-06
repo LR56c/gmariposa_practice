@@ -5,6 +5,7 @@
   "retry": "Retry",
   "noMoreProducts": "No more products",
   "addToCart": "Add to cart",
+  "addedToCart": "Added to cart",
   "backToCatalog": "Back to catalog",
   "noPhoto": "No photo",
   "errors": {

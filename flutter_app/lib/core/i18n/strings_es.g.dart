@@ -60,6 +60,9 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Agregar al carrito'
 	String get addToCart => 'Agregar al carrito';
 
+	/// es: 'Agregado al carrito'
+	String get addedToCart => 'Agregado al carrito';
+
 	/// es: 'Volver al catálogo'
 	String get backToCatalog => 'Volver al catálogo';
 
@@ -107,6 +110,7 @@ extension on Translations {
 			'retry' => 'Reintentar',
 			'noMoreProducts' => 'No hay más productos',
 			'addToCart' => 'Agregar al carrito',
+			'addedToCart' => 'Agregado al carrito',
 			'backToCatalog' => 'Volver al catálogo',
 			'noPhoto' => 'Sin foto',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
