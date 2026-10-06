@@ -43,6 +43,8 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get searchHint => 'Search products';
 	@override String get retry => 'Retry';
 	@override String get noMoreProducts => 'No more products';
+	@override String get addToCart => 'Add to cart';
+	@override String get backToCatalog => 'Back to catalog';
 	@override String get noPhoto => 'No photo';
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 }
@@ -57,6 +59,7 @@ class _Translations$errors$en implements Translations$errors$es {
 	@override String get network => 'Couldn\'t connect. Check your connection.';
 	@override String get server => 'Something went wrong. Please try again.';
 	@override String get parse => 'Couldn\'t read the response. Please try again.';
+	@override String get notFound => 'We couldn\'t find that product.';
 	@override String get generic => 'Something went wrong. Please try again.';
 }
 
@@ -73,10 +76,13 @@ extension on TranslationsEn {
 			'searchHint' => 'Search products',
 			'retry' => 'Retry',
 			'noMoreProducts' => 'No more products',
+			'addToCart' => 'Add to cart',
+			'backToCatalog' => 'Back to catalog',
 			'noPhoto' => 'No photo',
 			'errors.network' => 'Couldn\'t connect. Check your connection.',
 			'errors.server' => 'Something went wrong. Please try again.',
 			'errors.parse' => 'Couldn\'t read the response. Please try again.',
+			'errors.notFound' => 'We couldn\'t find that product.',
 			'errors.generic' => 'Something went wrong. Please try again.',
 			_ => null,
 		};

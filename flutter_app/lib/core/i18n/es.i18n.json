@@ -4,11 +4,14 @@
   "searchHint": "Buscar productos",
   "retry": "Reintentar",
   "noMoreProducts": "No hay más productos",
+  "addToCart": "Agregar al carrito",
+  "backToCatalog": "Volver al catálogo",
   "noPhoto": "Sin foto",
   "errors": {
     "network": "No se pudo conectar. Revisa tu conexión.",
     "server": "Algo salió mal. Inténtalo de nuevo.",
     "parse": "No se pudo leer la respuesta. Inténtalo de nuevo.",
+    "notFound": "No encontramos ese producto.",
     "generic": "Algo salió mal. Inténtalo de nuevo."
   }
 }

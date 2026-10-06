@@ -57,6 +57,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'No hay más productos'
 	String get noMoreProducts => 'No hay más productos';
 
+	/// es: 'Agregar al carrito'
+	String get addToCart => 'Agregar al carrito';
+
+	/// es: 'Volver al catálogo'
+	String get backToCatalog => 'Volver al catálogo';
+
 	/// es: 'Sin foto'
 	String get noPhoto => 'Sin foto';
 
@@ -80,6 +86,9 @@ class Translations$errors$es {
 	/// es: 'No se pudo leer la respuesta. Inténtalo de nuevo.'
 	String get parse => 'No se pudo leer la respuesta. Inténtalo de nuevo.';
 
+	/// es: 'No encontramos ese producto.'
+	String get notFound => 'No encontramos ese producto.';
+
 	/// es: 'Algo salió mal. Inténtalo de nuevo.'
 	String get generic => 'Algo salió mal. Inténtalo de nuevo.';
 }
@@ -97,10 +106,13 @@ extension on Translations {
 			'searchHint' => 'Buscar productos',
 			'retry' => 'Reintentar',
 			'noMoreProducts' => 'No hay más productos',
+			'addToCart' => 'Agregar al carrito',
+			'backToCatalog' => 'Volver al catálogo',
 			'noPhoto' => 'Sin foto',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
 			'errors.server' => 'Algo salió mal. Inténtalo de nuevo.',
 			'errors.parse' => 'No se pudo leer la respuesta. Inténtalo de nuevo.',
+			'errors.notFound' => 'No encontramos ese producto.',
 			'errors.generic' => 'Algo salió mal. Inténtalo de nuevo.',
 			_ => null,
 		};
