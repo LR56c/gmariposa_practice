@@ -26,50 +26,56 @@ final List<Product> _skeletonProducts = List.filled(
 const loadMoreThreshold = 200.0;
 
 /// `/`: the Catalog with its loading, empty, error and data states.
-class CatalogPage extends ConsumerWidget {
+class CatalogPage extends StatelessWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final catalog = ref.watch(catalogProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(t.appTitle)),
-      body: Column(
-        children: [
-          const _SearchField(),
-          Expanded(child: _body(context, ref, catalog)),
-        ],
+      appBar: AppBar(title: Text(context.t.appTitle)),
+      // The AppBar already covers the top inset.
+      body: const SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            _SearchField(),
+            Expanded(child: _CatalogBody()),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _body(
-    BuildContext context,
-    WidgetRef ref,
-    AsyncValue<CatalogState> catalog,
-  ) {
+class _CatalogBody extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = context.t;
-    return catalog.when(
-      // A retry from an error goes back to the loading state (AD-6).
-      skipLoadingOnRefresh: false,
-      loading: () => Skeletonizer(
-        child: _ProductList(
-          state: CatalogState(items: _skeletonProducts, total: 99),
-        ),
-      ),
-      error: (error, _) => ErrorView(
-        error: error,
-        onRetry: () => ref.invalidate(catalogProvider),
-      ),
-      data: (state) => state.items.isEmpty
-          ? Center(
-              child: Text(
-                t.emptyCatalog,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            )
-          : _ProductList(state: state),
-    );
+    return ref
+        .watch(catalogProvider)
+        .when(
+          // A retry from an error goes back to the loading state (AD-6).
+          skipLoadingOnRefresh: false,
+          loading: () => Skeletonizer(
+            child: _ProductList(
+              state: CatalogState(items: _skeletonProducts, total: 99),
+            ),
+          ),
+          error: (error, _) => ErrorView(
+            error: error,
+            onRetry: () => ref.invalidate(catalogProvider),
+          ),
+          data: (state) => state.items.isEmpty
+              ? Center(
+                  child: Text(
+                    t.emptyCatalog,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                )
+              : _ProductList(state: state),
+        );
   }
 }
 
