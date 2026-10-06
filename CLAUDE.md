@@ -20,8 +20,14 @@ Checklist general del usuario: `E:\dev\Projects\project-checklist.md` (aplicar s
 - Stories 5.2–5.5 son bonus (`optional`); la 5.1 verifica el MVP.
 
 ## Git: reglas obligatorias
-- **Una rama por cada item (story) de cada epic**, desde `main`: `<tipo>/<epic>-<story>-<slug>`
-  (ej. `feat/e2-s3-cart-notifier`). Merge a `main` al cerrar la story (historial real, no commit único).
+- **Modelo de ramas `main` ← `dev` ← `sprint/<epic>` ← story** (desde Epic 2; el Epic 1 se fusionó directo a `main`):
+  - `main`: solo versiones **verificadas** (analyze + test + prueba en emulador). Nunca se commitea directo.
+  - `dev`: integración; recibe cada sprint ya cerrado.
+  - `sprint/<epic>` (ej. `sprint/e2`): se crea desde `dev` al empezar el epic; recibe las stories con `--no-ff`.
+  - **Una rama por cada item (story) de cada epic**, desde su `sprint/<epic>`: `<tipo>/<epic>-<story>-<slug>`
+    (ej. `feat/e2-s3-cart-notifier`). Merge `--no-ff` a la rama del sprint al cerrar la story (historial real).
+  - Cierre de sprint: verificar en la rama del sprint (`dart format`, `flutter analyze`, `flutter test`, emulador) →
+    merge a `dev` → merge a `main` (mensaje `merge: sprint/<epic>`). Un fix tras el cierre va en `fix/...` desde `dev`.
 - **Conventional Commits** en todos los commits: `feat|fix|docs|test|refactor|chore|ci(scope): resumen`
   (scope = `flutter`, `angular`, `docs`, `repo`). Commits pequeños y frecuentes dentro de la rama.
 - Cada story BMAD debe incluir en sus tareas: crear rama, commits convencionales, merge.
