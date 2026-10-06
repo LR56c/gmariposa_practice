@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_app/core/cancel_signal.dart';
+import 'package:flutter_app/core/errors/base_exception.dart';
+import 'package:flutter_app/core/errors/errors.dart';
+import 'package:flutter_app/core/i18n/strings.g.dart';
+import 'package:flutter_app/features/product_detail/presentation/product_detail_page.dart';
+import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:flutter_app/features/products/domain/product_repository.dart';
+import 'package:flutter_app/features/products/presentation/provider/product_repository_provider.dart';
+import 'package:flutter_app/presentation/router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
+
+final Translations _t = AppLocale.es.buildSync();
+
+class _MockRepository extends Mock implements ProductRepository;
+
+Product _product(int id) => Product(
+  id: id,
+  title: 'Product $id',
+  price: 9.5,
+  rating: 4.5,
+  // Empty URL: the image shows "Sin foto" without touching the network.
+  imageUrl: '',
+);
+
+Widget _app(_MockRepository repository, Widget home) => TranslationProvider(
+  child: ProviderScope(
+    retry: (_, _) => null,
+    overrides: [productRepositoryProvider.overrideWithValue(repository)],
+    child: MaterialApp(home: home),
+  ),
+);
+
+void main() {
+  late _MockRepository repository;
+
+  setUpAll(() => registerFallbackValue(CancelSignal()));
+  setUp(() => repository = _MockRepository());
+
+  void answer(int id, Either<Errors, Product> Function() result) =>
+      when(() => repository.getById(id, cancel: any(named: 'cancel')))
+          .thenAnswer((_) async => result());
+
+  testWidgets('shows the product and an inactive "Agregar al carrito"', (
+    tester,
+  ) async {
+    answer(1, () => Right(_product(1)));
+    await tester.pumpWidget(_app(repository, const ProductDetailPage(id: 1)));
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    await tester.pump();
+
+    expect(find.text('Product 1'), findsOneWidget);
+    expect(find.text('9.50'), findsOneWidget);
+    expect(find.text('★ 4.5'), findsOneWidget);
+    final button = tester.widget<FilledButton>(find.byType(FilledButton));
+    expect(button.onPressed, isNull);
+    expect(find.text(_t.addToCart), findsOneWidget);
+  });
+
+  testWidgets('shows the error and "Reintentar" reloads the product', (
+    tester,
+  ) async {
+    var fail = true;
+    answer(
+      1,
+      () =>
+          fail ? const Left(Errors([NetworkException()])) : Right(_product(1)),
+    );
+    await tester.pumpWidget(_app(repository, const ProductDetailPage(id: 1)));
+    await tester.pump();
+    expect(find.text(_t.errors.network), findsOneWidget);
+
+    fail = false;
+    await tester.tap(find.text(_t.retry));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Product 1'), findsOneWidget);
+    verify(() => repository.getById(1, cancel: any(named: 'cancel'))).called(2);
+  });
+
+  testWidgets('a 404 shows "No encontramos ese producto."', (tester) async {
+    answer(404, () => const Left(Errors([NotFoundException()])));
+    await tester.pumpWidget(_app(repository, const ProductDetailPage(id: 404)));
+    await tester.pump();
+
+    expect(find.text('No encontramos ese producto.'), findsOneWidget);
+    expect(find.text(_t.errors.server), findsNothing);
+  });
+
+  testWidgets('each id keeps its own state', (tester) async {
+    answer(1, () => Right(_product(1)));
+    answer(2, () => Right(_product(2)));
+    for (final id in [1, 2]) {
+      await tester.pumpWidget(_app(repository, ProductDetailPage(id: id)));
+      await tester.pump();
+      expect(find.text('Product $id'), findsOneWidget);
+    }
+    verify(() => repository.getById(1, cancel: any(named: 'cancel'))).called(1);
+    verify(() => repository.getById(2, cancel: any(named: 'cancel'))).called(1);
+  });
+
+  testWidgets('/product/abc goes to the error screen without a request', (
+    tester,
+  ) async {
+    appRouter.go('/product/abc');
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: ProviderScope(
+          overrides: [productRepositoryProvider.overrideWithValue(repository)],
+          child: MaterialApp.router(routerConfig: appRouter),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('No encontramos ese producto.'), findsOneWidget);
+    verifyZeroInteractions(repository);
+  });
+}
