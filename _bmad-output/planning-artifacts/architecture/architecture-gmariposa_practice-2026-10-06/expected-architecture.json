@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "gmariposa_practice — arquitectura esperada",
+    "output": "expected-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "flutterPresentation", "type": "frontend", "label": "presentation", "sublabel": "widgets, notifiers, router", "tag": "Riverpod", "pos": [40, 100], "size": [160, 64] },
+    { "id": "flutterDomain", "type": "backend", "label": "domain", "sublabel": "modelos freezed, contrato", "tag": "Dart puro", "pos": [270, 100], "size": [160, 64] },
+    { "id": "flutterData", "type": "backend", "label": "data", "sublabel": "Repository, mapeo de errores", "tag": "Either", "pos": [500, 100], "size": [160, 64] },
+    { "id": "flutterCore", "type": "cloud", "label": "core", "sublabel": "Dio, Errors, CancelSignal", "pos": [730, 100], "size": [160, 64] },
+    { "id": "dummyjson", "type": "external", "label": "DummyJSON", "sublabel": "API pública", "pos": [980, 215], "size": [140, 64] },
+    { "id": "ngPage", "type": "frontend", "label": "OrdersPage", "sublabel": "contenedor", "pos": [40, 330], "size": [160, 64] },
+    { "id": "ngCard", "type": "frontend", "label": "OrderCard", "sublabel": "presentacional, OnPush", "pos": [40, 470], "size": [160, 64] },
+    { "id": "ngStore", "type": "messagebus", "label": "NgRx Store", "sublabel": "acciones, reducer, selectores", "pos": [270, 330], "size": [160, 64] },
+    { "id": "ngEffects", "type": "backend", "label": "Effects", "sublabel": "exhaustMap, mergeMap", "pos": [500, 330], "size": [160, 64] },
+    { "id": "ngService", "type": "backend", "label": "OrdersService", "sublabel": "HttpClient, Schema, Result", "tag": "effect", "pos": [730, 330], "size": [160, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "flutter_app", "wraps": ["flutterPresentation", "flutterDomain", "flutterData", "flutterCore"] },
+    { "kind": "region", "label": "angular_app", "wraps": ["ngPage", "ngCard", "ngStore", "ngEffects", "ngService"] }
+  ],
+  "connections": [
+    { "id": "pres-domain", "from": "flutterPresentation", "to": "flutterDomain", "label": "usa", "variant": "emphasis" },
+    { "id": "data-domain", "from": "flutterData", "to": "flutterDomain", "label": "implementa", "fromSide": "left", "toSide": "right" },
+    { "id": "data-core", "from": "flutterData", "to": "flutterCore", "label": "Dio" },
+    { "id": "core-api", "from": "flutterCore", "to": "dummyjson", "label": "HTTP", "variant": "emphasis" },
+    { "id": "page-store", "from": "ngPage", "to": "ngStore", "label": "acciones" },
+    { "id": "page-card", "from": "ngPage", "to": "ngCard", "label": "input / output", "fromSide": "bottom", "toSide": "top", "labelDy": 24 },
+    { "id": "store-effects", "from": "ngStore", "to": "ngEffects", "label": "dispara" },
+    { "id": "effects-service", "from": "ngEffects", "to": "ngService", "label": "llama" },
+    { "id": "service-api", "from": "ngService", "to": "dummyjson", "label": "HTTP", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Flutter: reglas", "items": ["domain solo importa core/errors", "presentation no importa dio", "Product vive en features/products", "Errors llegan como AsyncError"] },
+    { "dot": "violet", "title": "Angular: reglas", "items": ["Solo OrdersService usa HttpClient", "Solo los effects llaman al servicio", "Un único mapa de Orders por id"] },
+    { "dot": "amber", "title": "Compartido", "items": ["Dos apps independientes, sin código común", "Mismo patrón de errores: BaseException y Errors"] }
+  ]
+}
