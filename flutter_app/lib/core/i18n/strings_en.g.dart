@@ -47,6 +47,16 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get addedToCart => 'Added to cart';
 	@override String get backToCatalog => 'Back to catalog';
 	@override String get noPhoto => 'No photo';
+	@override String get cart => 'Cart';
+	@override String get cartEmpty => 'Your cart is empty';
+	@override String get remove => 'Remove';
+	@override String decreaseQuantity({required Object title}) => 'Decrease quantity of ${title}';
+	@override String increaseQuantity({required Object title}) => 'Increase quantity of ${title}';
+	@override String units({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} unit',
+		other: '${n} units',
+	);
+	@override String total({required Object amount}) => 'Total ${amount}';
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 }
 
@@ -81,6 +91,13 @@ extension on TranslationsEn {
 			'addedToCart' => 'Added to cart',
 			'backToCatalog' => 'Back to catalog',
 			'noPhoto' => 'No photo',
+			'cart' => 'Cart',
+			'cartEmpty' => 'Your cart is empty',
+			'remove' => 'Remove',
+			'decreaseQuantity' => ({required Object title}) => 'Decrease quantity of ${title}',
+			'increaseQuantity' => ({required Object title}) => 'Increase quantity of ${title}',
+			'units' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: '${n} unit', other: '${n} units', ), 
+			'total' => ({required Object amount}) => 'Total ${amount}',
 			'errors.network' => 'Couldn\'t connect. Check your connection.',
 			'errors.server' => 'Something went wrong. Please try again.',
 			'errors.parse' => 'Couldn\'t read the response. Please try again.',

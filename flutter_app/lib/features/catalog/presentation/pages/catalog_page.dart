@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
+import 'package:flutter_app/features/cart/presentation/widgets/cart_icon_button.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/catalog_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/search_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/widgets/product_list_item.dart';
@@ -32,7 +33,10 @@ class CatalogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.t.appTitle)),
+      appBar: AppBar(
+        title: Text(context.t.appTitle),
+        actions: const [CartIconButton()],
+      ),
       // The AppBar already covers the top inset.
       body: const SafeArea(
         top: false,

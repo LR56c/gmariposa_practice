@@ -69,6 +69,30 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Sin foto'
 	String get noPhoto => 'Sin foto';
 
+	/// es: 'Carrito'
+	String get cart => 'Carrito';
+
+	/// es: 'Tu carrito está vacío'
+	String get cartEmpty => 'Tu carrito está vacío';
+
+	/// es: 'Quitar'
+	String get remove => 'Quitar';
+
+	/// es: 'Disminuir cantidad de $title'
+	String decreaseQuantity({required Object title}) => 'Disminuir cantidad de ${title}';
+
+	/// es: 'Aumentar cantidad de $title'
+	String increaseQuantity({required Object title}) => 'Aumentar cantidad de ${title}';
+
+	/// es: '(one) {$n unidad} (other) {$n unidades}'
+	String units({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} unidad',
+		other: '${n} unidades',
+	);
+
+	/// es: 'Total $amount'
+	String total({required Object amount}) => 'Total ${amount}';
+
 	late final Translations$errors$es errors = Translations$errors$es._(_root);
 }
 
@@ -113,6 +137,13 @@ extension on Translations {
 			'addedToCart' => 'Agregado al carrito',
 			'backToCatalog' => 'Volver al catálogo',
 			'noPhoto' => 'Sin foto',
+			'cart' => 'Carrito',
+			'cartEmpty' => 'Tu carrito está vacío',
+			'remove' => 'Quitar',
+			'decreaseQuantity' => ({required Object title}) => 'Disminuir cantidad de ${title}',
+			'increaseQuantity' => ({required Object title}) => 'Aumentar cantidad de ${title}',
+			'units' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: '${n} unidad', other: '${n} unidades', ), 
+			'total' => ({required Object amount}) => 'Total ${amount}',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
 			'errors.server' => 'Algo salió mal. Inténtalo de nuevo.',
 			'errors.parse' => 'No se pudo leer la respuesta. Inténtalo de nuevo.',

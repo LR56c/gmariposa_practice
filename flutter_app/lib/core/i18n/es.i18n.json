@@ -8,6 +8,16 @@
   "addedToCart": "Agregado al carrito",
   "backToCatalog": "Volver al catálogo",
   "noPhoto": "Sin foto",
+  "cart": "Carrito",
+  "cartEmpty": "Tu carrito está vacío",
+  "remove": "Quitar",
+  "decreaseQuantity": "Disminuir cantidad de $title",
+  "increaseQuantity": "Aumentar cantidad de $title",
+  "units(plural, param=n)": {
+    "one": "$n unidad",
+    "other": "$n unidades"
+  },
+  "total": "Total $amount",
   "errors": {
     "network": "No se pudo conectar. Revisa tu conexión.",
     "server": "Algo salió mal. Inténtalo de nuevo.",
