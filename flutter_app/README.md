@@ -1,17 +1,29 @@
 # flutter_app
 
-A new Flutter project.
+Product catalog built with Flutter and Riverpod (Android).
 
-## Getting Started
+## Versions
 
-This project is a starting point for a Flutter application.
+| Tool | Version |
+| --- | --- |
+| Flutter | 3.47.6 (stable), pinned in `.fvmrc` |
+| Dart | 3.13.5 |
 
-A few resources to get you started if this is your first Flutter project:
+## Run
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```sh
+dart pub global activate fvm   # skip if fvm is already installed
+fvm install                    # reads .fvmrc
+fvm flutter pub get
+fvm flutter run               # with an Android emulator running
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Without fvm, any Flutter 3.47.x stable works.
+
+## Checks
+
+```sh
+fvm dart format --set-exit-if-changed .
+fvm flutter analyze
+fvm flutter test
+```
