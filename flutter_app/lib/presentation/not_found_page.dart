@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_app/core/widgets/not_found_view.dart';
 
 /// Unknown route or non-numeric product id: a message and a way back to `/`.
 class NotFoundPage extends StatelessWidget {
@@ -8,29 +8,9 @@ class NotFoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = context.t;
     return Scaffold(
-      appBar: AppBar(title: Text(t.appTitle)),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                t.errors.notFound,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              FilledButton.tonal(
-                onPressed: () => context.go('/'),
-                child: Text(t.backToCatalog),
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: AppBar(title: Text(context.t.appTitle)),
+      body: const NotFoundView(),
     );
   }
 }

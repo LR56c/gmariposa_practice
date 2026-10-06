@@ -8,6 +8,8 @@ class Errors implements Exception {
 
   bool get isCancelled => exceptions.isEmpty;
 
+  bool get isNotFound => exceptions.any((e) => e is NotFoundException);
+
   @override
   String toString() => 'Errors($exceptions)';
 }

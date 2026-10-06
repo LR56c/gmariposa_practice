@@ -89,6 +89,9 @@ void main() {
 
     expect(find.text('No encontramos ese producto.'), findsOneWidget);
     expect(find.text(_t.errors.server), findsNothing);
+    // Retrying a missing product is pointless: the way back replaces it.
+    expect(find.text(_t.retry), findsNothing);
+    expect(find.text(_t.backToCatalog), findsOneWidget);
   });
 
   testWidgets('each id keeps its own state', (tester) async {
