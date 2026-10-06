@@ -18,4 +18,7 @@ abstract interface class ProductRepository {
     int skip = 0,
     CancelSignal? cancel,
   });
+
+  /// A missing [id] fails with `NotFoundException`.
+  Future<Either<Errors, Product>> getById(int id, {CancelSignal? cancel});
 }

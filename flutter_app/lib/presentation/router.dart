@@ -1,6 +1,19 @@
 import 'package:flutter_app/features/catalog/presentation/catalog_page.dart';
+import 'package:flutter_app/features/product_detail/presentation/product_detail_page.dart';
+import 'package:flutter_app/presentation/not_found_page.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
-  routes: [GoRoute(path: '/', builder: (_, _) => const CatalogPage())],
+  errorBuilder: (_, _) => const NotFoundPage(),
+  routes: [
+    GoRoute(path: '/', builder: (_, _) => const CatalogPage()),
+    GoRoute(
+      path: '/product/:id',
+      builder: (_, state) {
+        // Parsed once here; a non-numeric id never reaches the network.
+        final id = int.tryParse(state.pathParameters['id']!);
+        return id == null ? const NotFoundPage() : ProductDetailPage(id: id);
+      },
+    ),
+  ],
 );

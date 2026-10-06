@@ -7,6 +7,7 @@ String errorMessage(Object error, Translations t) {
   return switch (error.exceptions.first) {
     NetworkException() => t.errors.network,
     ServerException() => t.errors.server,
+    NotFoundException() => t.errors.notFound,
     ParseException() => t.errors.parse,
   };
 }
