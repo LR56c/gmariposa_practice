@@ -26,10 +26,23 @@ const _product = Product(
   imageUrl: '',
 );
 
+/// Records the errors providers emit.
+final class _FailureRecorder extends ProviderObserver {
+  final failures = <Object>[];
+
+  @override
+  void providerDidFail(
+    ProviderObserverContext context,
+    Object error,
+    StackTrace stackTrace,
+  ) => failures.add(error);
+}
+
 Future<_MockRepository> _pump(
   WidgetTester tester,
-  Either<Errors, Page<Product>> Function() answer,
-) async {
+  Either<Errors, Page<Product>> Function() answer, {
+  ProviderObserver? observer,
+}) async {
   final repository = _MockRepository();
   when(() => repository.list(cancel: any(named: 'cancel')))
       .thenAnswer((_) async => answer());
@@ -37,6 +50,7 @@ Future<_MockRepository> _pump(
     TranslationProvider(
       child: ProviderScope(
         retry: (_, _) => null,
+        observers: [?observer],
         overrides: [productRepositoryProvider.overrideWithValue(repository)],
         child: const MaterialApp(home: CatalogPage()),
       ),
@@ -71,11 +85,13 @@ void main() {
     tester,
   ) async {
     var fail = true;
+    final recorder = _FailureRecorder();
     final repository = await _pump(
       tester,
       () => fail
           ? const Left(Errors([NetworkException()]))
           : const Right(Page(items: [_product], total: 1)),
+      observer: recorder,
     );
     await tester.pump();
 
@@ -88,5 +104,7 @@ void main() {
 
     expect(find.text('Essence Mascara'), findsOneWidget);
     verify(() => repository.list(cancel: any(named: 'cancel'))).called(2);
+    // Only the first load failed; the retry did not fail again.
+    expect(recorder.failures, hasLength(1));
   });
 }
