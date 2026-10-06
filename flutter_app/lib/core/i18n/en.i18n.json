@@ -1,0 +1,12 @@
+{
+  "appTitle": "Mini Catalog",
+  "emptyCatalog": "No products",
+  "retry": "Retry",
+  "noPhoto": "No photo",
+  "errors": {
+    "network": "Couldn't connect. Check your connection.",
+    "server": "Something went wrong. Please try again.",
+    "parse": "Couldn't read the response. Please try again.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

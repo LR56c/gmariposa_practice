@@ -1,13 +1,13 @@
+import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
+import 'package:flutter_app/core/i18n/strings.g.dart';
 
-/// User-facing text for [error] (`EXPERIENCE.md`): widgets never build it.
-String errorMessage(Object error) {
-  final code = error is Errors && error.exceptions.isNotEmpty
-      ? error.exceptions.first.code
-      : null;
-  return switch (code) {
-    'network' => 'No se pudo conectar. Revisa tu conexión.',
-    'parse' => 'No se pudo leer la respuesta. Inténtalo de nuevo.',
-    _ => 'Algo salió mal. Inténtalo de nuevo.',
+/// Localized text for [error]: widgets never build it.
+String errorMessage(Object error, Translations t) {
+  if (error is! Errors || error.exceptions.isEmpty) return t.errors.generic;
+  return switch (error.exceptions.first) {
+    NetworkException() => t.errors.network,
+    ServerException() => t.errors.server,
+    ParseException() => t.errors.parse,
   };
 }

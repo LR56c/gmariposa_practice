@@ -1,0 +1,12 @@
+{
+  "appTitle": "Mini Catálogo",
+  "emptyCatalog": "No hay productos",
+  "retry": "Reintentar",
+  "noPhoto": "Sin foto",
+  "errors": {
+    "network": "No se pudo conectar. Revisa tu conexión.",
+    "server": "Algo salió mal. Inténtalo de nuevo.",
+    "parse": "No se pudo leer la respuesta. Inténtalo de nuevo.",
+    "generic": "Algo salió mal. Inténtalo de nuevo."
+  }
+}
