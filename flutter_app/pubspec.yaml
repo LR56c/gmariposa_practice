@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^4.0.4
   dio: ^5.11.1
   flutter:
     sdk: flutter
@@ -44,6 +45,7 @@ dev_dependencies:
     sdk: flutter
   freezed: ^4.0.2
   json_serializable: ^6.14.1
+  mocktail: ^1.0.5
   riverpod_generator: 4.0.9
   very_good_analysis: 11.0.0
 
