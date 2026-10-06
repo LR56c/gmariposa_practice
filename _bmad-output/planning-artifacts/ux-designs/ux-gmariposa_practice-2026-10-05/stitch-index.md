@@ -17,17 +17,17 @@ Proyecto Stitch: `projects/475278247836846461` · Design system: `assets/1560818
 
 | Pantalla | App | Screen ID Stitch | Ruta / contenedor | FR | Story |
 |---|---|---|---|---|---|
-| Catálogo | Flutter | `0d762685e2044b1da58750a9b667a78c` | `go_router` `/` | FR-1, 2, 3, 9 | _por asignar (epics)_ |
-| Detalle | Flutter | `b0e799e0db0b4c42be81e70c72658b69` | `/product/:id` | FR-4, 5, 6, 9 | _por asignar_ |
-| Carrito | Flutter | `f6db58a53f334618803f46bd60e49ce7` | `/cart` | FR-6 a 9 | _por asignar_ |
-| Órdenes | Angular | `1b9f30e0c87346e89569ed83f17ec75b` | `OrdersPageComponent` (página única) | FR-13 a 16 | _por asignar_ |
+| Catálogo | Flutter | `0d762685e2044b1da58750a9b667a78c` | `go_router` `/` | FR-1, 2, 3, 9 | 1.3, 1.4, 1.5, 3.2, 3.3 |
+| Detalle | Flutter | `b0e799e0db0b4c42be81e70c72658b69` | `/product/:id` | FR-4, 5, 6, 9 | 2.1, 3.1, 3.3 |
+| Carrito | Flutter | `f6db58a53f334618803f46bd60e49ce7` | `/cart` | FR-6 a 9 | 3.2, 3.3 |
+| Órdenes | Angular | `1b9f30e0c87346e89569ed83f17ec75b` | `OrdersPageComponent` (`/`) y detalle en `/orders/:id` | FR-13 a 16 | 4.2, 4.3, 4.4 |
 
 Sin pantalla en Stitch (solo documentados en `EXPERIENCE.md`): estados de carga, vacío y error, y carrito vacío.
 
 ## Transversal: no implementar en ninguna pantalla
 
 Barra inferior, menú lateral o hamburguesa, banners de envío, cupones, subtotales de envío o descuento, sellos de pago,
-favoritos, reseñas, chips de categoría (DF-2), "Tramitar pedido" y cualquier ícono de filtros. Además:
+favoritos, reseñas, chips de categoría (el filtro de DF-2 es un botón con un modal, story 5.2), "Tramitar pedido" y cualquier ícono de filtros. Además:
 
 - Importes siempre sin símbolo de moneda y con 2 decimales.
 - Ids reales de DummyJSON; no inventar formatos como `#ORD-001` o `usr_…`.
@@ -76,8 +76,8 @@ favoritos, reseñas, chips de categoría (DF-2), "Tramitar pedido" y cualquier �
 | Barra superior "Gestión de Órdenes · Historial · Reportes" y íconos de refrescar | No implementar | Página única, sin navegación |
 | Etiqueta "Usuario" | Usar `userId` | FR-13 |
 | "Total con descuento" siempre visible | Solo si la orden lo trae | FR-13 |
-| Orden #1 expandida de forma fija | Expandir al emitir el `id` desde "Ver detalle" | FR-16 |
-| "Ocultar detalle" | Permitido [ASSUMPTION] | UX razonable; FR-16 no lo prohíbe |
+| Orden #1 expandida de forma fija | "Ver detalle" navega a `/orders/:id`, que muestra los productos | FR-16 |
+| "Ocultar detalle" | No implementar | El detalle es una ruta, no una tarjeta expandible |
 | Tabla con productos inventados | Datos de `/carts`; "Precio" es unitario | FR-16 |
 | Filtro "Total mínimo" con valor 30.00 | Filtra por `total >= mínimo`, no por el descontado; vacío = todas las órdenes | FR-14 |
 | Anillo de foco en el primario `#006A60` | Usar `{colors.focus}` (`#0B57D0`) | Foco visible según el tema |

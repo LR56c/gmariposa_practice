@@ -168,14 +168,17 @@ botones, buscador y badge, y `{rounded.sm}` en miniaturas.
   **button-text-danger**. El "−" deshabilitado se ve atenuado.
 - **cart-footer**: pie fijo con las unidades y el total, con separación superior sutil.
 - **order-card**: id, `userId`, total y, solo si existe, total con descuento; un **button-tonal** "Ver detalle".
-- **Tabla de productos de la orden**: columnas Título, Cantidad y Precio, dentro de la tarjeta expandida.
+- **Tabla de productos de la orden**: columnas Título, Cantidad y Precio, en la página de detalle `/orders/:id`.
 - **Estados**: skeleton `{colors.skeleton}` o indicador de progreso centrado; texto para el vacío; mensaje y
   **button-tonal** "Reintentar" para el error. Un pie de lista con indicador sirve para la carga de páginas (DF-1).
+
+- **toast** (Flutter, `toastification`): aviso breve "Agregado al carrito", sobre las superficies y colores de los tokens,
+  sin acumularse y con movimiento reducido si el sistema lo pide.
 
 ## Do's and Don'ts
 
 - Sí: importes con 2 decimales y sin símbolo de moneda, foco `{colors.focus}` visible y contraste AA.
-- Sí: los mismos tokens en Flutter (`ThemeData`/`ColorScheme`) y en Angular (variables CSS).
+- Sí: los mismos tokens en Flutter (`ThemeData`/`ColorScheme`) y en Angular (bloque `@theme` de Tailwind).
 - No: usar `{colors.danger}` como decoración ni `{colors.primary}` para errores.
 - No: sombras marcadas, gradientes ni ilustraciones.
 - No: lo que el mock de Stitch agregó y la spec no pide (ver `stitch-index.md`, sección "Transversal").

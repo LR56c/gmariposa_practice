@@ -22,8 +22,8 @@ código. El texto literal de la UI va entre comillas rectas. Lo marcado `[ASSUMP
   (navegador). Cada una tiene su código; comparten solo la identidad visual.
 - **Datos**: DummyJSON. Sin cuentas, pagos, envíos ni backend propio. El carrito vive en memoria y se pierde al cerrar la
   app (DF-3, persistencia, queda fuera).
-- **UI system**: Material 3 en Flutter (`ThemeData` con el `ColorScheme` de `DESIGN.md`); Angular con CSS propio y las
-  mismas variables. Este documento solo especifica el comportamiento.
+- **UI system**: Material 3 en Flutter (`ThemeData` con el `ColorScheme` de `DESIGN.md`); Angular con Tailwind y los
+  mismos tokens. Este documento solo especifica el comportamiento.
 - **Idioma de la UI**: español [ASSUMPTION; el PRD no lo define]. Código en inglés.
 - **Formato de importes** (ambas apps): punto decimal, 2 decimales, sin separador de miles y sin símbolo de moneda
   (FR-9). Ejemplo: `1234.50`.
@@ -45,8 +45,8 @@ código. El texto literal de la UI va entre comillas rectas. Lo marcado `[ASSUMP
 - Del Catálogo al Detalle y del Catálogo al Carrito se navega con `push`, para que "atrás" vuelva a la pantalla anterior.
 - Sin barra inferior, menú lateral ni pestañas. El contador del AppBar es el acceso al carrito.
 
-**Angular**: una sola página, `OrdersPageComponent`, con un `OrderCardComponent` por orden. Sin routing en el MVP;
-`/orders/:id` lazy (DA-1) es evolución futura.
+**Angular**: una sola página, `OrdersPageComponent`, con un `OrderCardComponent` por orden. La ruta `/orders/:id` (lazy, DA-1) muestra
+el detalle de una orden y entró al MVP (PRD FR-16); "Ver detalle" navega a ella.
 
 ## Key Flows
 
@@ -65,7 +65,7 @@ Casos límite: sin red ve el mensaje de error con **Reintentar**. Quitar el últ
 1. Lucía abre el panel y ve las órdenes con `userId` y total.
 2. Escribe un total mínimo en el filtro.
 3. **Clímax**: la lista se reduce al instante, sin recargar ni repetir la petición.
-4. Pulsa **Ver detalle** en una orden y ve sus productos (título, cantidad, precio) en la misma página.
+4. Pulsa **Ver detalle** en una orden y ve sus productos (título, cantidad, precio) en la página de detalle de esa orden (`/orders/:id`).
 
 Casos límite: si la API falla ve un mensaje de error con **Reintentar**. Si ninguna orden alcanza el total ve el mensaje
 de vacío.
@@ -110,12 +110,12 @@ error se derivan de `Errors` en Flutter (FR-12) y de `OrdersService` en Angular;
   (FR-7).
 - **Quitar**: acción separada que elimina el ítem completo (FR-8). Sin diálogo de confirmación [ASSUMPTION].
 - **Agregar al carrito**: un producto nuevo entra con cantidad 1; uno existente suma 1 y nunca se duplica (FR-6). La app
-  confirma con un `SnackBar` breve "Agregado al carrito" [ASSUMPTION] y el contador sube.
-- **Total del carrito**: Σ precio × cantidad, calculado en centavos enteros (o redondeado al final) para evitar errores
+  confirma con un toast breve (`toastification`) "Agregado al carrito" [ASSUMPTION] y el contador sube.
+- **Total del carrito**: Σ precio × cantidad, calculado en `double` y redondeado solo al mostrarlo (AD-7), para evitar errores
   de coma flotante, con 2 decimales (FR-9). Con el carrito vacío no hay pie con total.
-- **Tarjeta de orden (Angular)**: es presentacional; "Ver detalle" **emite el id** al contenedor, que muestra los
-  productos de esa orden en la misma página (FR-16). "Ocultar detalle" cierra el detalle [ASSUMPTION]. Solo una orden
-  queda expandida a la vez [ASSUMPTION]; si el filtro oculta la orden expandida, el detalle se cierra.
+- **Tarjeta de orden (Angular)**: es presentacional; "Ver detalle" **emite el id** al contenedor, y el contenedor
+  navega a `/orders/:id`, que muestra los productos de esa orden (FR-16). Ya no hay "Ocultar detalle" ni una orden
+  expandida: el detalle es una página. Al volver, el filtro y la lista se conservan.
 - **Tabla de productos de la orden**: "Precio" es el precio unitario (2 decimales); sin símbolo de moneda.
 - **Filtro "Total mínimo"**: campo numérico; compara `total >= mínimo` contra el `total` (no el descontado) y un
   mínimo vacío muestra todas las órdenes (FR-14). Un valor no numérico (incluida la coma decimal) se trata como vacío.
@@ -150,10 +150,10 @@ Los mismos cuatro estados rigen Catálogo y búsqueda (FR-2, FR-3), Detalle (FR-
   `GET /carts?limit=0` para traer todas las órdenes (FR-13).
 - **Movimiento**: transiciones por defecto de Material, sin animaciones propias; se respeta "reducir movimiento".
 
-### Preparado para paginación infinita (DF-1, fuera del MVP)
+### Paginación infinita (DF-1, dentro del MVP)
 
 El Catálogo y la búsqueda ya piden `limit=20&skip=0` y el Repository devuelve el `total` de la API (FR-10), así que
-DF-1 no cambia el contrato. En el MVP solo se muestra la primera página, sin "ver más". Al activar DF-1:
+DF-1 no cambia el contrato. DF-1 entró al MVP (PRD §6.1, decisión de Mauri), con este comportamiento:
 
 - Al llegar a unos 200 px del final de la lista se pide la siguiente página (`skip += 20`), con una sola petición en
   vuelo a la vez.

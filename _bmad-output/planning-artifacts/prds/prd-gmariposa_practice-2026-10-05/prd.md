@@ -228,7 +228,7 @@ El Usuario puede ver una lista de Orders, cada uno en su tarjeta. Realiza UJ-2.
 El Usuario puede filtrar los Orders por un total mínimo. Realiza UJ-2.
 
 **Consecuencias (verificables):**
-- El filtro usa el campo `total` del Order (no el total con descuento) y se captura con un `FormControl` (o un signal) que despacha el valor al Store de NgRx, dueño del estado del filtro.
+- El filtro usa el campo `total` del Order (no el total con descuento) y se captura con un `FormControl` (o un signal) que actualiza el store manual de Angular (AD-16), dueño del estado del filtro.
 - Al cambiar el valor del filtro, la lista se actualiza sin recargar la página ni repetir la petición, porque se aplica sobre los datos ya cargados.
 - Un Order cuyo `total` es igual al mínimo se incluye (comparación `>=`).
 - Con el filtro vacío se muestran todos los Orders.
@@ -335,7 +335,7 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 - Navegación con `go_router` (decisión de Mauri, 2026-10-06; antes DF-4). Rutas `/`, `/product/:id` y `/cart`.
 - Paginación infinita en el Catalog y en la búsqueda (DF-1 promovido al MVP, decisión de Mauri, 2026-10-06).
 - Deep link a `/product/:id` verificado en el emulador Android con `adb` (decisión de arquitectura AD-9).
-- Angular: estado con NgRx Store clásico, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md`. Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
+- Angular: estado con un store manual con signals (sin NgRx, `@ngrx/*` instalado sin uso), estilos con Tailwind, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md` (AD-16, AD-17). Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
 - Apoyo de UX: dirección visual con `bmad-ux` y un Stitch pequeño con 4 pantallas (listado, detalle, carrito y panel de órdenes), con un índice pantalla ↔ story que actúa como gate en las stories de UI.
 
 **Angular priorizado.** Lo que el PDF pide para Angular se prioriza. Estos deseables se hacen apenas se cierran los obligatorios de Angular, antes que cualquier deseable o bonus de Flutter:
@@ -353,11 +353,11 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 
 | ID | Parte | Ítem |
 |---|---|---|
-| DF-2 | Flutter | Filtro por categoría (`GET /products/categories`), combinable con la búsqueda |
-| DF-3 | Flutter | Persistencia del Cart (`shared_preferences` o `hive`) |
+| DF-2 | Flutter | Filtro por categoría (`GET /products/categories`), combinable con la búsqueda; selector en un modal con `wolt_modal_sheet`. Bonus planificado (story 5.2) |
+| DF-3 | Flutter | Persistencia del Cart con `shared_preferences` (decidido). Bonus planificado (story 5.3) |
 | DF-6 | Flutter | Tema claro/oscuro controlado por un provider |
-| B-1 | Flutter | Prueba de integración del flujo buscar → detalle → agregar al Cart |
-| B-2 | Repo | GitHub Action que ejecute `analyze` y `test` en cada push |
+| B-1 | Flutter | Prueba de integración del flujo buscar → detalle → agregar al Cart. Bonus planificado (story 5.4) |
+| B-2 | Repo | GitHub Action que ejecute `analyze` y `test` en cada push. Bonus planificado (story 5.5) |
 
 `[NOTE FOR PM: DF-5 (errores tipados) se integró como FR-12, y el bonus riverpod_generator está dentro del alcance desde el inicio.]`
 
@@ -396,7 +396,7 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 4. Resuelta: paquete `stream_transform`.
 5. Resuelta: `very_good_analysis`.
 6. Resuelta (2026-10-06): navegación con `go_router` dentro del MVP (ver §6.1).
-7. Resuelta: Angular 22 y Vitest; estado con NgRx Store clásico.
+7. Resuelta: Angular 22 y Vitest; estado con store manual (sin NgRx) y estilos con Tailwind.
 8. Resuelta: commits en inglés.
 
 ## 10. Supuestos confirmados
