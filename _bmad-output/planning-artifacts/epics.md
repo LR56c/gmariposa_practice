@@ -70,7 +70,7 @@ NFR9: Código e identificadores en inglés; README, `RESPUESTAS.md` y documentos
 - AD-4: `Errors`/`BaseException` en `core/errors/`; Repository devuelve `Future<Either<Errors, T>>` (`fpdart`); extensión propia `getOrThrow()` en la carga inicial; `loadMore` hace `fold` y escribe el error en el estado sin `AsyncValue.guard`.
 - AD-5: `riverpod_generator` en todos los providers; reintento automático de Riverpod 3 desactivado (`ProviderScope(retry: (_, __) => null)` y en tests); autoDispose por defecto, `keepAlive` en Cart, `searchTerm`, `Dio` y Repository; notifiers sin navegación ni UI.
 - AD-6: `searchTerm` (`Notifier<String>` keepAlive), `debouncedTerm` (`StreamProvider` con `stream_transform`, 400 ms, vacío inmediato), `catalogProvider` con `items`, `total`, `loadMore: AsyncValue<void>`; contador de época para descartar respuestas tardías; `CancelSignal` en `ref.onDispose`; `loadMore` con `skip = items.length`; "Reintentar" inicial = `ref.invalidate(catalogProvider)`; gatillo de `loadMore` por `ScrollController`.
-- AD-7: `CartItem` único en `cart/domain/` con funciones puras (agregar, cantidad, quitar, total); Notifier del Cart en `presentation/` con `keepAlive`; `cartCountProvider` derivado; total `double` redondeado solo al mostrar.
+- AD-7: `CartItem` único en `cart/domain/`; la lógica (agregar, cantidad, quitar) vive en el Notifier del Cart en `presentation/` con `keepAlive`; `cartTotalProvider` y `cartCountProvider` derivados; total `double` redondeado solo al mostrar.
 - AD-8: un único `GoRouter` en el shell (`MaterialApp.router`), sin provider; `context.push` del Catalog al detalle y al Cart; rutas `/`, `/product/:id`, `/cart` autosuficientes; `id` parseado a `int` una vez, inválido → pantalla de error; atrás con `canPop() ? pop() : go('/')`; `errorBuilder` para rutas desconocidas.
 - AD-9: deep link Android (`intent-filter` `VIEW`/`DEFAULT`/`BROWSABLE`, `scheme="gmariposa"`, `host="app"`) verificado con `adb shell am start …gmariposa://app/product/5`; resultado al README.
 - AD-10: Angular standalone, strict, zoneless; contenedor/presentacional; solo `OrdersService` usa `HttpClient` y solo el store manual llama a `OrdersService` (sustituye a "solo los effects", resolución 4); filtro del `FormControl` al store (`setMinTotal`), lista visible como valor derivado (`computed`); cada story corre `ng test` y `ng build`.
@@ -154,7 +154,7 @@ Lucía abre un Product por `id`, también desde un deep link, y ve su detalle co
 ### Epic 3: Armar el carrito (Flutter)
 Lucía agrega Products, cambia cantidades, quita ítems y ve total y contador desde cualquier pantalla.
 **FRs covered:** FR6, FR7, FR8, FR9
-**Notas:** lógica pura en `cart/domain`, Notifier `keepAlive`, badge del AppBar, pantalla `/cart`. Gate Stitch: Carrito.
+**Notas:** lógica en el Notifier `keepAlive` de `cart/presentation`, badge del AppBar, pantalla `/cart`. Gate Stitch: Carrito.
 
 ### Epic 4: Panel de órdenes (Angular)
 Lucía ve las Orders, filtra por total mínimo y abre el detalle de una, con estados de carga y error.
@@ -630,10 +630,10 @@ So that vaya armando mi compra y el carrito conserve lo agregado mientras navego
 **Then** `CartItem { Product product, int quantity }` se define una sola vez, inmutable (`freezed`) (AD-7, FR11)
 **And** `domain/` solo importa `products/domain` y las librerías permitidas, sin Flutter ni Riverpod (AD-2)
 
-**Given** las funciones puras del Cart en `cart/domain/`
-**When** se inspeccionan
-**Then** existen agregar, aumentar, disminuir, quitar, total y unidades, todas sin estado ni dependencias de UI (AD-7)
-**And** cada una devuelve una nueva lista y nunca muta la recibida (NFR5)
+**Given** el Notifier del Cart en `cart/presentation/`
+**When** se inspecciona
+**Then** expone agregar, aumentar, disminuir y quitar, más los providers derivados `cartTotalProvider` y `cartCountProvider`; no hay archivo de lógica aparte (AD-7)
+**And** cada cambio reemplaza el estado por una nueva lista y nunca muta la anterior (NFR5)
 **And** el total es la suma de precio × cantidad en `double`, sin redondear (AD-7)
 **And** las unidades son la suma de las cantidades, no la cantidad de ítems distintos (FR9)
 
@@ -657,7 +657,7 @@ So that vaya armando mi compra y el carrito conserve lo agregado mientras navego
 **Given** el Notifier del Cart en `cart/presentation/`
 **When** se inspecciona
 **Then** es un `Notifier` generado con `riverpod_generator` y `keepAlive: true`, y es el único dueño del estado (AD-5, AD-7, NFR1)
-**And** su estado es la lista inmutable de `CartItem` y delega toda la lógica en las funciones puras
+**And** su estado es la lista inmutable de `CartItem` y contiene él mismo la lógica de agregar, cantidad y quitar
 **And** el Cart se conserva al navegar entre pantallas y al volver al Catalog (UX-DR6, AD-7)
 **And** no navega ni muestra UI (AD-5)
 
@@ -677,9 +677,8 @@ So that vaya armando mi compra y el carrito conserve lo agregado mientras navego
 
 **Given** las pruebas de esta story
 **When** se ejecuta `flutter test`
-**Then** pasan al menos 3 pruebas unitarias de la lógica pura: agregar nuevo con cantidad 1, agregar existente sin duplicar, y disminuir que no baja de 1 ni elimina (NFR3)
-**And** otra prueba verifica el total y las unidades de una lista con varias cantidades
-**And** una prueba con `ProviderContainer` (reintento desactivado) verifica que el Notifier agrega y conserva el estado (NFR3, AD-5)
+**Then** pasan al menos 3 pruebas unitarias del Notifier con `ProviderContainer`: agregar nuevo con cantidad 1, agregar existente sin duplicar, y disminuir que no baja de 1 ni elimina (NFR3)
+**And** otra prueba verifica `cartTotalProvider` y `cartCountProvider` con varias cantidades (NFR3, AD-5)
 **And** una prueba de widget verifica que pulsar el botón agrega el Product y muestra el toast "Agregado al carrito" (el widget de prueba monta el `ToastificationWrapper`)
 
 ### Story 3.2: Revisar y editar el carrito
@@ -1321,7 +1320,7 @@ So that no pierda lo que agregué.
 **Given** `CartItem` en `cart/domain/`
 **When** se añade la serialización
 **Then** `CartItem` (y por tanto el `Product` que guarda) se serializa con `toJson` y `fromJson` generados, y `domain/` solo importa `json_annotation`, sin Flutter ni `shared_preferences` (AD-2, FR11)
-**And** las funciones puras de la story 3.1 no cambian
+**And** la lógica del Notifier de la story 3.1 no cambia
 
 **Given** `cart/data/`
 **When** se inspecciona

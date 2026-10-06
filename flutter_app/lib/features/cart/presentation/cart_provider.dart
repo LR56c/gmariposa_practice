@@ -40,5 +40,5 @@ double cartTotal(Ref ref) => ref
 
 /// Sum of quantities, not the number of distinct items.
 @Riverpod(keepAlive: true)
-int cartUnits(Ref ref) =>
+int cartCount(Ref ref) =>
     ref.watch(cartProvider).fold(0, (sum, i) => sum + i.quantity);
