@@ -1,4 +1,4 @@
-import 'package:flutter_app/features/cart/presentation/cart_provider.dart';
+import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

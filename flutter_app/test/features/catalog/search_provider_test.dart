@@ -1,4 +1,4 @@
-import 'package:flutter_app/features/catalog/presentation/search_provider.dart';
+import 'package:flutter_app/features/catalog/presentation/providers/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
