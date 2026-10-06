@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dirección 4 — Audaz expresivo · Mini Catálogo / Panel de Orders</title>
+<style>
+:root{
+  /* Audaz expresivo - hex:
+     primario fucsia #C2185B (sobre #FFF 5.9:1) | acento amarillo #FFD23F (texto #14111F encima 12:1) | tinta #14111F | fondo #FFFBEF
+     superficie #FFFFFF | pagina #F6E9B8 | texto secundario #4B4560 (8:1) | contorno #14111F | alerta #B3261E | foco #C2185B con separacion
+     miniaturas #FFB3D1 #FFE27A #A9E5D1 #B9C7FF | estrella #14111F */
+  --font:"Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --page:#F6E9B8;--bg:#FFFBEF;--surface:#fff;--surface2:#FFF0B3;--ink:#14111F;--muted:#4B4560;
+  --primary:#C2185B;--on-primary:#fff;--line:#14111F;--line-strong:#14111F;--focus:#C2185B;
+  --bar-bg:#FFD23F;--bar-ink:#14111F;--bar-border:3px solid #14111F;--badge:#C2185B;--on-badge:#fff;--badge-border:2px solid #14111F;
+  --danger:#B3261E;--skel:#EADFB0;--star:#14111F;
+  --t1:#FFB3D1;--t2:#FFE27A;--t3:#A9E5D1;--t4:#B9C7FF;
+  --r-card:24px;--r-btn:999px;--r-input:18px;--r-thumb:18px;--r-win:20px;--bw:2.5px;--elev:4px 4px 0 #14111F;
+  --item-bg:#fff;--item-border:2.5px solid #14111F;--item-pad:10px;--pad:16px;--gap:14px;--thumb:100px;--bar-h:68px;
+  --btn-border:2.5px solid #14111F;--btn-shadow:3px 3px 0 #14111F;--btn-font:800 16px var(--font);
+  --h-intro:900 40px var(--font);--h-sec:900 28px var(--font);--title:900 26px var(--font);--ptitle:800 15px/1.2 var(--font);
+  --price:900 18px var(--font);--price-lg:900 36px var(--font);--h1:900 28px/1.1 var(--font);--h-state:900 24px var(--font);--total:900 26px var(--font);
+  --dtitle:900 44px/1 var(--font);--oid:900 24px var(--font);--stat:900 30px var(--font);--tt:uppercase;
+  --dpad:40px 48px;--dgap:32px;--ocols:1fr 1fr;--ogap:24px;--ocard-pad:24px;--cellpad:12px 14px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--page);color:var(--ink);padding:32px;line-height:1.45}
+.intro{max-width:1280px;margin:0 auto 32px}
+.intro h1{font:var(--h-intro);margin-bottom:8px}
+.intro p{max-width:72ch;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;font-family:"Segoe UI",system-ui,sans-serif}
+.chips span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--ink)}
+.chips i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.25)}
+main{max-width:1320px;margin:0 auto}
+.sec{font:var(--h-sec);margin:40px 0 16px;color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:40px}
+.fig{display:flex;flex-direction:column;gap:10px}
+figcaption{font:13px "Segoe UI",system-ui,sans-serif;color:var(--muted);max-width:422px}
+.col figcaption{max-width:none}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.phone{width:422px;padding:16px;border-radius:48px;background:#1c1b1f}
+.screen{width:390px;height:780px;border-radius:32px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;position:relative}
+.screen.short{height:560px}
+.appbar{display:flex;align-items:center;gap:4px;min-height:var(--bar-h);padding:0 8px 0 var(--pad);background:var(--bar-bg);color:var(--bar-ink);border-bottom:var(--bar-border);flex:none}
+.appbar .iconbtn{margin-left:-8px}
+.title{flex:1;font:var(--title)}
+.cartbtn,.iconbtn{position:relative;width:48px;height:48px;display:grid;place-items:center;border:0;background:transparent;color:inherit;border-radius:var(--r-btn)}
+.badge{position:absolute;top:3px;right:1px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--badge);color:var(--on-badge);font:700 12px/16px "Segoe UI",system-ui,sans-serif;text-align:center;border:var(--badge-border);display:grid;place-items:center}
+.sw{padding:var(--pad);flex:none}
+.sf{position:relative}
+.sf svg{position:absolute;left:14px;top:14px;color:var(--muted)}
+.search{width:100%;height:48px;padding:0 14px 0 44px;border:var(--bw) solid var(--line-strong);border-radius:var(--r-input);background:var(--surface);font-size:16px}
+.search::placeholder{color:var(--muted);opacity:1}
+.colhead{display:none}
+.plist,.clist{flex:1;overflow:hidden;padding:0 var(--pad)}
+.pitem{display:flex;align-items:center;gap:12px;min-height:72px;padding:var(--item-pad);background:var(--item-bg);border:var(--item-border);border-radius:var(--r-card);margin-bottom:var(--gap);box-shadow:var(--elev)}
+.thumb{width:var(--thumb);height:var(--thumb-h,var(--thumb));border-radius:var(--r-thumb);flex:none;display:grid;place-items:center}
+.t1{background:var(--t1)}.t2{background:var(--t2)}.t3{background:var(--t3)}.t4{background:var(--t4)}
+.thumb.missing{background:var(--surface2);border:1.5px dashed var(--muted);color:var(--muted)}
+.pinfo{flex:1;min-width:0}
+.ptitle{font:var(--ptitle)}
+.rating{font:13px "Segoe UI",system-ui,sans-serif;color:var(--muted)}
+.star{color:var(--star)}
+.price{font:var(--price)}
+.foot{padding:10px var(--pad);font:13px "Segoe UI",system-ui,sans-serif;color:var(--muted);text-align:center;flex:none}
+.btn{min-height:48px;padding:0 24px;border-radius:var(--r-btn);background:var(--primary);color:var(--on-primary);border:var(--btn-border);font:var(--btn-font);box-shadow:var(--btn-shadow)}
+.btn:hover{filter:brightness(1.08)}
+.state,.dstate{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:32px;flex:1}
+.state h3,.dstate h3{font:var(--h-state)}
+.state p,.dstate p{color:var(--muted);max-width:30ch}
+.dstate p{max-width:52ch}
+.sicon{color:var(--primary)}
+.err .sicon{color:var(--danger)}
+.state .btn,.dstate .btn{margin-top:8px}
+.sk{background:var(--skel);border-radius:6px}
+.pitem.skel{border-color:var(--line)}
+.skel .l1{height:14px;width:80%;margin-bottom:8px}.skel .l2{height:12px;width:40%}.skel .l3{height:16px;width:44px}
+.hero{margin:var(--pad);height:250px;border-radius:var(--r-card);flex:none;border:var(--item-border);box-shadow:var(--elev)}
+.dbody{padding:0 var(--pad);display:flex;flex-direction:column;gap:10px;flex:1}
+.h1{font:var(--h1)}
+.drow{display:flex;align-items:baseline;gap:16px}
+.dprice{font:var(--price-lg)}
+.desc{color:var(--muted);font:15px/1.5 "Segoe UI",system-ui,sans-serif}
+.cta{margin:var(--pad);min-height:56px;width:calc(100% - 2 * var(--pad))}
+.citem{display:flex;flex-direction:column;gap:6px;padding:var(--item-pad);background:var(--item-bg);border:var(--item-border);border-radius:var(--r-card);margin-bottom:var(--gap);box-shadow:var(--elev)}
+.crow{display:flex;gap:12px;align-items:center}
+.citem .thumb{width:64px;height:64px}
+.cctl{display:flex;justify-content:space-between;align-items:center}
+.stepper{display:flex;align-items:center}
+.stepper button{width:48px;height:48px;font-size:22px;border:var(--bw) solid var(--line-strong);background:var(--surface);border-radius:var(--r-btn)}
+.stepper button.dis{opacity:.45;cursor:not-allowed}
+.stepper output{min-width:40px;text-align:center;font-weight:700;font-size:17px}
+.remove{min-height:48px;padding:0 16px;color:var(--danger);background:transparent;border:var(--bw) solid var(--danger);border-radius:var(--r-btn);font-weight:600}
+.totalbar{display:flex;justify-content:space-between;align-items:baseline;padding:16px var(--pad);background:var(--surface);border-top:var(--bar-border);font:var(--total);flex:none}
+.browser{width:1280px;border-radius:var(--r-win);overflow:hidden;border:1px solid #bdbdc4;background:#fff;box-shadow:0 10px 32px rgba(0,0,0,.14)}
+.bbar{height:44px;background:#e8e8ec;display:flex;align-items:center;gap:8px;padding:0 14px}
+.bbar i{width:12px;height:12px;border-radius:50%;background:#b5b5bd}
+.url{flex:1;max-width:520px;margin:0 auto;height:28px;border-radius:14px;background:#fff;color:#4a4a52;font:13px "Segoe UI",system-ui,sans-serif;display:flex;align-items:center;padding:0 14px}
+.page{background:var(--bg);padding:var(--dpad)}
+.phead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:var(--dgap)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.dtitle{font:var(--dtitle)}
+.filter label{display:block;font:600 13px "Segoe UI",system-ui,sans-serif;margin-bottom:6px}
+.filter input{height:44px;width:220px;padding:0 12px;border:var(--bw) solid var(--line-strong);border-radius:var(--r-input);background:var(--surface)}
+.filter input:focus-visible,.filter input.is-focus{outline:3px solid var(--focus);outline-offset:2px}
+.orders{display:grid;grid-template-columns:var(--ocols);gap:var(--ogap)}
+.ocard{background:var(--item-bg);border:var(--item-border);border-radius:var(--r-card);padding:var(--ocard-pad);box-shadow:var(--elev)}
+.ocard.open{grid-column:1/-1}
+.otop{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px}
+.oid{font:var(--oid)}
+.ouser{color:var(--muted);font:14px "Segoe UI",system-ui,sans-serif}
+.ostats{display:flex;gap:28px}
+.stat dt{font:12px "Segoe UI",system-ui,sans-serif;color:var(--muted);text-transform:var(--tt)}
+.stat dd{font:var(--stat)}
+.obtn{min-height:44px;padding:0 18px;background:transparent;color:var(--primary);border:var(--bw) solid var(--primary);border-radius:var(--r-btn);font:var(--btn-font)}
+.obtn:hover{background:var(--surface2)}
+.detail{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.detail h4{font:600 14px "Segoe UI",system-ui,sans-serif;margin-bottom:8px}
+.items{width:100%;border-collapse:collapse;font-family:"Segoe UI",system-ui,sans-serif}
+.items th,.items td{padding:var(--cellpad);text-align:left;border-bottom:1px solid var(--line)}
+.items th{font-size:12px;color:var(--muted);text-transform:var(--tt);font-weight:600}
+.items .num{text-align:right;font-variant-numeric:tabular-nums}
+.ocard.skel{display:flex;flex-direction:column;gap:12px}
+.ocard.skel .s1{height:20px;width:40%}.ocard.skel .s2{height:16px;width:70%}.ocard.skel .s3{height:40px;width:130px}
+.dstate{padding:56px 24px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+
+ .plist{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+ .plist .pitem{flex-direction:column;align-items:stretch;gap:8px;margin:0;min-height:0;position:relative}
+ .plist .pitem .thumb{width:100%;height:100px}
+ .plist .pitem .price{position:absolute;top:16px;left:16px;background:#FFD23F;border:2.5px solid #14111F;border-radius:999px;padding:0 10px;line-height:26px;font-size:15px}
+ .plist .pitem.skel{min-height:150px}
+ .thumb.missing{border-style:dashed;border-color:#14111F;color:#14111F}
+ .citem .thumb{width:64px;height:64px}
+ .btn:active{box-shadow:none;transform:translate(3px,3px)}
+ .search{box-shadow:3px 3px 0 #14111F}
+ .hero{height:230px}
+ .stepper button{box-shadow:2px 2px 0 #14111F}
+ .remove{box-shadow:2px 2px 0 #14111F;background:#fff}
+ .totalbar{background:#FFD23F}
+ .foot{font-weight:700;color:var(--ink)}
+ .ocard.open{background:#FFF0B3}
+ .oid{display:inline-block;background:#FFD23F;border:2.5px solid #14111F;border-radius:999px;padding:0 14px}
+ .oh{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+ .ostats{width:100%}
+ .stat dd{color:var(--primary)}
+ .otop{align-items:flex-start}
+ .otop .obtn{margin-left:auto}
+ .obtn{box-shadow:3px 3px 0 #14111F;background:#fff;border-color:#14111F;color:#14111F}
+ .items thead{background:#14111F}.items th{color:#fff}
+ .items td{font-weight:700}
+ .filter input{box-shadow:3px 3px 0 #14111F;font-weight:700}
+ .dstate{border:2.5px dashed #14111F;border-radius:24px;margin-top:8px}
+</style></head><body>
+<div class="intro"><h1>Dirección 4 · Audaz expresivo</h1><p>Dirección de marca juvenil: fucsia y amarillo sobre crema, contornos gruesos de 2.5 px, sombras duras desplazadas y radios muy redondeados. Tipografía de peso 800, productos en rejilla de dos columnas con imagen protagonista y precio como etiqueta. En el panel, las orders son tarjetas grandes de dos columnas con totales en tamaño de titular.</p><div class="chips"><span><i style="background:#C2185B"></i>Primario #C2185B</span><span><i style="background:#FFD23F"></i>Acento #FFD23F</span><span><i style="background:#14111F"></i>Tinta #14111F</span><span><i style="background:#FFFBEF"></i>Fondo #FFFBEF</span><span><i style="background:#B3261E"></i>Alerta #B3261E</span></div></div>
+<main>
+<h2 class="sec">A · Móvil 390 px — Mini Catálogo (Flutter)</h2>
+<div class="row"><figure class="fig"><div class="phone"><div class="screen"><header class="appbar"><h2 class="title">Mini Catálogo</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="sw"><div class="sf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search" type="search" aria-label="Buscar productos" placeholder="Buscar productos" value=""></div></div><div class="colhead"><span>Producto</span><span>Precio</span></div><div class="plist"><article class="pitem"><div class="thumb t1" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Essence Mascara Lash Princess</h3><span class="rating"><span class="star">★</span> 4.9</span></div><div class="price">9.99</div></article><article class="pitem"><div class="thumb t2" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Eyeshadow Palette with Mirror</h3><span class="rating"><span class="star">★</span> 3.8</span></div><div class="price">19.99</div></article><article class="pitem"><div class="thumb missing" role="img" aria-label="Imagen no disponible"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/><path d="m4 4 16 16"/></svg></div><div class="pinfo"><h3 class="ptitle">Powder Canister</h3><span class="rating"><span class="star">★</span> 3.7</span></div><div class="price">14.99</div></article><article class="pitem"><div class="thumb t4" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Red Lipstick</h3><span class="rating"><span class="star">★</span> 4.4</span></div><div class="price">12.99</div></article><article class="pitem"><div class="thumb t1" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Red Nail Polish</h3><span class="rating"><span class="star">★</span> 4.3</span></div><div class="price">8.99</div></article><article class="pitem"><div class="thumb t2" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Calvin Klein CK One</h3><span class="rating"><span class="star">★</span> 4.8</span></div><div class="price">49.99</div></article><article class="pitem"><div class="thumb t3" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Chanel Coco Noir Eau De</h3><span class="rating"><span class="star">★</span> 4.9</span></div><div class="price">129.99</div></article><article class="pitem"><div class="thumb t4" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Dior J'adore</h3><span class="rating"><span class="star">★</span> 4.0</span></div><div class="price">89.99</div></article></div><div class="foot">20 productos</div></div></div><figcaption>Listado (hero) — 20 productos, uno con imagen faltante</figcaption></figure><figure class="fig"><div class="phone"><div class="screen"><header class="appbar"><button class="iconbtn" aria-label="Volver"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><h2 class="title">Detalle</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="hero t1" role="img" aria-label="Imagen del producto"></div><div class="dbody"><h1 class="h1">Essence Mascara Lash Princess</h1><div class="drow"><span class="dprice">9.99</span><span class="rating"><span class="star">★</span> 4.9 de 5</span></div><p class="desc">Máscara de pestañas con efecto volumen y curvatura, de larga duración y sin grumos.</p></div><button class="btn cta">Agregar al carrito</button></div></div><figcaption>Detalle de producto</figcaption></figure><figure class="fig"><div class="phone"><div class="screen"><header class="appbar"><button class="iconbtn" aria-label="Volver"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><h2 class="title">Carrito</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="clist"><article class="citem"><div class="crow"><div class="thumb t1" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Essence Mascara Lash Princess</h3><div class="price">9.99</div></div></div><div class="cctl"><div class="stepper" role="group" aria-label="Cantidad"><button aria-label="Disminuir cantidad">−</button><output>2</output><button aria-label="Aumentar cantidad">+</button></div><button class="remove">Quitar</button></div></article><article class="citem"><div class="crow"><div class="thumb t4" role="img" aria-label="Imagen del producto"></div><div class="pinfo"><h3 class="ptitle">Red Lipstick</h3><div class="price">12.99</div></div></div><div class="cctl"><div class="stepper" role="group" aria-label="Cantidad"><button aria-disabled="true" class="dis" aria-label="Disminuir cantidad">−</button><output>1</output><button aria-label="Aumentar cantidad">+</button></div><button class="remove">Quitar</button></div></article></div><div class="totalbar"><span>Total</span><strong>32.97</strong></div></div></div><figcaption>Carrito — cantidad mínima 1, Quitar separado</figcaption></figure><figure class="fig"><div class="phone"><div class="screen short"><header class="appbar"><h2 class="title">Mini Catálogo</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="sw"><div class="sf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search" type="search" aria-label="Buscar productos" placeholder="Buscar productos" value=""></div></div><div class="plist" aria-busy="true" aria-label="Cargando productos"><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article><article class="pitem skel"><div class="thumb sk"></div><div class="pinfo"><div class="sk l1"></div><div class="sk l2"></div></div><div class="sk l3"></div></article></div></div></div><figcaption>Estado: cargando</figcaption></figure><figure class="fig"><div class="phone"><div class="screen short"><header class="appbar"><h2 class="title">Mini Catálogo</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="sw"><div class="sf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search" type="search" aria-label="Buscar productos" placeholder="Buscar productos" value="zzxq"></div></div><div class="state "><div class="sicon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8.5 8.5l5 5M13.5 8.5l-5 5"/></svg></div><h3>Sin resultados para «zzxq»</h3><p>Prueba con otra palabra o revisa la ortografía.</p></div></div></div><figcaption>Estado: búsqueda sin resultados</figcaption></figure><figure class="fig"><div class="phone"><div class="screen short"><header class="appbar"><h2 class="title">Mini Catálogo</h2><button class="cartbtn" aria-label="Carrito, 3 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">3</span></button></header><div class="sw"><div class="sf"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search" type="search" aria-label="Buscar productos" placeholder="Buscar productos" value=""></div></div><div class="state err"><div class="sicon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v5M12 18v.5"/></svg></div><h3>No pudimos cargar los productos</h3><p>Revisa tu conexión e inténtalo de nuevo.</p><button class="btn">Reintentar</button></div></div></div><figcaption>Estado: error de carga</figcaption></figure><figure class="fig"><div class="phone"><div class="screen short"><header class="appbar"><button class="iconbtn" aria-label="Volver"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><h2 class="title">Carrito</h2><button class="cartbtn" aria-label="Carrito, 0 artículos"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg><span class="badge">0</span></button></header><div class="state "><div class="sicon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H6"/></svg></div><h3>Tu carrito está vacío</h3><p>Agrega productos desde el catálogo.</p><button class="btn">Ver productos</button></div></div></div><figcaption>Estado: carrito vacío</figcaption></figure></div>
+<h2 class="sec">B · Escritorio 1280 px — Panel de Orders (Angular, solo lectura)</h2>
+<div class="col"><figure class="fig"><div class="browser"><div class="bbar"><i></i><i></i><i></i><span class="url">orders.local/panel</span></div><div class="page"><div class="phead"><div><p class="eyebrow">Solo lectura</p><h2 class="dtitle">Panel de Orders</h2></div><div class="filter"><label for="min">Total mínimo</label><input id="min" class="is-focus" type="number" value="300" placeholder="0.00"></div></div><div class="orders"><article class="ocard open"><div class="otop"><div class="oh"><h3 class="oid">Order #1</h3><span class="ouser">Usuario 142</span></div><dl class="ostats"><div class="stat"><dt>Total</dt><dd>6499.96</dd></div><div class="stat"><dt>Total con descuento</dt><dd>5834.21</dd></div></dl><button class="obtn" aria-expanded="true">Ocultar detalle</button></div><div class="detail"><h4>Productos de la order</h4><table class="items"><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th></tr></thead><tbody><tr><td>Apple MacBook Pro 14 Inch Space Grey</td><td class="num">2</td><td class="num">1999.99</td></tr><tr><td>Annibale Colombo Bed</td><td class="num">1</td><td class="num">1899.99</td></tr><tr><td>Dual Camera 360 Degree Video Doorbell</td><td class="num">1</td><td class="num">599.99</td></tr></tbody></table></div></article><article class="ocard"><div class="otop"><div class="oh"><h3 class="oid">Order #2</h3><span class="ouser">Usuario 91</span></div><dl class="ostats"><div class="stat"><dt>Total</dt><dd>2328.50</dd></div><div class="stat"><dt>Total con descuento</dt><dd>2105.62</dd></div></dl><button class="obtn" aria-expanded="false">Ver detalle</button></div></article><article class="ocard"><div class="otop"><div class="oh"><h3 class="oid">Order #3</h3><span class="ouser">Usuario 15</span></div><dl class="ostats"><div class="stat"><dt>Total</dt><dd>349.90</dd></div><div class="stat"><dt>Total con descuento</dt><dd>331.10</dd></div></dl><button class="obtn" aria-expanded="false">Ver detalle</button></div></article><article class="ocard"><div class="otop"><div class="oh"><h3 class="oid">Order #4</h3><span class="ouser">Usuario 142</span></div><dl class="ostats"><div class="stat"><dt>Total</dt><dd>8120.00</dd></div><div class="stat"><dt>Total con descuento</dt><dd>7480.35</dd></div></dl><button class="obtn" aria-expanded="false">Ver detalle</button></div></article></div></div></div><figcaption>Panel de Orders — una order expandida con sus productos (foco visible en «Total mínimo»)</figcaption></figure><figure class="fig"><div class="browser"><div class="bbar"><i></i><i></i><i></i><span class="url">orders.local/panel</span></div><div class="page"><div class="phead"><div><p class="eyebrow">Solo lectura</p><h2 class="dtitle">Panel de Orders</h2></div><div class="filter"><label for="min">Total mínimo</label><input id="min" type="number" value="" placeholder="0.00"></div></div><div class="orders" aria-busy="true"><article class="ocard skel"><div class="sk s1"></div><div class="sk s2"></div><div class="sk s3"></div></article><article class="ocard skel"><div class="sk s1"></div><div class="sk s2"></div><div class="sk s3"></div></article><article class="ocard skel"><div class="sk s1"></div><div class="sk s2"></div><div class="sk s3"></div></article><article class="ocard skel"><div class="sk s1"></div><div class="sk s2"></div><div class="sk s3"></div></article></div></div></div><figcaption>Estado: cargando</figcaption></figure><figure class="fig"><div class="browser"><div class="bbar"><i></i><i></i><i></i><span class="url">orders.local/panel</span></div><div class="page"><div class="phead"><div><p class="eyebrow">Solo lectura</p><h2 class="dtitle">Panel de Orders</h2></div><div class="filter"><label for="min">Total mínimo</label><input id="min" type="number" value="" placeholder="0.00"></div></div><div class="dstate err" role="alert"><div class="sicon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v5M12 18v.5"/></svg></div><h3>No pudimos cargar las orders</h3><p>El servidor no respondió. Revisa tu conexión e inténtalo de nuevo.</p><button class="btn">Reintentar</button></div></div></div><figcaption>Estado: error</figcaption></figure><figure class="fig"><div class="browser"><div class="bbar"><i></i><i></i><i></i><span class="url">orders.local/panel</span></div><div class="page"><div class="phead"><div><p class="eyebrow">Solo lectura</p><h2 class="dtitle">Panel de Orders</h2></div><div class="filter"><label for="min">Total mínimo</label><input id="min" type="number" value="99999" placeholder="0.00"></div></div><div class="dstate"><div class="sicon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8.5 8.5l5 5M13.5 8.5l-5 5"/></svg></div><h3>Ninguna order supera 99999</h3><p>Baja el total mínimo o borra el filtro para ver todas las orders.</p></div></div></div><figcaption>Estado: vacío por filtro</figcaption></figure></div>
+</main></body></html>
