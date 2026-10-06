@@ -16,6 +16,8 @@ void showAddedToCartToast(BuildContext context) {
       foregroundColor: scheme.onSurface,
       autoCloseDuration: const Duration(milliseconds: 2500),
       showProgressBar: false,
+      // Below the AppBar so the cart badge stays visible.
+      margin: const EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
       // "Reduce motion": no entry/exit animation.
       animationDuration: MediaQuery.disableAnimationsOf(context)
           ? Duration.zero
