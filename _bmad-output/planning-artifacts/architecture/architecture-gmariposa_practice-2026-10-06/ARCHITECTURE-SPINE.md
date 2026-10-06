@@ -51,7 +51,7 @@ flowchart LR
   P --> C[core]
   D --> C
   DA --> C
-  P -. "solo productRepositoryProvider" .-> DA
+  P -. "solo products/presentation/provider" .-> DA
 ```
 
 ### AD-3 — Un solo dueño de cada pieza de infraestructura y de cada modelo [ADOPTED]
@@ -63,7 +63,7 @@ flowchart LR
   - `data/` implementa el Repository y es el único lugar que captura `DioException`: timeouts y fallos de conexión → `NetworkException`; respuesta no exitosa → `ServerException(status)`; JSON inválido → `ParseException`; una petición cancelada no es un error.
   - `core/` expone un `CancelSignal` propio, y los métodos del Repository lo aceptan opcional. Así `presentation` cancela sin importar `dio`.
   - `features/products/{data,domain}` es el único dueño de `Product` y `ProductRepository`. `Page<T>` es genérico y vive en `core/` (`core/page.dart`). `catalog` y `product_detail` solo tienen `presentation`.
-  - `productRepositoryProvider` se declara en `products/data/` y es la única importación de `data` permitida desde `presentation`.
+  - `data/` implementa el Repository en `DioProductData` (sin sufijo `Impl`). `productRepositoryProvider` se declara en `products/presentation/provider/` y es el único lugar de `presentation` que importa `data`; `catalog` y `product_detail` solo importan ese provider.
   - Los modelos `freezed` con `fromJson` viven en `domain/` (sin DTO aparte). Un campo requerido ausente o de tipo erróneo produce `ParseException`.
 
 ### AD-4 — Capa de errores de Flutter: `Either` en el contrato, excepción en el borde [ADOPTED]
