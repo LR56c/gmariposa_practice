@@ -2,19 +2,15 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_app/core/cancel_signal.dart';
-import 'package:flutter_app/core/dio_provider.dart';
 import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/page.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/domain/product_repository.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'product_repository_impl.g.dart';
 
 /// The only place that catches [DioException] (AD-3).
-class ProductRepositoryImpl implements ProductRepository {
+class DioProductData implements ProductRepository {
   const new(this._dio);
 
   final Dio _dio;
@@ -98,8 +94,3 @@ class ProductRepositoryImpl implements ProductRepository {
     DioExceptionType.unknown => const Errors([NetworkException()]),
   };
 }
-
-/// The only `data` import allowed from `presentation` (AD-2).
-@Riverpod(keepAlive: true)
-ProductRepository productRepository(Ref ref) =>
-    ProductRepositoryImpl(ref.watch(dioProvider));
