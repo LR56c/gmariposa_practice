@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/features/catalog/presentation/product_thumbnail.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:go_router/go_router.dart';
 
-/// One Catalog row; the whole row is the tap target (the tap arrives in 2.1).
+/// One Catalog row; the whole row opens the detail.
 class ProductListItem extends StatelessWidget {
   const new({required this.product, super.key});
 
@@ -16,6 +19,7 @@ class ProductListItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
+        onTap: () => unawaited(context.push('/product/${product.id}')),
         leading: ProductThumbnail(url: product.imageUrl, title: product.title),
         title: Text(
           product.title,

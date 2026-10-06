@@ -2,14 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 
-/// 56 px thumbnail; a missing or failing image shows "Sin foto", not an error.
+/// Square product image (56 px by default); a missing or failing one shows
+/// "Sin foto", not an error.
 class ProductThumbnail extends StatelessWidget {
-  const new({required this.url, required this.title, super.key});
+  const new({
+    required this.url,
+    required this.title,
+    this.size = 56,
+    super.key,
+  });
 
   final String url;
   final String title;
 
-  static const size = 56.0;
+  final double size;
 
   @override
   Widget build(BuildContext context) {

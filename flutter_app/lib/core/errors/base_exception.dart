@@ -17,6 +17,10 @@ final class ServerException extends BaseException {
   final int? status;
 }
 
+final class NotFoundException extends BaseException {
+  const new() : super('Not found', 'notFound');
+}
+
 final class ParseException extends BaseException {
   const new([String message = 'Invalid response format'])
     : super(message, 'parse');
