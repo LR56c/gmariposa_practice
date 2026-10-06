@@ -8,6 +8,5 @@ part 'page.freezed.dart';
 /// One page of results plus the API's overall [total].
 @freezed
 abstract class Page<T> with _$Page<T> {
-  /// Creates a page.
   const factory Page({required List<T> items, required int total}) = _Page<T>;
 }

@@ -1,0 +1,3 @@
+base_locale: es
+input_directory: lib/core/i18n
+output_directory: lib/core/i18n

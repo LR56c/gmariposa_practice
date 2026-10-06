@@ -8,16 +8,12 @@ part of 'dio_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The single [Dio] of the app (AD-3).
 
 @ProviderFor(dio)
 final dioProvider = DioProvider._();
 
-/// The single [Dio] of the app (AD-3).
-
 final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
     with $Provider<Dio> {
-  /// The single [Dio] of the app (AD-3).
   DioProvider._()
     : super(
         from: null,

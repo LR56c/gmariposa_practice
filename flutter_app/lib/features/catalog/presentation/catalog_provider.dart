@@ -14,7 +14,6 @@ part 'catalog_provider.g.dart';
 /// Loaded Catalog; [loadMore] stays idle (`AsyncData(null)`) until story 1.5.
 @freezed
 abstract class CatalogState with _$CatalogState {
-  /// Creates the state.
   const factory CatalogState({
     required List<Product> items,
     required int total,

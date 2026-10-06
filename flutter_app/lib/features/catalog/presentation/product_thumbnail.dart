@@ -1,19 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/core/theme/app_theme.dart';
+import 'package:flutter_app/core/i18n/strings.g.dart';
 
 /// 56 px thumbnail; a missing or failing image shows "Sin foto", not an error.
 class ProductThumbnail extends StatelessWidget {
-  /// Creates the thumbnail.
   const new({required this.url, required this.title, super.key});
 
-  /// Image URL; empty means no photo.
   final String url;
-
-  /// Product title, used as the accessibility label.
   final String title;
 
-  /// Side of the square thumbnail.
   static const size = 56.0;
 
   @override
@@ -30,8 +25,9 @@ class ProductThumbnail extends StatelessWidget {
               : CachedNetworkImage(
                   imageUrl: url,
                   fit: BoxFit.cover,
-                  placeholder: (_, _) =>
-                      const ColoredBox(color: AppColors.skeleton),
+                  placeholder: (context, _) => ColoredBox(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
                   errorWidget: (_, _, _) => const _NoPhoto(),
                 ),
         ),
@@ -45,15 +41,17 @@ class _NoPhoto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: AppColors.placeholder,
+    final theme = Theme.of(context);
+    final color = theme.colorScheme.onSecondaryContainer;
+    return ColoredBox(
+      color: theme.colorScheme.secondaryContainer,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.image_outlined, size: 20, color: AppColors.onPlaceholder),
+          Icon(Icons.image_outlined, size: 20, color: color),
           Text(
-            'Sin foto',
-            style: TextStyle(fontSize: 10, color: AppColors.onPlaceholder),
+            context.t.noPhoto,
+            style: theme.textTheme.labelMedium?.copyWith(color: color),
           ),
         ],
       ),

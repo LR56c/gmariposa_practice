@@ -62,7 +62,7 @@ flowchart LR
   - `core/` crea el único `Dio` (URL base de DummyJSON como constante, sin `envied`; `connectTimeout` y `receiveTimeout` de 10 s como constantes).
   - `data/` implementa el Repository y es el único lugar que captura `DioException`: timeouts y fallos de conexión → `NetworkException`; respuesta no exitosa → `ServerException(status)`; JSON inválido → `ParseException`; una petición cancelada no es un error.
   - `core/` expone un `CancelSignal` propio, y los métodos del Repository lo aceptan opcional. Así `presentation` cancela sin importar `dio`.
-  - `features/products/{data,domain}` es el único dueño de `Product`, `Page<Product>` y `ProductRepository`. `catalog` y `product_detail` solo tienen `presentation`.
+  - `features/products/{data,domain}` es el único dueño de `Product` y `ProductRepository`. `Page<T>` es genérico y vive en `core/` (`core/page.dart`). `catalog` y `product_detail` solo tienen `presentation`.
   - `productRepositoryProvider` se declara en `products/data/` y es la única importación de `data` permitida desde `presentation`.
   - Los modelos `freezed` con `fromJson` viven en `domain/` (sin DTO aparte). Un campo requerido ausente o de tipo erróneo produce `ParseException`.
 
@@ -283,7 +283,7 @@ flutter_app/lib/
   core/            # Dio, CancelSignal, errors/, theme, extensiones
   presentation/    # shell: app, router, tema aplicado
   features/
-    products/{data,domain}      # Product, Page, ProductRepository (único dueño)
+    products/{data,domain}      # Product, ProductRepository (único dueño); Page<T> está en core/
     catalog/presentation
     product_detail/presentation
     cart/{domain,presentation}  # CartItem y lógica pura en domain
