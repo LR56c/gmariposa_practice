@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
@@ -19,6 +21,9 @@ final List<Product> _skeletonProducts = List.filled(
     imageUrl: '',
   ),
 );
+
+/// Distance from the list end at which the next page is requested (NFR5).
+const loadMoreThreshold = 200.0;
 
 /// `/`: the Catalog with its loading, empty, error and data states.
 class CatalogPage extends ConsumerWidget {
@@ -47,8 +52,11 @@ class CatalogPage extends ConsumerWidget {
     return catalog.when(
       // A retry from an error goes back to the loading state (AD-6).
       skipLoadingOnRefresh: false,
-      loading: () =>
-          Skeletonizer(child: _ProductList(products: _skeletonProducts)),
+      loading: () => Skeletonizer(
+        child: _ProductList(
+          state: CatalogState(items: _skeletonProducts, total: 99),
+        ),
+      ),
       error: (error, _) => ErrorView(
         error: error,
         onRetry: () => ref.invalidate(catalogProvider),
@@ -60,7 +68,7 @@ class CatalogPage extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             )
-          : _ProductList(products: state.items),
+          : _ProductList(state: state),
     );
   }
 }
@@ -112,18 +120,80 @@ class _SearchFieldState extends ConsumerState<_SearchField> {
   }
 }
 
-class _ProductList extends StatelessWidget {
-  const new({required this.products});
+class _ProductList extends ConsumerStatefulWidget {
+  const new({required this.state});
 
-  final List<Product> products;
+  final CatalogState state;
+
+  @override
+  ConsumerState<_ProductList> createState() => _ProductListState();
+}
+
+class _ProductListState extends ConsumerState<_ProductList> {
+  final _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final position = _controller.position;
+    if (position.extentAfter <= loadMoreThreshold) {
+      unawaited(ref.read(catalogProvider.notifier).loadMore());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final state = widget.state;
     return ListView.separated(
+      controller: _controller,
       padding: const EdgeInsets.all(16),
-      itemCount: products.length,
+      // One extra row for the footer.
+      itemCount: state.items.length + 1,
       separatorBuilder: (_, _) => const SizedBox(height: 8),
-      itemBuilder: (_, i) => ProductListItem(product: products[i]),
+      itemBuilder: (_, i) => i < state.items.length
+          ? ProductListItem(product: state.items[i])
+          : _Footer(state: state),
+    );
+  }
+}
+
+class _Footer extends ConsumerWidget {
+  const new({required this.state});
+
+  final CatalogState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.t;
+    if (state.items.isEmpty) return const SizedBox.shrink();
+    final child = state.loadMore.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) => ErrorView(
+        error: error,
+        onRetry: () => unawaited(ref.read(catalogProvider.notifier).loadMore()),
+      ),
+      data: (_) => state.items.length >= state.total
+          ? Center(
+              child: Text(
+                t.noMoreProducts,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            )
+          : const SizedBox.shrink(),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: child,
     );
   }
 }

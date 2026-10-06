@@ -3,6 +3,7 @@
   "emptyCatalog": "No hay productos",
   "searchHint": "Buscar productos",
   "retry": "Reintentar",
+  "noMoreProducts": "No hay más productos",
   "noPhoto": "Sin foto",
   "errors": {
     "network": "No se pudo conectar. Revisa tu conexión.",
