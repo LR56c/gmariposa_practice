@@ -75,6 +75,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Tu carrito está vacío'
 	String get cartEmpty => 'Tu carrito está vacío';
 
+	/// es: 'Carrito vacío'
+	String get cartLabelEmpty => 'Carrito vacío';
+
+	/// es: 'Carrito, $units'
+	String cartLabelUnits({required Object units}) => 'Carrito, ${units}';
+
 	/// es: 'Quitar'
 	String get remove => 'Quitar';
 
@@ -139,6 +145,8 @@ extension on Translations {
 			'noPhoto' => 'Sin foto',
 			'cart' => 'Carrito',
 			'cartEmpty' => 'Tu carrito está vacío',
+			'cartLabelEmpty' => 'Carrito vacío',
+			'cartLabelUnits' => ({required Object units}) => 'Carrito, ${units}',
 			'remove' => 'Quitar',
 			'decreaseQuantity' => ({required Object title}) => 'Disminuir cantidad de ${title}',
 			'increaseQuantity' => ({required Object title}) => 'Aumentar cantidad de ${title}',

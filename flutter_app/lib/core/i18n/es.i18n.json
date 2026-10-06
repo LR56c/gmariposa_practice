@@ -10,6 +10,8 @@
   "noPhoto": "Sin foto",
   "cart": "Carrito",
   "cartEmpty": "Tu carrito está vacío",
+  "cartLabelEmpty": "Carrito vacío",
+  "cartLabelUnits": "Carrito, $units",
   "remove": "Quitar",
   "decreaseQuantity": "Disminuir cantidad de $title",
   "increaseQuantity": "Aumentar cantidad de $title",
