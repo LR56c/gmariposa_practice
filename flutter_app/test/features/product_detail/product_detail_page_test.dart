@@ -10,10 +10,14 @@ import 'package:flutter_app/features/products/domain/product_repository.dart';
 import 'package:flutter_app/features/products/presentation/providers/product_repository_provider.dart';
 import 'package:flutter_app/presentation/router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:toastification/toastification.dart';
+
+import '../../support/prefs.dart';
 
 final Translations _t = AppLocale.es.buildSync();
 
@@ -28,16 +32,20 @@ Product _product(int id) => Product(
   imageUrl: '',
 );
 
+late Override prefs;
+
 Widget _app(_MockRepository repository, Widget home) => TranslationProvider(
   child: ProviderScope(
     retry: (_, _) => null,
-    overrides: [productRepositoryProvider.overrideWithValue(repository)],
+    overrides: [productRepositoryProvider.overrideWithValue(repository), prefs],
     child: ToastificationWrapper(child: MaterialApp(home: home)),
   ),
 );
 
 void main() {
   late _MockRepository repository;
+
+  setUp(() async => prefs = await prefsOverride());
 
   setUpAll(() => registerFallbackValue(CancelSignal()));
   setUp(() => repository = _MockRepository());
@@ -138,7 +146,10 @@ void main() {
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
-          overrides: [productRepositoryProvider.overrideWithValue(repository)],
+          overrides: [
+            productRepositoryProvider.overrideWithValue(repository),
+            prefs,
+          ],
           child: MaterialApp.router(routerConfig: appRouter),
         ),
       ),

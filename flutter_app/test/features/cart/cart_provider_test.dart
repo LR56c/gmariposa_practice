@@ -3,6 +3,8 @@ import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/prefs.dart';
+
 Product _p(int id, double price) =>
     Product(id: id, title: 'P$id', price: price, rating: 4, imageUrl: '');
 
@@ -10,8 +12,11 @@ void main() {
   late ProviderContainer container;
   late Cart cart;
 
-  setUp(() {
-    container = ProviderContainer(retry: (_, _) => null);
+  setUp(() async {
+    container = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [await prefsOverride()],
+    );
     addTearDown(container.dispose);
     cart = container.read(cartProvider.notifier);
   });

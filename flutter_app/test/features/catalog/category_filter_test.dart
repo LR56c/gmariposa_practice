@@ -17,6 +17,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../support/prefs.dart';
+
 final Translations _t = AppLocale.es.buildSync();
 
 class _MockRepository extends Mock implements ProductRepository;
@@ -62,7 +64,10 @@ void main() {
       ),
     ).thenAnswer((_) => slow.future);
     final container = ProviderContainer(
-      overrides: [productRepositoryProvider.overrideWithValue(repository)],
+      overrides: [
+        productRepositoryProvider.overrideWithValue(repository),
+        await prefsOverride(),
+      ],
     );
     addTearDown(container.dispose);
     container.listen(catalogProvider, (_, _) {});
@@ -90,7 +95,10 @@ void main() {
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
-          overrides: [productRepositoryProvider.overrideWithValue(repository)],
+          overrides: [
+            productRepositoryProvider.overrideWithValue(repository),
+            await prefsOverride(),
+          ],
           child: const MaterialApp(home: CatalogPage()),
         ),
       ),

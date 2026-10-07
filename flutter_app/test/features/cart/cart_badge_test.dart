@@ -7,6 +7,8 @@ import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/prefs.dart';
+
 const _product = Product(
   id: 1,
   title: 'P1',
@@ -19,7 +21,10 @@ void main() {
   late ProviderContainer container;
 
   Future<void> pumpBadge(WidgetTester tester) async {
-    container = ProviderContainer(retry: (_, _) => null);
+    container = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [await prefsOverride()],
+    );
     addTearDown(container.dispose);
     await tester.pumpWidget(
       TranslationProvider(
@@ -35,8 +40,11 @@ void main() {
     CartItem(product: _product, quantity: n),
   ];
 
-  test('cartCount sums units across items, 0 when empty', () {
-    final c = ProviderContainer(retry: (_, _) => null);
+  test('cartCount sums units across items, 0 when empty', () async {
+    final c = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [await prefsOverride()],
+    );
     addTearDown(c.dispose);
     expect(c.read(cartCountProvider), 0);
     c.read(cartProvider.notifier).state = [

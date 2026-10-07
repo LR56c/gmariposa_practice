@@ -45,7 +45,7 @@ final class CatalogProvider
   Catalog create() => Catalog();
 }
 
-String _$catalogHash() => r'fb3924ccd36d61cff08abeea40bad83e5a633627';
+String _$catalogHash() => r'5b1c306c58d0a0e852fc7a691f9c377de78f51d6';
 
 /// First page of the Catalog, or of the search for the debounced term, within
 /// the selected category if any (AD-6).

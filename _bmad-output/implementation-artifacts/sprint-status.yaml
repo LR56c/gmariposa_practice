@@ -65,7 +65,7 @@ development_status:
   epic-5: backlog
   5-1-verificación-de-la-app-mvp: backlog
   5-2-bonus-filtrar-el-catálogo-por-categoría-df-2: done
-  5-3-bonus-conservar-el-carrito-entre-sesiones-df-3: backlog
+  5-3-bonus-conservar-el-carrito-entre-sesiones-df-3: done
   5-4-bonus-prueba-de-integración-del-flujo-principal-b-1: backlog
   5-5-bonus-github-action-de-analyze-y-test-b-2: backlog
   epic-5-retrospective: optional

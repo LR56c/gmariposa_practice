@@ -15,6 +15,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../support/prefs.dart';
+
 final Translations _t = AppLocale.es.buildSync();
 
 class _MockRepository extends Mock implements ProductRepository;
@@ -55,7 +57,10 @@ Future<_MockRepository> _pump(
       child: ProviderScope(
         retry: (_, _) => null,
         observers: [?observer],
-        overrides: [productRepositoryProvider.overrideWithValue(repository)],
+        overrides: [
+          productRepositoryProvider.overrideWithValue(repository),
+          await prefsOverride(),
+        ],
         child: const MaterialApp(home: CatalogPage()),
       ),
     ),
@@ -146,6 +151,7 @@ void main() {
             retry: (_, _) => null,
             overrides: [
               productRepositoryProvider.overrideWithValue(repository),
+              await prefsOverride(),
             ],
             child: const MaterialApp(home: CatalogPage()),
           ),
