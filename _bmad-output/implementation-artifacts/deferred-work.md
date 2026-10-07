@@ -1,0 +1,9 @@
+# Deferred work
+
+Hallazgos de la review por lotes que se dejan para después. Cada lote añade su sección.
+
+## Deferred from: code review R1, stories 1.1 + 1.2 (2026-10-07)
+
+- **Tema con valores sueltos** [`flutter_app/lib/core/theme/app_theme.dart`] — la AC de la 1.1 pide colores y espaciado como constantes con nombre (NFR5). Hay `Color(0xFF...)` en línea, `EdgeInsets` y `SizedBox` con números, y no hay escala de radios. A `ColorScheme.light` le faltan `onPrimary` y `surface`, y el `FilledButton` usa el valor por defecto de Flutter. Es un refactor de tokens; se resuelve junto a la review de UI, contra `DESIGN.md`.
+- **Dependencias añadidas sin justificar** [`flutter_app/pubspec.yaml`] — AD-18 y el `CLAUDE.md` piden justificar las librerías que sobran para el alcance: `skeletonizer`, `cached_network_image`, `slang` y `slang_flutter`, `infinite_scroll_pagination`, `flutter_gen_runner`, `shared_preferences` y `wolt_modal_sheet`. Se resuelve en el `README` o en `RESPUESTAS.md`, no en código.
+- **`DioProductData` sin test propio** [`flutter_app/lib/features/products/data/dio_product_data.dart`] — decisión de Mauri: se quitó el test con adapter falso, igual que en e1-s2. Sin cobertura directa del mapeo `DioException` → `Errors` (404, 500, timeout, JSON roto), de los paths de los endpoints ni de la cancelación con `CancelSignal`. Los tests de páginas usan un Repository falso y no llegan a ese código. Retomar solo si se vuelve a tocar la capa de datos.
