@@ -29,3 +29,7 @@ Hallazgos de la review por lotes que se dejan para después. Cada lote añade su
 ## Deferred from: code review R6, stories 4.4 + 4.5 (2026-10-07)
 
 - **Notas `location` obsoletas en `messages.en.xlf`** [`angular_app/src/locale/messages.en.xlf`] — varias apuntan a rutas que ya no existen (`order-detail.component.ts:17,19`, `orders-page.component.ts:11,12`, `errors.ts:42-45`) porque las plantillas pasaron a `templateUrl`. Es solo higiene: la traducción al inglés funciona (el paquete `en` muestra "1 order / N orders"). Regenerarlas con `ng extract-i18n` obliga a volver a fusionar a mano los `<target>` en inglés; hacerlo en una pasada de i18n.
+
+## Deferred from: code review R7, stories 5.2 + 5.3 + settings (2026-10-07)
+
+- **`settings/domain` importa Flutter** [`flutter_app/lib/features/settings/domain/settings_repository.dart`] — el contrato expone `ThemeMode` de `package:flutter/material.dart`, y AD-2 dice que `domain` es Dart puro. Lo correcto sería un enum propio en `domain` y mapearlo a `ThemeMode` en `presentation`. Es una refactorización pequeña sin efecto visible; anotarlo en `RESPUESTAS.md` como decisión consciente. Los ajustes (tema e idioma) no tienen story ni AD: si se dejan, reflejarlos en el spine (segundo dueño de `shared_preferences`, imports de `settings` desde las páginas, `keepAlive` de sus providers).
