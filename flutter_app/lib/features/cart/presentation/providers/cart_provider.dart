@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_app/features/cart/domain/cart_item.dart';
-import 'package:flutter_app/features/cart/presentation/providers/cart_storage_provider.dart';
+import 'package:flutter_app/features/cart/presentation/providers/cart_repository_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +11,7 @@ part 'cart_provider.g.dart';
 @Riverpod(keepAlive: true)
 class Cart extends _$Cart {
   @override
-  List<CartItem> build() => ref.read(cartStorageProvider).read();
+  List<CartItem> build() => ref.read(cartRepositoryProvider).read();
 
   /// Adds [product] with quantity 1, or bumps it if already in the Cart.
   void add(Product product) => _set(
@@ -38,7 +38,7 @@ class Cart extends _$Cart {
 
   Future<void> _save(List<CartItem> items) async {
     try {
-      await ref.read(cartStorageProvider).write(items);
+      await ref.read(cartRepositoryProvider).write(items);
     } on Object {
       // Deliberately ignored: a failed write must not break the Cart.
     }

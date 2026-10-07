@@ -43,7 +43,7 @@ final class CartProvider extends $NotifierProvider<Cart, List<CartItem>> {
   }
 }
 
-String _$cartHash() => r'8fa804e0313bb7807f383de0b47e49ad483c1fbe';
+String _$cartHash() => r'ce86c6292f96258106f7d00fb89c3810aaef3e82';
 
 /// Sole owner of the Cart state: an immutable list, replaced on each change.
 
