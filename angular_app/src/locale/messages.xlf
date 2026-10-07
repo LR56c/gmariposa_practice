@@ -33,45 +33,9 @@
         <source>No encontramos esa orden.</source>
       </segment>
     </unit>
-    <unit id="order.title">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:11,12</note>
-        <note category="location">src/app/features/orders/order-detail.component.ts:23,24</note>
-      </notes>
-      <segment>
-        <source>Orden <ph id="0" equiv="INTERPOLATION" disp="{{ order().id }}"/></source>
-      </segment>
-    </unit>
-    <unit id="order.user">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:12,13</note>
-        <note category="location">src/app/features/orders/order-detail.component.ts:24,25</note>
-      </notes>
-      <segment>
-        <source>Usuario <ph id="0" equiv="INTERPOLATION" disp="{{ order().userId }}"/></source>
-      </segment>
-    </unit>
-    <unit id="order.total">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:13,14</note>
-        <note category="location">src/app/features/orders/order-detail.component.ts:25,26</note>
-      </notes>
-      <segment>
-        <source>Total <ph id="0" equiv="INTERPOLATION" disp="{{ order().total | amount }}"/></source>
-      </segment>
-    </unit>
-    <unit id="order.discounted">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:16,18</note>
-        <note category="location">src/app/features/orders/order-detail.component.ts:28,29</note>
-      </notes>
-      <segment>
-        <source> Con descuento <ph id="0" equiv="INTERPOLATION" disp="{{ discounted | amount }}"/> </source>
-      </segment>
-    </unit>
     <unit id="order.detail">
       <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:26,28</note>
+        <note category="location">src/app/features/orders/order-card.component.ts:20,21</note>
       </notes>
       <segment>
         <source> Ver detalle </source>
@@ -79,7 +43,7 @@
     </unit>
     <unit id="order.detailLabel">
       <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:36</note>
+        <note category="location">src/app/features/orders/order-card.component.ts:31</note>
       </notes>
       <segment>
         <source>Ver detalle de la orden <ph id="0" equiv="id" disp="this.order().id"/></source>
@@ -87,23 +51,39 @@
     </unit>
     <unit id="detail.back">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:17,19</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:18,20</note>
       </notes>
       <segment>
         <source>Volver a órdenes</source>
       </segment>
     </unit>
+    <unit id="detail.title">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:24,25</note>
+      </notes>
+      <segment>
+        <source>Detalle de la orden</source>
+      </segment>
+    </unit>
     <unit id="detail.empty">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:32,34</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:28,30</note>
       </notes>
       <segment>
         <source>Esta orden no tiene productos</source>
       </segment>
     </unit>
+    <unit id="detail.products">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:34,35</note>
+      </notes>
+      <segment>
+        <source> Detalle de productos </source>
+      </segment>
+    </unit>
     <unit id="detail.colTitle">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:37,38</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:40,41</note>
       </notes>
       <segment>
         <source>Título</source>
@@ -111,7 +91,7 @@
     </unit>
     <unit id="detail.colQuantity">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:38,39</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:41,42</note>
       </notes>
       <segment>
         <source>Cantidad</source>
@@ -119,7 +99,7 @@
     </unit>
     <unit id="detail.colPrice">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:39,41</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:42,43</note>
       </notes>
       <segment>
         <source>Precio</source>
@@ -127,8 +107,8 @@
     </unit>
     <unit id="orders.retry">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:62,63</note>
-        <note category="location">src/app/features/orders/orders-page.component.ts:50,51</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:67,68</note>
+        <note category="location">src/app/features/orders/orders-page.component.ts:51,52</note>
       </notes>
       <segment>
         <source> Reintentar </source>
@@ -136,10 +116,42 @@
     </unit>
     <unit id="detail.loading">
       <notes>
-        <note category="location">src/app/features/orders/order-detail.component.ts:67,68</note>
+        <note category="location">src/app/features/orders/order-detail.component.ts:72,73</note>
       </notes>
       <segment>
         <source>Cargando orden</source>
+      </segment>
+    </unit>
+    <unit id="order.idLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:14,16</note>
+      </notes>
+      <segment>
+        <source> ID de orden </source>
+      </segment>
+    </unit>
+    <unit id="order.userLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:19,20</note>
+      </notes>
+      <segment>
+        <source>Usuario</source>
+      </segment>
+    </unit>
+    <unit id="order.totalLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:25,26</note>
+      </notes>
+      <segment>
+        <source>Total</source>
+      </segment>
+    </unit>
+    <unit id="order.discountedLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:30,31</note>
+      </notes>
+      <segment>
+        <source>Total con descuento</source>
       </segment>
     </unit>
     <unit id="orders.title">
@@ -160,7 +172,7 @@
     </unit>
     <unit id="orders.loading">
       <notes>
-        <note category="location">src/app/features/orders/orders-page.component.ts:30,31</note>
+        <note category="location">src/app/features/orders/orders-page.component.ts:31,32</note>
       </notes>
       <segment>
         <source>Cargando órdenes</source>
@@ -168,7 +180,7 @@
     </unit>
     <unit id="orders.count">
       <notes>
-        <note category="location">src/app/features/orders/orders-page.component.ts:56,58</note>
+        <note category="location">src/app/features/orders/orders-page.component.ts:57,59</note>
       </notes>
       <segment>
         <source> <ph id="0" equiv="ICU" disp="{store.visibleOrders().length, plural, =1 {1 orden} other {{{ store.visibleOrders().length }} órdenes}}" subFlows="6527018579230751044"/> </source>
@@ -176,7 +188,7 @@
     </unit>
     <unit id="4372802500973344713">
       <notes>
-        <note category="location">src/app/features/orders/orders-page.component.ts:56</note>
+        <note category="location">src/app/features/orders/orders-page.component.ts:57</note>
       </notes>
       <segment>
         <source>{VAR_PLURAL, plural, =1 {1 orden} other {<ph id="0" equiv="INTERPOLATION"/> órdenes}}</source>
@@ -184,7 +196,7 @@
     </unit>
     <unit id="orders.noMatch">
       <notes>
-        <note category="location">src/app/features/orders/orders-page.component.ts:63,64</note>
+        <note category="location">src/app/features/orders/orders-page.component.ts:64,65</note>
       </notes>
       <segment>
         <source> Ninguna orden alcanza ese total </source>
