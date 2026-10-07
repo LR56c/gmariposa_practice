@@ -17,12 +17,17 @@ interface OrdersState {
   readonly byIdError: Readonly<Record<number, ErrorInfo>>;
 }
 
-/** Empty or non-numeric text (including a decimal comma, "30,5") means "no filter". */
+/**
+ * Only plain decimals ("30", "30.5") filter. Anything else means "no filter": empty text,
+ * a decimal comma ("30,5"), a sign, hex or exponent ("0x10", "1e3").
+ */
 export function parseMinTotal(raw: string): number | null {
   const text = raw.trim();
-  if (text === '') return null;
-  const value = Number(text);
-  return Number.isFinite(value) ? value : null;
+  return /^\d+(\.\d+)?$/.test(text) ? Number(text) : null;
+}
+
+function withoutKey<T>(record: Readonly<Record<number, T>>, id: number): Record<number, T> {
+  return Object.fromEntries(Object.entries(record).filter(([key]) => Number(key) !== id));
 }
 
 @Injectable({ providedIn: 'root' })
@@ -74,7 +79,11 @@ export class OrdersStore {
     this.loadOrder$
       .pipe(
         mergeMap((id) => {
-          this.state.update((s) => ({ ...s, byIdStatus: { ...s.byIdStatus, [id]: 'loading' } }));
+          this.state.update((s) => ({
+            ...s,
+            byIdStatus: { ...s.byIdStatus, [id]: 'loading' },
+            byIdError: withoutKey(s.byIdError, id),
+          }));
           return this.service.getById(id).pipe(map((result) => ({ id, result })));
         }),
         takeUntilDestroyed(),
@@ -86,6 +95,7 @@ export class OrdersStore {
                 ...s,
                 byId: { ...s.byId, [id]: result.success },
                 byIdStatus: { ...s.byIdStatus, [id]: 'loaded' },
+                byIdError: withoutKey(s.byIdError, id),
               }
             : {
                 ...s,

@@ -18,7 +18,8 @@
     <dt class="text-label-md text-on-surface-muted" i18n="@@order.totalLabel">Total</dt>
     <dd class="text-title-md">{{ order().total | amount }}</dd>
   </div>
-  @if (order().discountedTotal; as discounted) {
+  @let discounted = order().discountedTotal;
+  @if (discounted !== undefined) {
     <div>
       <dt class="text-label-md text-on-surface-muted" i18n="@@order.discountedLabel">
         Total con descuento
