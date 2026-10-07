@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, LOCALE_ID, inject } from '@angular/core';
-import { Theme, ThemeService } from './theme.service';
+import { ThemeService, isTheme } from './theme.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,6 +22,6 @@ export class ToolbarComponent {
   }
 
   protected setTheme(theme: string): void {
-    this.themes.set(theme as Theme);
+    if (isTheme(theme)) this.themes.set(theme);
   }
 }

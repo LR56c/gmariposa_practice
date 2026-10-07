@@ -2,8 +2,9 @@
   <label class="flex items-center gap-2 text-label-md text-on-surface-muted">
     <span i18n="@@toolbar.language">Idioma</span>
     <select
+      #language
       class="rounded-full border border-outline bg-surface-tonal px-3 py-1.5 text-body-md text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-      (change)="setLanguage($any($event.target).value)"
+      (change)="setLanguage(language.value)"
     >
       <option value="es" [selected]="locale === 'es'">Español</option>
       <option value="en" [selected]="locale === 'en'">English</option>
@@ -12,8 +13,9 @@
   <label class="flex items-center gap-2 text-label-md text-on-surface-muted">
     <span i18n="@@toolbar.theme">Tema</span>
     <select
+      #theme
       class="rounded-full border border-outline bg-surface-tonal px-3 py-1.5 text-body-md text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-      (change)="setTheme($any($event.target).value)"
+      (change)="setTheme(theme.value)"
     >
       <option value="system" [selected]="themes.theme() === 'system'" i18n="@@toolbar.themeSystem">
         Sistema

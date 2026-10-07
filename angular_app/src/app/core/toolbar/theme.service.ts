@@ -6,6 +6,10 @@ export type Theme = 'system' | 'light' | 'dark';
 export const THEME_KEY = 'theme';
 const THEMES: readonly Theme[] = ['system', 'light', 'dark'];
 
+export function isTheme(value: unknown): value is Theme {
+  return THEMES.some((t) => t === value);
+}
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
@@ -22,13 +26,21 @@ export class ThemeService {
 
   set(theme: Theme): void {
     this.state.set(theme);
-    localStorage.setItem(THEME_KEY, theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // Storage blocked (private mode, quota): the choice just won't persist.
+    }
     this.apply();
   }
 
   private read(): Theme {
-    const saved = localStorage.getItem(THEME_KEY) as Theme | null;
-    return saved && THEMES.includes(saved) ? saved : 'system';
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      return isTheme(saved) ? saved : 'system';
+    } catch {
+      return 'system'; // Storage blocked: follow the system theme.
+    }
   }
 
   private apply(): void {
