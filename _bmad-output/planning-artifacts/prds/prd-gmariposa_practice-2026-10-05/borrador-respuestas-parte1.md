@@ -30,16 +30,21 @@ const padding = EdgeInsets.all(8);   // constante de compilación
 
 **9. `autoDispose` y `family`.** `autoDispose` destruye el estado cuando nadie lo escucha, liberando memoria y forzando una nueva carga la próxima vez. `family` crea un provider por parámetro (un estado por `id` de producto). En Riverpod 3 se unificaron las interfaces y `AutoDisposeNotifier` desapareció; el comportamiento sigue igual. [Verifica el valor por defecto de `autoDispose` con `@riverpod` en tu versión.]
 
-**10. `AsyncValue` con carga, error y datos.**
+**10.
 ```dart
-final products = ref.watch(productsProvider);
-return products.when(
-  loading: () => const CircularProgressIndicator(),
-  error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(productsProvider)),
-  data: (items) => ProductList(items: items),
+final asyncValue = ref.watch(myProvider);
+return asyncValue.when(
+  loading: () => const Center(
+    child: CircularProgressIndicator(),
+  ),
+  error: (error, stackTrace) => Center(
+    child: Text('Error al cargar: $error'),
+  ),
+  data: (data) => Center(
+    child: Text('Datos obtenidos: $data'),
+  ),
 );
 ```
-Con Dart 3 también puedes usar `switch` con patrones sobre `AsyncData`, `AsyncError` y `AsyncLoading`.
 
 **11. Sobrescribir un provider en una prueba.**
 ```dart

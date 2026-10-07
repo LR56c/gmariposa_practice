@@ -99,7 +99,7 @@ flowchart LR
   - Descarte de respuestas tardías: el notifier lleva un contador de época que se incrementa en cada `build()`. Toda respuesta (inicial o de `loadMore`) compara su época al volver y se descarta si cambió. La petición pendiente se corta con el `CancelSignal` en `ref.onDispose`.
   - `loadMore()` usa `skip = items.length`; hay más páginas mientras `items.length < total`; se ignora si `loadMore.isLoading`; conserva la lista y, si falla, deja `loadMore` en `AsyncError` con un reintento al final. El pie de la lista lee `loadMore.when(...)`.
   - "Reintentar" de la carga inicial es siempre `ref.invalidate(catalogProvider)`. El de `loadMore` vuelve a llamar a `loadMore()`.
-  - El gatillo de `loadMore()` es el `ScrollController` de la UI.
+  - El gatillo de `loadMore()` es `PagedListView` (`infinite_scroll_pagination`), que solo pide la página y no guarda estado: el estado sigue en `Catalog` (antes era un `ScrollController` propio).
 
 ### AD-7 — Cart sin red y con la lógica en su Notifier [ADOPTED]
 

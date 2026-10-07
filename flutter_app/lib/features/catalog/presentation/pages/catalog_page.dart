@@ -13,23 +13,20 @@ import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/domain/product_category.dart';
 import 'package:flutter_app/features/settings/presentation/widgets/settings_icon_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-/// Layout the skeleton is drawn from while the first page loads.
-final List<Product> _skeletonProducts = List.filled(
-  6,
-  const Product(
-    id: 0,
-    title: 'Product title',
-    price: 0,
-    rating: 0,
-    imageUrl: '',
-  ),
+/// Layout the skeleton is drawn from while a page loads.
+const _skeletonProduct = Product(
+  id: 0,
+  title: 'Product title',
+  price: 0,
+  rating: 0,
+  imageUrl: '',
 );
 
-/// Distance from the list end at which the next page is requested (NFR5).
-const loadMoreThreshold = 200.0;
+final List<Product> _skeletonProducts = List.filled(6, _skeletonProduct);
 
 /// `/`: the Catalog with its loading, empty, error and data states.
 class CatalogPage extends StatelessWidget {
@@ -251,54 +248,9 @@ class _Option extends StatelessWidget {
   }
 }
 
-class _ProductList extends ConsumerStatefulWidget {
-  const new({required this.state});
-
-  final CatalogState state;
-
-  @override
-  ConsumerState<_ProductList> createState() => _ProductListState();
-}
-
-class _ProductListState extends ConsumerState<_ProductList> {
-  final _controller = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    final position = _controller.position;
-    if (position.extentAfter <= loadMoreThreshold) {
-      unawaited(ref.read(catalogProvider.notifier).loadMore());
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = widget.state;
-    return ListView.separated(
-      controller: _controller,
-      padding: const EdgeInsets.all(16),
-      // One extra row for the footer.
-      itemCount: state.items.length + 1,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
-      itemBuilder: (_, i) => i < state.items.length
-          ? ProductListItem(product: state.items[i])
-          : _Footer(state: state),
-    );
-  }
-}
-
-class _Footer extends ConsumerWidget {
+/// The Catalog list; Riverpod owns the state and the library only renders it
+/// and asks for the next page.
+class _ProductList extends ConsumerWidget {
   const new({required this.state});
 
   final CatalogState state;
@@ -306,25 +258,57 @@ class _Footer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.t;
-    if (state.items.isEmpty) return const SizedBox.shrink();
-    final child = state.loadMore.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => ErrorView(
-        error: error,
-        onRetry: () => unawaited(ref.read(catalogProvider.notifier).loadMore()),
+    final loadMore = state.loadMore;
+    return PagedListView<int, Product>.separated(
+      state: PagingState(
+        pages: [state.items],
+        keys: const [0],
+        hasNextPage: state.items.length < state.total,
+        isLoading: loadMore.isLoading,
+        error: loadMore.error,
       ),
-      data: (_) => state.items.length >= state.total
-          ? Center(
-              child: Text(
-                t.noMoreProducts,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            )
-          : const SizedBox.shrink(),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: child,
+      fetchNextPage: () =>
+          unawaited(ref.read(catalogProvider.notifier).loadMore()),
+      padding: const EdgeInsets.all(16),
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      builderDelegate: PagedChildBuilderDelegate<Product>(
+        itemBuilder: (_, product, _) => ProductListItem(product: product),
+        newPageProgressIndicatorBuilder: (_) => const Skeletonizer(
+          child: Column(
+            children: [
+              SizedBox(height: 8),
+              ProductListItem(product: _skeletonProduct),
+              SizedBox(height: 8),
+              ProductListItem(product: _skeletonProduct),
+            ],
+          ),
+        ),
+        newPageErrorIndicatorBuilder: (_) => _FooterPadding(
+          child: ErrorView(
+            error: loadMore.error!,
+            onRetry: () =>
+                unawaited(ref.read(catalogProvider.notifier).loadMore()),
+          ),
+        ),
+        noMoreItemsIndicatorBuilder: (context) => _FooterPadding(
+          child: Center(
+            child: Text(
+              t.noMoreProducts,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ),
+      ),
     );
   }
+}
+
+class _FooterPadding extends StatelessWidget {
+  const new({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: child);
 }

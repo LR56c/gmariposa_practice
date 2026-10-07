@@ -52,3 +52,4 @@ CI builds `app-release.apk` and uploads it as the `app-release-apk` artifact (si
 ## Extra dependencies
 
 - `toastification`: the brief "Agregado al carrito" toast (UX-DR9). It shows from the button callback via `ToastificationWrapper`, with no provider and no `SnackBar`.
+- `infinite_scroll_pagination`: renders the Catalog list and asks for the next page. It does not own the state: `Catalog` (Riverpod) keeps `items`, `total` and `loadMore`, and the page builds a `PagingState` from it. While a page loads it shows skeleton rows, not a spinner.
