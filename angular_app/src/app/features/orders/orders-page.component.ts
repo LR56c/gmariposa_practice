@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { OrderCardComponent } from './order-card.component';
 import { OrdersStore } from './orders.store';
@@ -52,7 +53,7 @@ import { OrdersStore } from './orders.store';
             </p>
             <div class="mx-auto grid gap-4 lg:grid-cols-2">
               @for (order of store.visibleOrders(); track order.id) {
-                <app-order-card [order]="order" />
+                <app-order-card [order]="order" (viewDetail)="openDetail($event)" />
               } @empty {
                 <p class="text-on-surface-muted" i18n="@@orders.noMatch">
                   Ninguna orden alcanza ese total
@@ -67,6 +68,7 @@ import { OrdersStore } from './orders.store';
 })
 export class OrdersPageComponent {
   protected readonly store = inject(OrdersStore);
+  private readonly router = inject(Router);
 
   protected readonly minTotal = new FormControl('', { nonNullable: true });
 
@@ -77,5 +79,9 @@ export class OrdersPageComponent {
       else this.minTotal.disable({ emitEvent: false });
     });
     this.store.load();
+  }
+
+  protected openDetail(id: number): void {
+    void this.router.navigate(['/orders', id]);
   }
 }
