@@ -48,6 +48,7 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get backToCatalog => 'Back to catalog';
 	@override String get noPhoto => 'No photo';
 	@override String get cart => 'Cart';
+	@override String get productDetail => 'Product details';
 	@override String get cartEmpty => 'Your cart is empty';
 	@override String get cartLabelEmpty => 'Empty cart';
 	@override String cartLabelUnits({required Object units}) => 'Cart, ${units}';
@@ -94,6 +95,7 @@ extension on TranslationsEn {
 			'backToCatalog' => 'Back to catalog',
 			'noPhoto' => 'No photo',
 			'cart' => 'Cart',
+			'productDetail' => 'Product details',
 			'cartEmpty' => 'Your cart is empty',
 			'cartLabelEmpty' => 'Empty cart',
 			'cartLabelUnits' => ({required Object units}) => 'Cart, ${units}',

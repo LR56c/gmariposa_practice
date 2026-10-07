@@ -52,9 +52,15 @@ ThemeData buildAppTheme() {
       style: FilledButton.styleFrom(
         minimumSize: const Size(48, 48),
         shape: const StadiumBorder(),
-        backgroundColor: _surfaceTonal,
-        foregroundColor: _primary,
+        backgroundColor: _primary,
+        foregroundColor: Colors.white,
       ),
     ),
   );
 }
+
+/// `button-tonal` from DESIGN.md: tonal surface with primary text.
+final ButtonStyle tonalButtonStyle = FilledButton.styleFrom(
+  backgroundColor: _surfaceTonal,
+  foregroundColor: _primary,
+);

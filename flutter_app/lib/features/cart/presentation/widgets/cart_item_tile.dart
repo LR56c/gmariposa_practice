@@ -16,59 +16,92 @@ class CartItemTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final product = item.product;
     final cart = ref.read(cartProvider.notifier);
+    final scheme = theme.colorScheme;
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          ProductThumbnail(url: product.imageUrl, title: product.title),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium,
-                ),
-                Text(
-                  product.price.toStringAsFixed(2),
-                  style: theme.textTheme.bodyMedium,
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      tooltip: context.t.decreaseQuantity(title: product.title),
-                      icon: const Icon(Icons.remove),
-                      // Minimum 1: dropping the item is "Quitar"'s job.
-                      onPressed: item.quantity > 1
-                          ? () => cart.decrease(product.id)
-                          : null,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: scheme.outlineVariant),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  ProductThumbnail(url: product.imageUrl, title: product.title),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        Text(
+                          product.price.toStringAsFixed(2),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '${item.quantity}',
-                      style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
+              Divider(height: 8, color: scheme.outlineVariant),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: scheme.error,
+                      minimumSize: const Size(48, 48),
                     ),
-                    IconButton(
-                      tooltip: context.t.increaseQuantity(title: product.title),
-                      icon: const Icon(Icons.add),
-                      onPressed: () => cart.increase(product.id),
+                    onPressed: () => cart.remove(product.id),
+                    child: Text(context.t.remove),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: scheme.outlineVariant),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          tooltip: context.t.decreaseQuantity(
+                            title: product.title,
+                          ),
+                          icon: const Icon(Icons.remove),
+                          // Minimum 1: "Quitar" drops the item.
+                          onPressed: item.quantity > 1
+                              ? () => cart.decrease(product.id)
+                              : null,
+                        ),
+                        Text(
+                          '${item.quantity}',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        IconButton(
+                          tooltip: context.t.increaseQuantity(
+                            title: product.title,
+                          ),
+                          icon: const Icon(Icons.add),
+                          onPressed: () => cart.increase(product.id),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: theme.colorScheme.error,
-              minimumSize: const Size(48, 48),
-            ),
-            onPressed: () => cart.remove(product.id),
-            child: Text(context.t.remove),
-          ),
-        ],
+        ),
       ),
     );
   }
