@@ -14,6 +14,7 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ToastificationWrapper(
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         onGenerateTitle: (context) => context.t.appTitle,
         theme: buildAppTheme(),
         darkTheme: buildAppTheme(Brightness.dark),
