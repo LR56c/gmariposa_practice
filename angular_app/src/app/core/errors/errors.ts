@@ -1,4 +1,4 @@
-export type ErrorCode = 'network' | 'server' | 'parse';
+export type ErrorCode = 'network' | 'server' | 'parse' | 'notFound';
 
 export interface ErrorInfo {
   readonly message: string;
@@ -42,9 +42,11 @@ const messages: Record<ErrorCode, string> = {
   network: $localize`:@@error.network:No se pudo conectar. Revisa tu conexión.`,
   server: $localize`:@@error.server:Algo salió mal. Inténtalo de nuevo.`,
   parse: $localize`:@@error.parse:No se pudo leer la respuesta. Inténtalo de nuevo.`,
+  notFound: $localize`:@@error.notFound:No encontramos esa orden.`,
 };
 
 export function toErrorInfo(errors: Errors): ErrorInfo {
-  const code = errors.exceptions[0]?.code ?? 'server';
+  const first = errors.exceptions[0];
+  const code: ErrorCode = first instanceof ServerException && first.status === 404 ? 'notFound' : (first?.code ?? 'server');
   return { code, message: messages[code] };
 }
