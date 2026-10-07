@@ -37,7 +37,7 @@ describe('App', () => {
     await fixture.whenStable();
     const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('app-order-card');
     expect(cards.length).toBe(2);
-    expect(cards[0].textContent).toContain('Orden 1');
+    expect(cards[0].textContent).toContain('ID de orden');
     expect(cards[0].textContent).toContain('1234.50');
     expect(cards[0].textContent).not.toContain('descuento');
     expect(cards[1].textContent).toContain('999.00');

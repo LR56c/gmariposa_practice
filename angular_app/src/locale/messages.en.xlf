@@ -28,42 +28,6 @@
         <target>Could not read the response. Try again.</target>
       </segment>
     </unit>
-    <unit id="order.title">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:11,12</note>
-      </notes>
-      <segment>
-        <source>Orden <ph id="0" equiv="INTERPOLATION" disp="{{ order().id }}"/></source>
-        <target>Order <ph id="0" equiv="INTERPOLATION" disp="{{ order().id }}"/></target>
-      </segment>
-    </unit>
-    <unit id="order.user">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:12,13</note>
-      </notes>
-      <segment>
-        <source>Usuario <ph id="0" equiv="INTERPOLATION" disp="{{ order().userId }}"/></source>
-        <target>User <ph id="0" equiv="INTERPOLATION" disp="{{ order().userId }}"/></target>
-      </segment>
-    </unit>
-    <unit id="order.total">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:13,14</note>
-      </notes>
-      <segment>
-        <source>Total <ph id="0" equiv="INTERPOLATION" disp="{{ order().total | amount }}"/></source>
-        <target>Total <ph id="0" equiv="INTERPOLATION" disp="{{ order().total | amount }}"/></target>
-      </segment>
-    </unit>
-    <unit id="order.discounted">
-      <notes>
-        <note category="location">src/app/features/orders/order-card.component.ts:16,18</note>
-      </notes>
-      <segment>
-        <source> Con descuento <ph id="0" equiv="INTERPOLATION" disp="{{ discounted | amount }}"/> </source>
-        <target> Discounted <ph id="0" equiv="INTERPOLATION" disp="{{ discounted | amount }}"/></target>
-      </segment>
-    </unit>
     <unit id="orders.title">
       <notes>
         <note category="location">src/app/features/orders/orders-page.component.ts:11,12</note>
@@ -194,6 +158,60 @@
       <segment>
         <source>Cargando orden</source>
         <target>Loading order</target>
+      </segment>
+    </unit>
+    <unit id="detail.title">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:24,25</note>
+      </notes>
+      <segment>
+        <source>Detalle de la orden</source>
+        <target>Order details</target>
+      </segment>
+    </unit>
+    <unit id="detail.products">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:34,35</note>
+      </notes>
+      <segment>
+        <source> Detalle de productos </source>
+        <target>Product details</target>
+      </segment>
+    </unit>
+    <unit id="order.idLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:14,16</note>
+      </notes>
+      <segment>
+        <source> ID de orden </source>
+        <target>Order ID</target>
+      </segment>
+    </unit>
+    <unit id="order.userLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:19,20</note>
+      </notes>
+      <segment>
+        <source>Usuario</source>
+        <target>User</target>
+      </segment>
+    </unit>
+    <unit id="order.totalLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:25,26</note>
+      </notes>
+      <segment>
+        <source>Total</source>
+        <target>Total</target>
+      </segment>
+    </unit>
+    <unit id="order.discountedLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:30,31</note>
+      </notes>
+      <segment>
+        <source>Total con descuento</source>
+        <target>Total with discount</target>
       </segment>
     </unit>
   </file>

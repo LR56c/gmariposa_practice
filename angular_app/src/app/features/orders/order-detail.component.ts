@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AmountPipe } from './amount.pipe';
+import { OrderSummaryComponent } from './order-summary.component';
 import { OrdersStore } from './orders.store';
 import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
 
 @Component({
   selector: 'app-order-detail',
-  imports: [AmountPipe, RouterLink],
+  imports: [AmountPipe, OrderSummaryComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <main class="mx-auto max-w-5xl p-4">
+    <main class="mx-auto max-w-5xl px-6 py-8">
       <a
         routerLink="/"
         class="mb-4 inline-block text-label-md underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
@@ -20,42 +21,46 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
         @if (invalidId()) {
           <p role="alert">{{ notFound.message }}</p>
         } @else if (order(); as o) {
-          <h1 class="mb-2 text-title-lg" i18n="@@order.title">Orden {{ o.id }}</h1>
-          <p class="text-on-surface-muted" i18n="@@order.user">Usuario {{ o.userId }}</p>
-          <p class="text-price" i18n="@@order.total">Total {{ o.total | amount }}</p>
-          @if (o.discountedTotal; as discounted) {
-            <p class="text-body-md text-on-surface-muted" i18n="@@order.discounted">
-              Con descuento {{ discounted | amount }}
-            </p>
-          }
-          @if (o.products.length === 0) {
-            <p class="mt-4 text-on-surface-muted" i18n="@@detail.empty">Esta orden no tiene productos</p>
-          } @else {
-            <table class="mt-4 w-full text-left">
-              <thead>
-                <tr>
-                  <th scope="col" i18n="@@detail.colTitle">Título</th>
-                  <th scope="col" i18n="@@detail.colQuantity">Cantidad</th>
-                  <th scope="col" i18n="@@detail.colPrice">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (p of o.products; track p.id) {
-                  <tr>
-                    <td>{{ p.title }}</td>
-                    <td>{{ p.quantity }}</td>
-                    <td>{{ p.price | amount }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          }
+          <h1 class="mb-4 text-title-lg" i18n="@@detail.title">Detalle de la orden</h1>
+          <section class="rounded-lg bg-surface-tonal p-6">
+            <app-order-summary [order]="o" />
+            @if (o.products.length === 0) {
+              <p class="text-on-surface-muted" i18n="@@detail.empty">Esta orden no tiene productos</p>
+            } @else {
+              <h3
+                class="mb-3 text-label-md font-semibold uppercase tracking-wider text-on-surface-muted"
+                i18n="@@detail.products"
+              >
+                Detalle de productos
+              </h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-body-md">
+                  <thead>
+                    <tr class="border-b border-divider text-label-md text-on-surface-muted">
+                      <th scope="col" class="pb-2 font-medium" i18n="@@detail.colTitle">Título</th>
+                      <th scope="col" class="pb-2 text-center font-medium" i18n="@@detail.colQuantity">Cantidad</th>
+                      <th scope="col" class="pb-2 text-right font-medium" i18n="@@detail.colPrice">Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-divider/60">
+                    @for (p of o.products; track p.id) {
+                      <tr>
+                        <td class="py-2.5 pr-2">{{ p.title }}</td>
+                        <td class="py-2.5 text-center font-medium">{{ p.quantity }}</td>
+                        <td class="py-2.5 text-right font-medium">{{ p.price | amount }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </section>
         } @else if (status() === 'error') {
           <div role="alert" class="flex flex-col items-start gap-2">
             <p>{{ error()?.message }}</p>
             <button
               type="button"
-              class="rounded-full bg-placeholder px-4 py-2 text-label-md text-on-placeholder focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              class="min-h-12 rounded-full bg-surface-tonal px-5 py-2 text-label-md text-primary hover:bg-divider focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
               (click)="load()"
               i18n="@@orders.retry"
             >
