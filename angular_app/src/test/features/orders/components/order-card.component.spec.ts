@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { OrderCardComponent } from './order-card.component';
+import { OrderCardComponent } from '../../../../app/features/orders/components/order-card.component';
 
 describe('OrderCardComponent', () => {
   it('emits the order id when "Ver detalle" is clicked', () => {

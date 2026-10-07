@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Result } from 'effect';
 import { of } from 'rxjs';
-import { OrdersService } from './orders.service';
-import { OrdersStore, parseMinTotal } from './orders.store';
+import { OrdersService } from '../../../../app/features/orders/data/orders.service';
+import { OrdersStore, parseMinTotal } from '../../../../app/features/orders/state/orders.store';
 
 describe('parseMinTotal', () => {
   it('treats empty and non-numeric text (incl. decimal comma) as no filter', () => {
@@ -20,7 +20,9 @@ describe('OrdersStore.loadOrder', () => {
 
   function setup() {
     const getById = vi.fn(() => of(Result.succeed(order)));
-    TestBed.configureTestingModule({ providers: [{ provide: OrdersService, useValue: { getById, getOrders: vi.fn() } }] });
+    TestBed.configureTestingModule({
+      providers: [{ provide: OrdersService, useValue: { getById, getOrders: vi.fn() } }],
+    });
     return { store: TestBed.inject(OrdersStore), getById };
   }
 

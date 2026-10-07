@@ -47,6 +47,9 @@ const messages: Record<ErrorCode, string> = {
 
 export function toErrorInfo(errors: Errors): ErrorInfo {
   const first = errors.exceptions[0];
-  const code: ErrorCode = first instanceof ServerException && first.status === 404 ? 'notFound' : (first?.code ?? 'server');
+  const code: ErrorCode =
+    first instanceof ServerException && first.status === 404
+      ? 'notFound'
+      : (first?.code ?? 'server');
   return { code, message: messages[code] };
 }
