@@ -1,9 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  untracked,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AmountPipe } from './amount.pipe';
+import { AmountPipe } from '../pipes/amount.pipe';
 import { OrderSummaryComponent } from './order-summary.component';
-import { OrdersStore } from './orders.store';
-import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
+import { OrdersStore } from '../state/orders.store';
+import { Errors, ServerException, toErrorInfo } from '../../../core/errors/errors';
 
 @Component({
   selector: 'app-order-detail',
@@ -25,7 +33,9 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
           <section class="rounded-lg bg-surface-tonal p-6">
             <app-order-summary [order]="o" />
             @if (o.products.length === 0) {
-              <p class="text-on-surface-muted" i18n="@@detail.empty">Esta orden no tiene productos</p>
+              <p class="text-on-surface-muted" i18n="@@detail.empty">
+                Esta orden no tiene productos
+              </p>
             } @else {
               <h3
                 class="mb-3 text-label-md font-semibold uppercase tracking-wider text-on-surface-muted"
@@ -38,8 +48,16 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
                   <thead>
                     <tr class="border-b border-divider text-label-md text-on-surface-muted">
                       <th scope="col" class="pb-2 font-medium" i18n="@@detail.colTitle">Título</th>
-                      <th scope="col" class="pb-2 text-center font-medium" i18n="@@detail.colQuantity">Cantidad</th>
-                      <th scope="col" class="pb-2 text-right font-medium" i18n="@@detail.colPrice">Precio</th>
+                      <th
+                        scope="col"
+                        class="pb-2 text-center font-medium"
+                        i18n="@@detail.colQuantity"
+                      >
+                        Cantidad
+                      </th>
+                      <th scope="col" class="pb-2 text-right font-medium" i18n="@@detail.colPrice">
+                        Precio
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-divider/60">
@@ -70,11 +88,23 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
         } @else {
           <div role="status" class="flex flex-col gap-2">
             <span class="sr-only" i18n="@@detail.loading">Cargando orden</span>
-            <span aria-hidden="true" class="block h-7 w-1/4 animate-pulse rounded bg-outline/40"></span>
-            <span aria-hidden="true" class="block h-4 w-1/5 animate-pulse rounded bg-outline/40"></span>
-            <span aria-hidden="true" class="block h-6 w-1/3 animate-pulse rounded bg-outline/40"></span>
+            <span
+              aria-hidden="true"
+              class="block h-7 w-1/4 animate-pulse rounded bg-outline/40"
+            ></span>
+            <span
+              aria-hidden="true"
+              class="block h-4 w-1/5 animate-pulse rounded bg-outline/40"
+            ></span>
+            <span
+              aria-hidden="true"
+              class="block h-6 w-1/3 animate-pulse rounded bg-outline/40"
+            ></span>
             @for (n of skeletons; track n) {
-              <span aria-hidden="true" class="mt-2 block h-5 w-full animate-pulse rounded bg-outline/40"></span>
+              <span
+                aria-hidden="true"
+                class="mt-2 block h-5 w-full animate-pulse rounded bg-outline/40"
+              ></span>
             }
           </div>
         }

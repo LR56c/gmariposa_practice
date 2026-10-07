@@ -1,5 +1,5 @@
 import { ResolveFn, Routes } from '@angular/router';
-import { OrdersPageComponent } from './features/orders/orders-page.component';
+import { OrdersPageComponent } from './features/orders/components/orders-page.component';
 
 /** The only place the :id param becomes a number; null when it is not a positive integer. */
 const orderId: ResolveFn<number | null> = (route) => {
@@ -12,8 +12,9 @@ export const routes: Routes = [
   {
     path: 'orders/:id',
     resolve: { id: orderId },
-    // ponytail: the only dynamic import (lazy route), an exception to AD-15 `no-dynamic-imports`.
     loadComponent: () =>
-      import('./features/orders/order-detail.component').then((m) => m.OrderDetailComponent),
+      import('./features/orders/components/order-detail.component').then(
+        (m) => m.OrderDetailComponent,
+      ),
   },
 ];

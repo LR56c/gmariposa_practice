@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { AmountPipe } from './amount.pipe';
-import { Order } from './order.schema';
+import { AmountPipe } from '../pipes/amount.pipe';
+import { Order } from '../data/order.schema';
 
 /** Id, userId and totals block shared by the order card and the detail (Stitch "Órdenes"). */
 @Component({
@@ -10,7 +10,10 @@ import { Order } from './order.schema';
   template: `
     <div class="flex items-center justify-between border-b border-divider pb-4">
       <div>
-        <span class="text-label-md font-semibold uppercase tracking-wide text-primary" i18n="@@order.idLabel">
+        <span
+          class="text-label-md font-semibold uppercase tracking-wide text-primary"
+          i18n="@@order.idLabel"
+        >
           ID de orden
         </span>
         <h2 class="mt-0.5 text-title-lg">{{ order().id }}</h2>
@@ -27,7 +30,9 @@ import { Order } from './order.schema';
       </div>
       @if (order().discountedTotal; as discounted) {
         <div>
-          <dt class="text-label-md text-on-surface-muted" i18n="@@order.discountedLabel">Total con descuento</dt>
+          <dt class="text-label-md text-on-surface-muted" i18n="@@order.discountedLabel">
+            Total con descuento
+          </dt>
           <dd class="text-price">{{ discounted | amount }}</dd>
         </div>
       }

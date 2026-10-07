@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { OrderCardComponent } from './order-card.component';
-import { OrdersStore } from './orders.store';
+import { OrdersStore } from '../state/orders.store';
 
 @Component({
   selector: 'app-orders-page',
@@ -13,7 +13,9 @@ import { OrdersStore } from './orders.store';
     <main class="mx-auto max-w-5xl px-6 py-8">
       <h1 class="mb-4 text-title-lg" i18n="@@orders.title">Órdenes</h1>
       <div class="mb-4 flex flex-col gap-1">
-        <label for="min-total" class="text-label-md text-on-surface-muted" i18n="@@orders.minTotal">Total mínimo</label>
+        <label for="min-total" class="text-label-md text-on-surface-muted" i18n="@@orders.minTotal"
+          >Total mínimo</label
+        >
         <input
           id="min-total"
           type="text"
@@ -54,7 +56,10 @@ import { OrdersStore } from './orders.store';
           }
           @case ('loaded') {
             <p class="sr-only" i18n="@@orders.count">
-              {store.visibleOrders().length, plural, =1 {1 orden} other {{{ store.visibleOrders().length }} órdenes}}
+              {store.visibleOrders().length, plural,
+                =1 {1 orden}
+                other {{{ store.visibleOrders().length }} órdenes}
+              }
             </p>
             <div class="mx-auto grid gap-6 lg:grid-cols-2">
               @for (order of store.visibleOrders(); track order.id) {
@@ -76,10 +81,14 @@ export class OrdersPageComponent {
   private readonly router = inject(Router);
   protected readonly skeletons = [1, 2, 3, 4, 5, 6];
 
-  protected readonly minTotal = new FormControl(String(this.store.minTotal() ?? ''), { nonNullable: true });
+  protected readonly minTotal = new FormControl(String(this.store.minTotal() ?? ''), {
+    nonNullable: true,
+  });
 
   constructor() {
-    this.minTotal.valueChanges.pipe(takeUntilDestroyed()).subscribe((v) => this.store.setMinTotal(v));
+    this.minTotal.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((v) => this.store.setMinTotal(v));
     effect(() => {
       if (this.store.listStatus() === 'loaded') this.minTotal.enable({ emitEvent: false });
       else this.minTotal.disable({ emitEvent: false });

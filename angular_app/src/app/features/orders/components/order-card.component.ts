@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { Order } from './order.schema';
+import { Order } from '../data/order.schema';
 import { OrderSummaryComponent } from './order-summary.component';
 
 @Component({

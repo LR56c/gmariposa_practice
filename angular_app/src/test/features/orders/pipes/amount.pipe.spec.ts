@@ -1,4 +1,4 @@
-import { AmountPipe } from './amount.pipe';
+import { AmountPipe } from '../../../../app/features/orders/pipes/amount.pipe';
 
 describe('AmountPipe', () => {
   const pipe = new AmountPipe();
