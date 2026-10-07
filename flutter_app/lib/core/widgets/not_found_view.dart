@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
+import 'package:flutter_app/core/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 
 /// "Not found" message with a way back to `/`; retrying could not help.
@@ -22,6 +23,7 @@ class NotFoundView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
+              style: tonalButtonStyle,
               onPressed: () => context.go('/'),
               child: Text(t.backToCatalog),
             ),

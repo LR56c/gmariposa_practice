@@ -123,6 +123,11 @@ class _SearchFieldState extends ConsumerState<_SearchField> {
               borderRadius: BorderRadius.all(Radius.circular(24)),
               borderSide: BorderSide.none,
             ),
+            // Visible focus ring (DESIGN.md: focus #0B57D0).
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(24)),
+              borderSide: BorderSide(color: Color(0xFF0B57D0), width: 2),
+            ),
           ),
         ),
       ),

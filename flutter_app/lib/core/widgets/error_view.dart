@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/errors/error_message.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
+import 'package:flutter_app/core/theme/app_theme.dart';
 
 class ErrorView extends StatelessWidget {
   const new({required this.error, required this.onRetry, super.key});
@@ -23,7 +24,11 @@ class ErrorView extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onRetry, child: Text(t.retry)),
+            FilledButton.tonal(
+              style: tonalButtonStyle,
+              onPressed: onRetry,
+              child: Text(t.retry),
+            ),
           ],
         ),
       ),
