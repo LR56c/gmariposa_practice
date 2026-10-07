@@ -9,5 +9,7 @@ String errorMessage(Object error, Translations t) {
     ServerException() => t.errors.server,
     NotFoundException() => t.errors.notFound,
     ParseException() => t.errors.parse,
+    // Callers drop a cancelled request; this is only a safe fallback.
+    CancelledException() => t.errors.generic,
   };
 }

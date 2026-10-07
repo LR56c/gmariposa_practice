@@ -122,7 +122,7 @@ class DioProductData implements ProductRepository {
   }
 
   Errors _toErrors(DioException e) => switch (e.type) {
-    DioExceptionType.cancel => const Errors([]),
+    DioExceptionType.cancel => const Errors([CancelledException()]),
     DioExceptionType.badResponse when e.response?.statusCode == 404 =>
       const Errors([NotFoundException()]),
     DioExceptionType.badResponse => Errors([
@@ -133,7 +133,11 @@ class DioProductData implements ProductRepository {
     DioExceptionType.sendTimeout ||
     DioExceptionType.receiveTimeout ||
     DioExceptionType.connectionError ||
-    DioExceptionType.badCertificate ||
+    DioExceptionType.badCertificate => const Errors([NetworkException()]),
+    // Dio wraps a body that is not valid JSON as `unknown`.
+    DioExceptionType.unknown when e.error is FormatException => const Errors([
+      ParseException(),
+    ]),
     DioExceptionType.unknown => const Errors([NetworkException()]),
   };
 }
