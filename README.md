@@ -40,6 +40,8 @@ Extras hechos: filtro por categoría, carrito persistente (`shared_preferences`)
   `AsyncNotifier` para el catálogo (`Catalog`, con búsqueda y paginación), `Notifier` para el estado síncrono (`Cart`, `SearchTerm`,
   `SelectedCategory`, `ThemeModeChoice`), `FutureProvider` para cargas de una vez (`categories`, `productDetail` con `family`),
   `StreamProvider` para el debounce (`debouncedTerm`) y `Provider` para dependencias (`dio`, los Repository, `cartTotal`, `cartCount`).
+- **Paginación infinita con `infinite_scroll_pagination`:** la librería solo dibuja la lista y pide la siguiente página; el estado
+  (`items`, `total`, `loadMore`) sigue en el `Catalog` de Riverpod, con descarte de respuestas tardías y cancelación. Mientras carga muestra filas esqueleto.
 - **Errores tipados:** los métodos del Repository devuelven `Either<Errors, T>` (`fpdart`) y la UI traduce el error a un mensaje; las
   excepciones solo existen en el borde de red.
 - **Modelos con `freezed`:** inmutables, con `==`, `copyWith` y `fromJson` generados, para no escribir ese código a mano. Los archivos generados
