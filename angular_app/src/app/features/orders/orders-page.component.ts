@@ -70,7 +70,7 @@ export class OrdersPageComponent {
   protected readonly store = inject(OrdersStore);
   private readonly router = inject(Router);
 
-  protected readonly minTotal = new FormControl('', { nonNullable: true });
+  protected readonly minTotal = new FormControl(String(this.store.minTotal() ?? ''), { nonNullable: true });
 
   constructor() {
     this.minTotal.valueChanges.pipe(takeUntilDestroyed()).subscribe((v) => this.store.setMinTotal(v));

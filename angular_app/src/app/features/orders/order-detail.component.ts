@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AmountPipe } from './amount.pipe';
 import { OrdersStore } from './orders.store';
@@ -97,7 +97,11 @@ export class OrderDetailComponent {
   });
 
   constructor() {
-    this.load();
+    // Inputs are not set in the constructor; untracked so a failed load is not retried by the effect.
+    effect(() => {
+      const id = this.id();
+      if (id !== null) untracked(() => this.store.loadOrder(id));
+    });
   }
 
   protected load(): void {
