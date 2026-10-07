@@ -12,6 +12,7 @@ part of 'cart_item.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$CartItem {
 
@@ -22,6 +23,8 @@ mixin _$CartItem {
 @pragma('vm:prefer-inline')
 $CartItemCopyWith<CartItem> get copyWith => _$CartItemCopyWithImpl<CartItem>(this as CartItem, _$identity);
 
+  /// Serializes this CartItem to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -30,7 +33,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CartItem&&(identical(other.product, _this.product) || other.product == _this.product)&&(identical(other.quantity, _this.quantity) || other.quantity == _this.quantity));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as CartItem;
@@ -220,10 +223,10 @@ return $default(_that.product,_that.quantity);case _:
 
 /// @nodoc
 
-
+@JsonSerializable(explicitToJson: true)
 class _CartItem implements CartItem {
   const _CartItem({required this.product, required this.quantity});
-  
+  factory _CartItem.fromJson(Map<String, dynamic> json) => _$CartItemFromJson(json);
 
 @override final  Product product;
 @override final  int quantity;
@@ -234,14 +237,17 @@ class _CartItem implements CartItem {
 @pragma('vm:prefer-inline')
 _$CartItemCopyWith<_CartItem> get copyWith => __$CartItemCopyWithImpl<_CartItem>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$CartItemToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
     return identical(this, other) || (other.runtimeType == runtimeType&&other is _CartItem&&(identical(other.product, product) || other.product == product)&&(identical(other.quantity, quantity) || other.quantity == quantity));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
     return Object.hash(runtimeType,product,quantity);

@@ -6,6 +6,8 @@ import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/prefs.dart';
+
 final Translations _t = AppLocale.es.buildSync();
 
 Product _p(int id, double price) => Product(
@@ -21,7 +23,10 @@ void main() {
   late ProviderContainer container;
 
   Future<void> pumpCart(WidgetTester tester) async {
-    container = ProviderContainer(retry: (_, _) => null);
+    container = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [await prefsOverride()],
+    );
     addTearDown(container.dispose);
     await tester.pumpWidget(
       TranslationProvider(

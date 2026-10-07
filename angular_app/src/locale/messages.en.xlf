@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="es" trgLang="en">
+  <file id="ngi18n" original="ng.template">
+    <unit id="error.network">
+      <notes>
+        <note category="location">src/app/core/errors/errors.ts:42</note>
+      </notes>
+      <segment>
+        <source>No se pudo conectar. Revisa tu conexión.</source>
+        <target>Could not connect. Check your connection.</target>
+      </segment>
+    </unit>
+    <unit id="error.server">
+      <notes>
+        <note category="location">src/app/core/errors/errors.ts:43</note>
+      </notes>
+      <segment>
+        <source>Algo salió mal. Inténtalo de nuevo.</source>
+        <target>Something went wrong. Try again.</target>
+      </segment>
+    </unit>
+    <unit id="error.parse">
+      <notes>
+        <note category="location">src/app/core/errors/errors.ts:44</note>
+      </notes>
+      <segment>
+        <source>No se pudo leer la respuesta. Inténtalo de nuevo.</source>
+        <target>Could not read the response. Try again.</target>
+      </segment>
+    </unit>
+    <unit id="orders.title">
+      <notes>
+        <note category="location">src/app/features/orders/orders-page.component.ts:11,12</note>
+      </notes>
+      <segment>
+        <source>Órdenes</source>
+        <target>Orders</target>
+      </segment>
+    </unit>
+    <unit id="orders.loading">
+      <notes>
+        <note category="location">src/app/features/orders/orders-page.component.ts:20,22</note>
+      </notes>
+      <segment>
+        <source>Cargando órdenes</source>
+        <target>Loading orders</target>
+      </segment>
+    </unit>
+    <unit id="orders.retry">
+      <notes>
+        <note category="location">src/app/features/orders/orders-page.component.ts:32,33</note>
+      </notes>
+      <segment>
+        <source> Reintentar </source>
+        <target>Retry</target>
+      </segment>
+    </unit>
+    <unit id="orders.minTotal">
+      <segment>
+        <source>Total mínimo</source>
+        <target>Minimum total</target>
+      </segment>
+    </unit>
+    <unit id="orders.noMatch">
+      <segment>
+        <source> Ninguna orden alcanza ese total </source>
+        <target>No order reaches that total</target>
+      </segment>
+    </unit>
+    <unit id="orders.count">
+      <segment>
+        <source> <ph id="0" equiv="ICU" disp="{store.visibleOrders().length, plural, =1 {1 orden} other {{{ store.visibleOrders().length }} órdenes}}" subFlows="6527018579230751044"/> </source>
+        <target> <ph id="0" equiv="ICU" disp="{store.visibleOrders().length, plural, =1 {1 orden} other {{{ store.visibleOrders().length }} órdenes}}" subFlows="6527018579230751044"/> </target>
+      </segment>
+    </unit>
+    <unit id="4372802500973344713">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {1 orden} other {<ph id="0" equiv="INTERPOLATION"/> órdenes}}</source>
+        <target>{VAR_PLURAL, plural, =1 {1 order} other {<ph id="0" equiv="INTERPOLATION"/> orders}}</target>
+      </segment>
+    </unit>
+    <unit id="error.notFound">
+      <notes>
+        <note category="location">src/app/core/errors/errors.ts:45</note>
+      </notes>
+      <segment>
+        <source>No encontramos esa orden.</source>
+        <target>We could not find that order.</target>
+      </segment>
+    </unit>
+    <unit id="order.detail">
+      <notes>
+        <note category="location">src/app/features/orders/order-card.component.ts:26,28</note>
+      </notes>
+      <segment>
+        <source> Ver detalle </source>
+        <target>View details</target>
+      </segment>
+    </unit>
+    <unit id="order.detailLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-card.component.ts:36</note>
+      </notes>
+      <segment>
+        <source>Ver detalle de la orden <ph id="0" equiv="id" disp="this.order().id"/></source>
+        <target>View details of order <ph id="0" equiv="id" disp="this.order().id"/></target>
+      </segment>
+    </unit>
+    <unit id="detail.back">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:17,19</note>
+      </notes>
+      <segment>
+        <source>Volver a órdenes</source>
+        <target>Back to orders</target>
+      </segment>
+    </unit>
+    <unit id="detail.empty">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:32,34</note>
+      </notes>
+      <segment>
+        <source>Esta orden no tiene productos</source>
+        <target>This order has no products</target>
+      </segment>
+    </unit>
+    <unit id="detail.colTitle">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:37,38</note>
+      </notes>
+      <segment>
+        <source>Título</source>
+        <target>Title</target>
+      </segment>
+    </unit>
+    <unit id="detail.colQuantity">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:38,39</note>
+      </notes>
+      <segment>
+        <source>Cantidad</source>
+        <target>Quantity</target>
+      </segment>
+    </unit>
+    <unit id="detail.colPrice">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:39,41</note>
+      </notes>
+      <segment>
+        <source>Precio</source>
+        <target>Price</target>
+      </segment>
+    </unit>
+    <unit id="detail.loading">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:71,73</note>
+      </notes>
+      <segment>
+        <source>Cargando orden</source>
+        <target>Loading order</target>
+      </segment>
+    </unit>
+    <unit id="detail.title">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:24,25</note>
+      </notes>
+      <segment>
+        <source>Detalle de la orden</source>
+        <target>Order details</target>
+      </segment>
+    </unit>
+    <unit id="detail.products">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:34,35</note>
+      </notes>
+      <segment>
+        <source> Detalle de productos </source>
+        <target>Product details</target>
+      </segment>
+    </unit>
+    <unit id="order.idLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:14,16</note>
+      </notes>
+      <segment>
+        <source> ID de orden </source>
+        <target>Order ID</target>
+      </segment>
+    </unit>
+    <unit id="order.userLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:19,20</note>
+      </notes>
+      <segment>
+        <source>Usuario</source>
+        <target>User</target>
+      </segment>
+    </unit>
+    <unit id="order.totalLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:25,26</note>
+      </notes>
+      <segment>
+        <source>Total</source>
+        <target>Total</target>
+      </segment>
+    </unit>
+    <unit id="order.discountedLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-summary.component.ts:30,31</note>
+      </notes>
+      <segment>
+        <source>Total con descuento</source>
+        <target>Total with discount</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.language">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Idioma</source>
+        <target>Language</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.theme">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Tema</source>
+        <target>Theme</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeSystem">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Sistema</source>
+        <target>System</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeLight">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Claro</source>
+        <target>Light</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeDark">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Oscuro</source>
+        <target>Dark</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

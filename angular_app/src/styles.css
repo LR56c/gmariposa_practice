@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #006a60;
+  --color-on-primary: #ffffff;
+  --color-background: #fbfdfa;
+  --color-surface: #ffffff;
+  --color-surface-tonal: #edf3f0;
+  --color-on-surface: #191c1b;
+  --color-on-surface-muted: #4a5650;
+  --color-outline: #6f7976;
+  --color-divider: #dce5e1;
+  --color-focus: #0b57d0;
+  --color-danger: #b3261e;
+  --color-on-danger: #ffffff;
+  --color-star: #8a5a00;
+  --color-placeholder: #cde8e2;
+  --color-on-placeholder: #191c1b;
+  --color-skeleton: #dce5e1;
+
+  --font-sans: Roboto, ui-sans-serif, system-ui, sans-serif;
+
+  --text-title-lg: 22px;
+  --text-title-lg--line-height: 28px;
+  --text-title-lg--font-weight: 500;
+  --text-title-md: 16px;
+  --text-title-md--line-height: 24px;
+  --text-title-md--font-weight: 500;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 20px;
+  --text-body-md--font-weight: 400;
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--font-weight: 500;
+  --text-price: 16px;
+  --text-price--line-height: 24px;
+  --text-price--font-weight: 600;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* Dark theme: the app only uses semantic tokens, so overriding them is enough. */
+:root.dark {
+  color-scheme: dark;
+  --color-primary: #4fdbc8;
+  --color-on-primary: #003731;
+  --color-background: #0f1513;
+  --color-surface: #171d1b;
+  --color-surface-tonal: #1f2926;
+  --color-on-surface: #e0e4e1;
+  --color-on-surface-muted: #b0bab5;
+  --color-outline: #8a9490;
+  --color-divider: #2e3835;
+  --color-focus: #8ab4f8;
+  --color-danger: #f2b8b5;
+  --color-on-danger: #601410;
+  --color-star: #f0b429;
+  --color-placeholder: #1f3a35;
+  --color-on-placeholder: #e0e4e1;
+  --color-skeleton: #2e3835;
+}
+
+@layer base {
+  body {
+    @apply bg-background font-sans text-body-md text-on-surface;
+  }
+}

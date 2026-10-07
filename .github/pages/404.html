@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8" />
+<script>
+  // Pages has no SPA fallback: on a deep link (/<repo>/es/orders/3) load that locale's index in place,
+  // keeping the URL, so the Angular router resolves the route.
+  var m = location.pathname.match(/^(.*?\/(?:es|en))\//);
+  if (m) {
+    fetch(m[1] + '/index.html')
+      .then(function (r) { return r.text(); })
+      .then(function (html) { document.open(); document.write(html); document.close(); });
+  } else {
+    location.replace('/gmariposa_practice/');
+  }
+</script>

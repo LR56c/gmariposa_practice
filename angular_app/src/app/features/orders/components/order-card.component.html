@@ -1,0 +1,14 @@
+<article class="flex flex-col rounded-lg bg-surface-tonal p-6">
+  <app-order-summary [order]="order()" />
+  <div class="flex justify-end pt-2">
+    <button
+      type="button"
+      class="min-h-12 rounded-full bg-surface px-5 py-2 text-label-md text-primary hover:bg-divider focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      [attr.aria-label]="detailLabel()"
+      (click)="viewDetail.emit(order().id)"
+      i18n="@@order.detail"
+    >
+      Ver detalle
+    </button>
+  </div>
+</article>

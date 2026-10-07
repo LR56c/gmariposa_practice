@@ -136,7 +136,7 @@ El Usuario ve cargando, datos o error al abrir un detalle. Realiza UJ-1.
 **Notas:** el detalle no reutiliza los datos del Catalog; siempre consulta por `id`, porque así lo pide el PDF.
 
 ### 4.4 Cart (Flutter)
-**Descripción:** el Usuario agrega Products al Cart desde el detalle, cambia cantidades, quita ítems y ve el total. El contador del AppBar es visible desde cualquier pantalla. El Cart vive solo en memoria en el MVP. Realiza UJ-1.
+**Descripción:** el Usuario agrega Products al Cart desde el detalle, cambia cantidades, quita ítems y ve el total. El contador del AppBar es visible desde cualquier pantalla. El Cart vive en memoria y, desde la story 5.3 (DF-3), se guarda también en el dispositivo. Realiza UJ-1.
 
 **Requisitos funcionales:**
 
@@ -169,7 +169,7 @@ El Usuario ve el total del Cart y un contador en el AppBar, desde cualquier pant
 - El contador del AppBar muestra la cantidad total de unidades, no la de Cart items distintos.
 - El contador es visible en el Catalog, el detalle y el Cart.
 
-**Fuera de alcance:** persistencia del Cart entre sesiones (deseable, ver §6.2).
+**Fuera de alcance:** ninguno. La persistencia del Cart entre sesiones (DF-3, §6.2) se hizo en la story 5.3 con `shared_preferences`.
 
 **NFR específicos de esta funcionalidad:**
 - La lógica del Cart (agregar, cambiar cantidad, quitar, total) no depende de la UI, para poder probarla con pruebas unitarias. El estado cumple NFR-5 (inmutable).
@@ -335,7 +335,7 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 - Navegación con `go_router` (decisión de Mauri, 2026-10-06; antes DF-4). Rutas `/`, `/product/:id` y `/cart`.
 - Paginación infinita en el Catalog y en la búsqueda (DF-1 promovido al MVP, decisión de Mauri, 2026-10-06).
 - Deep link a `/product/:id` verificado en el emulador Android con `adb` (decisión de arquitectura AD-9).
-- Angular: estado con un store manual con signals (sin NgRx, `@ngrx/*` instalado sin uso), estilos con Tailwind, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md` (AD-16, AD-17). Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
+- Angular: estado con un store manual con signals (sin NgRx), estilos con Tailwind, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md` (AD-16, AD-17). Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
 - Apoyo de UX: dirección visual con `bmad-ux` y un Stitch pequeño con 4 pantallas (listado, detalle, carrito y panel de órdenes), con un índice pantalla ↔ story que actúa como gate en las stories de UI.
 
 **Angular priorizado.** Lo que el PDF pide para Angular se prioriza. Estos deseables se hacen apenas se cierran los obligatorios de Angular, antes que cualquier deseable o bonus de Flutter:

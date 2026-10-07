@@ -15,6 +15,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../support/prefs.dart';
+
 final Translations _t = AppLocale.es.buildSync();
 
 class _MockRepository extends Mock implements ProductRepository;
@@ -48,12 +50,17 @@ Future<_MockRepository> _pump(
   final repository = _MockRepository();
   when(() => repository.list(cancel: any(named: 'cancel')))
       .thenAnswer((_) async => answer());
+  when(() => repository.categories(cancel: any(named: 'cancel')))
+      .thenAnswer((_) async => const Right([]));
   await tester.pumpWidget(
     TranslationProvider(
       child: ProviderScope(
         retry: (_, _) => null,
         observers: [?observer],
-        overrides: [productRepositoryProvider.overrideWithValue(repository)],
+        overrides: [
+          productRepositoryProvider.overrideWithValue(repository),
+          await prefsOverride(),
+        ],
         child: const MaterialApp(home: CatalogPage()),
       ),
     ),
@@ -81,6 +88,34 @@ void main() {
     await tester.pump();
 
     expect(find.text(_t.emptyCatalog), findsOneWidget);
+  });
+
+  testWidgets('a long term in "Sin resultados" keeps its side margins', (
+    tester,
+  ) async {
+    final term = List.filled(30, 'by').join(' ');
+    final repository = await _pump(
+      tester,
+      () => const Right(Page(items: [_product], total: 1)),
+    );
+    when(() => repository.search(term, cancel: any(named: 'cancel')))
+        .thenAnswer((_) async => const Right(Page(items: [], total: 0)));
+    await tester.pump();
+
+    await tester.enterText(find.byType(TextField), term);
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump();
+
+    final text = find.text(_t.noResults(term: term));
+    expect(text, findsOneWidget);
+    final rect = tester.getRect(text);
+    expect(rect.left, greaterThanOrEqualTo(16));
+    expect(
+      rect.right,
+      lessThanOrEqualTo(
+        tester.view.physicalSize.width / tester.view.devicePixelRatio - 16,
+      ),
+    );
   });
 
   testWidgets('shows the error and "Reintentar" reloads the Catalog', (
@@ -144,6 +179,7 @@ void main() {
             retry: (_, _) => null,
             overrides: [
               productRepositoryProvider.overrideWithValue(repository),
+              await prefsOverride(),
             ],
             child: const MaterialApp(home: CatalogPage()),
           ),
