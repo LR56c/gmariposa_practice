@@ -21,6 +21,11 @@ final class NotFoundException extends BaseException {
   const new() : super('Not found', 'notFound');
 }
 
+/// The request was cancelled on purpose; not a failure to show (AD-3).
+final class CancelledException extends BaseException {
+  const new() : super('Request cancelled', 'cancelled');
+}
+
 final class ParseException extends BaseException {
   const new([String message = 'Invalid response format'])
     : super(message, 'parse');

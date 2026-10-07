@@ -6,7 +6,7 @@ class Errors implements Exception {
 
   final List<BaseException> exceptions;
 
-  bool get isCancelled => exceptions.isEmpty;
+  bool get isCancelled => exceptions.any((e) => e is CancelledException);
 
   bool get isNotFound => exceptions.any((e) => e is NotFoundException);
 

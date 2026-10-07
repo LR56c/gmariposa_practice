@@ -25,7 +25,11 @@ void main() {
     );
   });
 
-  test('falls back to the generic text for unknown or empty errors', () {
+  test('falls back to the generic text for unknown, empty or cancelled', () {
+    expect(
+      errorMessage(const Errors([CancelledException()]), es),
+      es.errors.generic,
+    );
     expect(errorMessage(StateError('x'), es), es.errors.generic);
     expect(errorMessage(const Errors([]), en), en.errors.generic);
   });
