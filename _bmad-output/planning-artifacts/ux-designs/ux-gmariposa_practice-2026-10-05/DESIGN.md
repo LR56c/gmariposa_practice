@@ -131,7 +131,7 @@ documento y `EXPERIENCE.md` ganan sobre el mock (ver `stitch-index.md`).
 - **Foco** `{colors.focus}`: anillo visible en todo control interactivo. No lo reemplaza el primario.
 - **Estrella** `{colors.star}` solo en el rating. **Placeholder** `{colors.placeholder}` con texto `{colors.on-placeholder}`
   para la imagen faltante.
-- Solo tema claro en el MVP. El oscuro es deseable (DF-6) y queda fuera.
+- Tema claro en el MVP. El oscuro (DF-6) se añadió después en las dos apps: redefine los mismos tokens, con un selector Sistema, Claro y Oscuro.
 
 ## Typography
 
