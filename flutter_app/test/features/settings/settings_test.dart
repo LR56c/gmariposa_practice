@@ -18,6 +18,23 @@ void main() {
     expect(data.readLanguage(), isNull);
   });
 
+  test('the saved language is read back', () async {
+    SharedPreferences.setMockInitialValues({});
+    final data = SharedPreferenceSettingsData(
+      await SharedPreferences.getInstance(),
+    );
+
+    await data.writeLanguage('en');
+
+    expect(data.readLanguage(), 'en');
+    expect(
+      (await SharedPreferences.getInstance()).getString(
+        SharedPreferenceSettingsData.languageKey,
+      ),
+      'en',
+    );
+  });
+
   test('an unknown saved theme falls back to the system theme', () async {
     SharedPreferences.setMockInitialValues({
       SharedPreferenceSettingsData.themeKey: 'neon',
@@ -30,7 +47,10 @@ void main() {
   });
 
   test('the chosen theme is applied and saved', () async {
-    final container = ProviderContainer(overrides: [await prefsOverride()]);
+    final container = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [await prefsOverride()],
+    );
     addTearDown(container.dispose);
 
     container.read(themeModeChoiceProvider.notifier).set(ThemeMode.dark);

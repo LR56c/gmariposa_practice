@@ -73,12 +73,12 @@ class _SettingsBody extends ConsumerWidget {
   }
 
   Future<void> _setLanguage(WidgetRef ref, AppLocale locale) async {
+    // Read before the await: the sheet may be closed while the locale loads.
+    final settings = ref.read(settingsRepositoryProvider);
     // English is a deferred library: it must finish loading before it applies.
     await LocaleSettings.setLocale(locale);
     try {
-      await ref
-          .read(settingsRepositoryProvider)
-          .writeLanguage(locale.languageCode);
+      await settings.writeLanguage(locale.languageCode);
     } on Object {
       // Deliberately ignored: a failed write must not break the app.
     }
