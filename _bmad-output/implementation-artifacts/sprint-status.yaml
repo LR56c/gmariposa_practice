@@ -62,8 +62,8 @@ development_status:
   4-5-bonus-i18n-es-en-con-angular-localize: done
   epic-4-retrospective: optional
 
-  epic-5: in-progress
-  5-1-verificación-de-la-app-mvp: in-progress
+  epic-5: done
+  5-1-verificación-de-la-app-mvp: done
   5-2-bonus-filtrar-el-catálogo-por-categoría-df-2: done
   5-3-bonus-conservar-el-carrito-entre-sesiones-df-3: done
   5-4-bonus-prueba-de-integración-del-flujo-principal-b-1: done
