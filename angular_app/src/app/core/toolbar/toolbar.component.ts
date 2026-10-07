@@ -12,7 +12,7 @@ export class ToolbarComponent {
   protected readonly locale = inject(LOCALE_ID);
   protected readonly themes = inject(ThemeService);
 
-  // ponytail: build-time i18n ships one bundle per locale (/es/, /en/), so switching language
+  // build-time i18n ships one bundle per locale (/es/, /en/), so switching language
   // means loading the other bundle. `ng serve` serves a single locale, where this is a no-op.
   protected setLanguage(target: string): void {
     const next = this.location.pathname.replace(`/${this.locale}/`, `/${target}/`);
