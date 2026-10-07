@@ -84,9 +84,13 @@ class _CatalogBody extends ConsumerWidget {
           ),
           data: (state) => state.items.isEmpty
               ? Center(
-                  child: Text(
-                    term.isEmpty ? t.emptyCatalog : t.noResults(term: term),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      term.isEmpty ? t.emptyCatalog : t.noResults(term: term),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 )
               : _ProductList(state: state),
