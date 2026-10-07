@@ -1,4 +1,7 @@
+import 'package:flutter_app/features/cart/domain/cart_item.dart';
+import 'package:flutter_app/features/cart/domain/cart_repository.dart';
 import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:flutter_app/features/cart/presentation/providers/cart_repository_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +10,15 @@ import '../../support/prefs.dart';
 
 Product _p(int id, double price) =>
     Product(id: id, title: 'P$id', price: price, rating: 4, imageUrl: '');
+
+/// A Cart store whose every write fails.
+class _FailingCart implements CartRepository {
+  @override
+  List<CartItem> read() => const [];
+
+  @override
+  Future<void> write(List<CartItem> items) => Future.error(StateError('disk'));
+}
 
 void main() {
   late ProviderContainer container;
@@ -52,6 +64,19 @@ void main() {
     expect(container.read(cartProvider).map((i) => i.product.id), [2]);
     cart.remove(2);
     expect(container.read(cartProvider), isEmpty);
+  });
+
+  test('a failed save keeps the Cart in memory and raises no error', () async {
+    final failing = ProviderContainer(
+      retry: (_, _) => null,
+      overrides: [cartRepositoryProvider.overrideWithValue(_FailingCart())],
+    );
+    addTearDown(failing.dispose);
+
+    failing.read(cartProvider.notifier).add(_p(1, 10));
+    await pumpEventQueue(); // an unhandled async error would fail the test
+
+    expect(failing.read(cartProvider).single.quantity, 1);
   });
 
   test('total and units sum over quantities', () {
