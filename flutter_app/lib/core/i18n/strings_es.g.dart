@@ -114,6 +114,24 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Total $amount'
 	String total({required Object amount}) => 'Total ${amount}';
 
+	/// es: 'Ajustes'
+	String get settings => 'Ajustes';
+
+	/// es: 'Tema'
+	String get theme => 'Tema';
+
+	/// es: 'Sistema'
+	String get themeSystem => 'Sistema';
+
+	/// es: 'Claro'
+	String get themeLight => 'Claro';
+
+	/// es: 'Oscuro'
+	String get themeDark => 'Oscuro';
+
+	/// es: 'Idioma'
+	String get language => 'Idioma';
+
 	late final Translations$errors$es errors = Translations$errors$es._(_root);
 }
 
@@ -172,6 +190,12 @@ extension on Translations {
 			'increaseQuantity' => ({required Object title}) => 'Aumentar cantidad de ${title}',
 			'units' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: '${n} unidad', other: '${n} unidades', ), 
 			'total' => ({required Object amount}) => 'Total ${amount}',
+			'settings' => 'Ajustes',
+			'theme' => 'Tema',
+			'themeSystem' => 'Sistema',
+			'themeLight' => 'Claro',
+			'themeDark' => 'Oscuro',
+			'language' => 'Idioma',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
 			'errors.server' => 'Algo salió mal. Inténtalo de nuevo.',
 			'errors.parse' => 'No se pudo leer la respuesta. Inténtalo de nuevo.',

@@ -25,6 +25,12 @@
     "other": "$n units"
   },
   "total": "Total $amount",
+  "settings": "Settings",
+  "theme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
   "errors": {
     "network": "Couldn't connect. Check your connection.",
     "server": "Something went wrong. Please try again.",

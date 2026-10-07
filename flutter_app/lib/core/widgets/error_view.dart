@@ -25,7 +25,7 @@ class ErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
-              style: tonalButtonStyle,
+              style: tonalButtonStyle(context),
               onPressed: onRetry,
               child: Text(t.retry),
             ),

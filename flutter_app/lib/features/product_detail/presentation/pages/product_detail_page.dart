@@ -9,6 +9,7 @@ import 'package:flutter_app/features/catalog/presentation/widgets/product_thumbn
 import 'package:flutter_app/features/product_detail/presentation/providers/product_detail_provider.dart';
 import 'package:flutter_app/features/product_detail/presentation/widgets/added_to_cart_toast.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:flutter_app/features/settings/presentation/widgets/settings_icon_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -36,7 +37,7 @@ class ProductDetailPage extends ConsumerWidget {
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.t.productDetail),
-        actions: const [CartIconButton()],
+        actions: const [SettingsIconButton(), CartIconButton()],
       ),
       body: ref
           .watch(productDetailProvider(id))
