@@ -214,5 +214,50 @@
         <target>Total with discount</target>
       </segment>
     </unit>
+    <unit id="toolbar.language">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Idioma</source>
+        <target>Language</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.theme">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Tema</source>
+        <target>Theme</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeSystem">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Sistema</source>
+        <target>System</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeLight">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Claro</source>
+        <target>Light</target>
+      </segment>
+    </unit>
+    <unit id="toolbar.themeDark">
+      <notes>
+        <note category="location">src/app/core/toolbar/toolbar.component.html</note>
+      </notes>
+      <segment>
+        <source>Oscuro</source>
+        <target>Dark</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

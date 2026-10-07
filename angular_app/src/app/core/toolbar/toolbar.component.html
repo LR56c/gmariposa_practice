@@ -1,0 +1,29 @@
+<header class="mx-auto flex max-w-5xl justify-end gap-4 px-6 pt-4">
+  <label class="flex items-center gap-2 text-label-md text-on-surface-muted">
+    <span i18n="@@toolbar.language">Idioma</span>
+    <select
+      class="rounded-full border border-outline bg-surface-tonal px-3 py-1.5 text-body-md text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      (change)="setLanguage($any($event.target).value)"
+    >
+      <option value="es" [selected]="locale === 'es'">Español</option>
+      <option value="en" [selected]="locale === 'en'">English</option>
+    </select>
+  </label>
+  <label class="flex items-center gap-2 text-label-md text-on-surface-muted">
+    <span i18n="@@toolbar.theme">Tema</span>
+    <select
+      class="rounded-full border border-outline bg-surface-tonal px-3 py-1.5 text-body-md text-on-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      (change)="setTheme($any($event.target).value)"
+    >
+      <option value="system" [selected]="themes.theme() === 'system'" i18n="@@toolbar.themeSystem">
+        Sistema
+      </option>
+      <option value="light" [selected]="themes.theme() === 'light'" i18n="@@toolbar.themeLight">
+        Claro
+      </option>
+      <option value="dark" [selected]="themes.theme() === 'dark'" i18n="@@toolbar.themeDark">
+        Oscuro
+      </option>
+    </select>
+  </label>
+</header>
