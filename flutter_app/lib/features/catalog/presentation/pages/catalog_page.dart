@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
+import 'package:flutter_app/core/theme/app_theme.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
 import 'package:flutter_app/features/cart/presentation/widgets/cart_icon_button.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/catalog_provider.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_app/features/catalog/presentation/providers/search_provi
 import 'package:flutter_app/features/catalog/presentation/widgets/product_list_item.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/domain/product_category.dart';
+import 'package:flutter_app/features/settings/presentation/widgets/settings_icon_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -38,7 +40,7 @@ class CatalogPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.t.appTitle),
-        actions: const [CartIconButton()],
+        actions: const [SettingsIconButton(), CartIconButton()],
       ),
       // The AppBar already covers the top inset.
       body: const SafeArea(
@@ -139,9 +141,9 @@ class _SearchFieldState extends ConsumerState<_SearchField> {
               borderSide: BorderSide.none,
             ),
             // Visible focus ring (DESIGN.md: focus #0B57D0).
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(24)),
-              borderSide: BorderSide(color: Color(0xFF0B57D0), width: 2),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
+              borderSide: BorderSide(color: focusColor(context), width: 2),
             ),
           ),
         ),

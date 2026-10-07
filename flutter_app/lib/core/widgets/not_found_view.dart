@@ -23,7 +23,7 @@ class NotFoundView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             FilledButton.tonal(
-              style: tonalButtonStyle,
+              style: tonalButtonStyle(context),
               onPressed: () => context.go('/'),
               child: Text(t.backToCatalog),
             ),

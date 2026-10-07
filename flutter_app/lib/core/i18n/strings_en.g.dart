@@ -64,6 +64,12 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 		other: '${n} units',
 	);
 	@override String total({required Object amount}) => 'Total ${amount}';
+	@override String get settings => 'Settings';
+	@override String get theme => 'Theme';
+	@override String get themeSystem => 'System';
+	@override String get themeLight => 'Light';
+	@override String get themeDark => 'Dark';
+	@override String get language => 'Language';
 	@override late final _Translations$errors$en errors = _Translations$errors$en._(_root);
 }
 
@@ -112,6 +118,12 @@ extension on TranslationsEn {
 			'increaseQuantity' => ({required Object title}) => 'Increase quantity of ${title}',
 			'units' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: '${n} unit', other: '${n} units', ), 
 			'total' => ({required Object amount}) => 'Total ${amount}',
+			'settings' => 'Settings',
+			'theme' => 'Theme',
+			'themeSystem' => 'System',
+			'themeLight' => 'Light',
+			'themeDark' => 'Dark',
+			'language' => 'Language',
 			'errors.network' => 'Couldn\'t connect. Check your connection.',
 			'errors.server' => 'Something went wrong. Please try again.',
 			'errors.parse' => 'Couldn\'t read the response. Please try again.',
