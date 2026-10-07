@@ -26,13 +26,17 @@ import { OrdersStore } from './orders.store';
       <div aria-live="polite">
         @switch (store.listStatus()) {
           @case ('loading') {
-            <p role="status" class="flex items-center gap-2 text-on-surface-muted">
-              <span
-                class="size-4 animate-spin rounded-full border-2 border-outline border-t-primary"
-                aria-hidden="true"
-              ></span>
-              <span i18n="@@orders.loading">Cargando órdenes</span>
-            </p>
+            <div role="status" class="mx-auto grid gap-4 lg:grid-cols-2">
+              <span class="sr-only" i18n="@@orders.loading">Cargando órdenes</span>
+              @for (n of skeletons; track n) {
+                <div aria-hidden="true" class="flex flex-col gap-2 rounded-lg bg-surface-tonal p-4">
+                  <span class="block h-5 w-1/3 animate-pulse rounded bg-outline/40"></span>
+                  <span class="block h-4 w-1/4 animate-pulse rounded bg-outline/40"></span>
+                  <span class="block h-6 w-1/2 animate-pulse rounded bg-outline/40"></span>
+                  <span class="mt-1 block h-9 w-28 animate-pulse rounded-full bg-outline/40"></span>
+                </div>
+              }
+            </div>
           }
           @case ('error') {
             <div role="alert" class="flex flex-col items-start gap-2">
@@ -69,6 +73,7 @@ import { OrdersStore } from './orders.store';
 export class OrdersPageComponent {
   protected readonly store = inject(OrdersStore);
   private readonly router = inject(Router);
+  protected readonly skeletons = [1, 2, 3, 4, 5, 6];
 
   protected readonly minTotal = new FormControl(String(this.store.minTotal() ?? ''), { nonNullable: true });
 

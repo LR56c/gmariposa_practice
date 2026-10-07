@@ -63,13 +63,15 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
             </button>
           </div>
         } @else {
-          <p role="status" class="flex items-center gap-2 text-on-surface-muted">
-            <span
-              class="size-4 animate-spin rounded-full border-2 border-outline border-t-primary"
-              aria-hidden="true"
-            ></span>
-            <span i18n="@@detail.loading">Cargando orden</span>
-          </p>
+          <div role="status" class="flex flex-col gap-2">
+            <span class="sr-only" i18n="@@detail.loading">Cargando orden</span>
+            <span aria-hidden="true" class="block h-7 w-1/4 animate-pulse rounded bg-outline/40"></span>
+            <span aria-hidden="true" class="block h-4 w-1/5 animate-pulse rounded bg-outline/40"></span>
+            <span aria-hidden="true" class="block h-6 w-1/3 animate-pulse rounded bg-outline/40"></span>
+            @for (n of skeletons; track n) {
+              <span aria-hidden="true" class="mt-2 block h-5 w-full animate-pulse rounded bg-outline/40"></span>
+            }
+          </div>
         }
       </div>
     </main>
@@ -77,6 +79,7 @@ import { Errors, ServerException, toErrorInfo } from '../../core/errors/errors';
 })
 export class OrderDetailComponent {
   private readonly store = inject(OrdersStore);
+  protected readonly skeletons = [1, 2, 3];
 
   /** Parsed to number (or null if not numeric) by the route resolver, once. */
   readonly id = input.required<number | null>();
