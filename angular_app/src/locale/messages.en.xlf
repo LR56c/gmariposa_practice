@@ -115,5 +115,86 @@
         <target>{VAR_PLURAL, plural, =1 {1 order} other {<ph id="0" equiv="INTERPOLATION"/> orders}}</target>
       </segment>
     </unit>
+    <unit id="error.notFound">
+      <notes>
+        <note category="location">src/app/core/errors/errors.ts:45</note>
+      </notes>
+      <segment>
+        <source>No encontramos esa orden.</source>
+        <target>We could not find that order.</target>
+      </segment>
+    </unit>
+    <unit id="order.detail">
+      <notes>
+        <note category="location">src/app/features/orders/order-card.component.ts:26,28</note>
+      </notes>
+      <segment>
+        <source> Ver detalle </source>
+        <target>View details</target>
+      </segment>
+    </unit>
+    <unit id="order.detailLabel">
+      <notes>
+        <note category="location">src/app/features/orders/order-card.component.ts:36</note>
+      </notes>
+      <segment>
+        <source>Ver detalle de la orden <ph id="0" equiv="id" disp="this.order().id"/></source>
+        <target>View details of order <ph id="0" equiv="id" disp="this.order().id"/></target>
+      </segment>
+    </unit>
+    <unit id="detail.back">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:17,19</note>
+      </notes>
+      <segment>
+        <source>Volver a órdenes</source>
+        <target>Back to orders</target>
+      </segment>
+    </unit>
+    <unit id="detail.empty">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:32,34</note>
+      </notes>
+      <segment>
+        <source>Esta orden no tiene productos</source>
+        <target>This order has no products</target>
+      </segment>
+    </unit>
+    <unit id="detail.colTitle">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:37,38</note>
+      </notes>
+      <segment>
+        <source>Título</source>
+        <target>Title</target>
+      </segment>
+    </unit>
+    <unit id="detail.colQuantity">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:38,39</note>
+      </notes>
+      <segment>
+        <source>Cantidad</source>
+        <target>Quantity</target>
+      </segment>
+    </unit>
+    <unit id="detail.colPrice">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:39,41</note>
+      </notes>
+      <segment>
+        <source>Precio</source>
+        <target>Price</target>
+      </segment>
+    </unit>
+    <unit id="detail.loading">
+      <notes>
+        <note category="location">src/app/features/orders/order-detail.component.ts:71,73</note>
+      </notes>
+      <segment>
+        <source>Cargando orden</source>
+        <target>Loading order</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

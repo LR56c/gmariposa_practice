@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { AmountPipe } from './amount.pipe';
 import { Order } from './order.schema';
 
@@ -16,9 +16,23 @@ import { Order } from './order.schema';
           Con descuento {{ discounted | amount }}
         </p>
       }
+      <button
+        type="button"
+        class="mt-3 rounded-full bg-placeholder px-4 py-2 text-label-md text-on-placeholder focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+        [attr.aria-label]="detailLabel()"
+        (click)="viewDetail.emit(order().id)"
+        i18n="@@order.detail"
+      >
+        Ver detalle
+      </button>
     </article>
   `,
 })
 export class OrderCardComponent {
   readonly order = input.required<Order>();
+  readonly viewDetail = output<number>();
+
+  protected readonly detailLabel = computed(
+    () => $localize`:@@order.detailLabel:Ver detalle de la orden ${this.order().id}:id:`,
+  );
 }
