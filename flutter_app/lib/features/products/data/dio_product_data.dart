@@ -6,6 +6,7 @@ import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/page.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:flutter_app/features/products/domain/product_category.dart';
 import 'package:flutter_app/features/products/domain/product_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -35,6 +36,24 @@ class DioProductData implements ProductRepository {
     _toPage,
     query: {'q': query, 'limit': limit, 'skip': skip},
   );
+
+  @override
+  Future<Either<Errors, Page<Product>>> byCategory(
+    String slug, {
+    int limit = 20,
+    int skip = 0,
+    CancelSignal? cancel,
+  }) => _get(
+    '/products/category/$slug',
+    cancel,
+    _toPage,
+    query: {'limit': limit, 'skip': skip},
+  );
+
+  @override
+  Future<Either<Errors, List<ProductCategory>>> categories({
+    CancelSignal? cancel,
+  }) => _get('/products/categories', cancel, _toCategories);
 
   @override
   Future<Either<Errors, Product>> getById(int id, {CancelSignal? cancel}) =>
@@ -69,6 +88,19 @@ class DioProductData implements ProductRepository {
   Product _toProduct(Object? data) => data is Map<String, dynamic>
       ? Product.fromJson(data)
       : throw const ParseException();
+
+  List<ProductCategory> _toCategories(Object? data) {
+    if (data is! List<Object?>) throw const ParseException();
+    return [
+      for (final c in data)
+        if (c is Map<String, dynamic> &&
+            c['slug'] is String &&
+            c['name'] is String)
+          ProductCategory(slug: c['slug'] as String, name: c['name'] as String)
+        else
+          throw const ParseException(),
+    ];
+  }
 
   Page<Product> _toPage(Object? data) {
     if (data is! Map<String, dynamic>) throw const ParseException();

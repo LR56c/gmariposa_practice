@@ -5,11 +5,14 @@ import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/widgets/error_view.dart';
 import 'package:flutter_app/features/cart/presentation/widgets/cart_icon_button.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/catalog_provider.dart';
+import 'package:flutter_app/features/catalog/presentation/providers/category_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/search_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/widgets/product_list_item.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:flutter_app/features/products/domain/product_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 /// Layout the skeleton is drawn from while the first page loads.
 final List<Product> _skeletonProducts = List.filled(
@@ -43,6 +46,7 @@ class CatalogPage extends StatelessWidget {
         child: Column(
           children: [
             _SearchField(),
+            _CategoryButton(),
             Expanded(child: _CatalogBody()),
           ],
         ),
@@ -57,6 +61,7 @@ class _CatalogBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.t;
+    final term = ref.watch(debouncedTermProvider.select((a) => a.value ?? ''));
     return ref
         .watch(catalogProvider)
         .when(
@@ -74,7 +79,7 @@ class _CatalogBody extends ConsumerWidget {
           data: (state) => state.items.isEmpty
               ? Center(
                   child: Text(
-                    t.emptyCatalog,
+                    term.isEmpty ? t.emptyCatalog : t.noResults(term: term),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 )
@@ -130,6 +135,105 @@ class _SearchFieldState extends ConsumerState<_SearchField> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Opens the category modal; shows the chosen category (UX-DR24).
+///
+/// Hidden while categories load or if they fail, so the list is never blocked.
+class _CategoryButton extends ConsumerWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(categoriesProvider).value;
+    if (categories == null) return const SizedBox.shrink();
+    final t = context.t;
+    final slug = ref.watch(selectedCategoryProvider);
+    final selected = categories.where((c) => c.slug == slug).firstOrNull;
+    final label = selected?.name ?? t.category;
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        child: Semantics(
+          button: true,
+          label: t.categoryFilter(name: selected?.name ?? t.allCategories),
+          excludeSemantics: true,
+          child: FilledButton.tonalIcon(
+            style: FilledButton.styleFrom(minimumSize: const Size(0, 48)),
+            onPressed: () => _showModal(context, ref, categories),
+            icon: const Icon(Icons.filter_list),
+            label: Text(label),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showModal(
+    BuildContext context,
+    WidgetRef ref,
+    List<ProductCategory> categories,
+  ) {
+    final t = context.t;
+    final current = ref.read(selectedCategoryProvider);
+    unawaited(
+      WoltModalSheet.show<void>(
+        context: context,
+        pageListBuilder: (modalContext) => [
+          SliverWoltModalSheetPage(
+            mainContentSliversBuilder: (_) => [
+              SliverList.list(
+                children: [
+                  _Option(
+                    name: t.allCategories,
+                    selected: current == null,
+                    onTap: () => _choose(modalContext, ref, null),
+                  ),
+                  for (final c in categories)
+                    _Option(
+                      name: c.name,
+                      selected: c.slug == current,
+                      onTap: () => _choose(modalContext, ref, c.slug),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _choose(BuildContext modalContext, WidgetRef ref, String? slug) {
+    ref.read(selectedCategoryProvider.notifier).set(slug);
+    Navigator.of(modalContext).pop();
+  }
+}
+
+/// Modal row; the check, not only the color, marks the selected one.
+class _Option extends StatelessWidget {
+  const new({required this.name, required this.selected, required this.onTap});
+
+  final String name;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: name,
+      selected: selected,
+      button: true,
+      excludeSemantics: true,
+      child: ListTile(
+        minTileHeight: 48,
+        title: Text(name),
+        trailing: selected ? const Icon(Icons.check) : null,
+        onTap: onTap,
       ),
     );
   }

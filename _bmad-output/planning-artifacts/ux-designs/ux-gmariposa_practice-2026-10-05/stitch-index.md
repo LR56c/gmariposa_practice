@@ -17,7 +17,7 @@ Proyecto Stitch: `projects/475278247836846461` · Design system: `assets/1560818
 
 | Pantalla | App | Screen ID Stitch | Ruta / contenedor | FR | Story |
 |---|---|---|---|---|---|
-| Catálogo | Flutter | `0d762685e2044b1da58750a9b667a78c` | `go_router` `/` | FR-1, 2, 3, 9 | 1.3, 1.4, 1.5, 3.2, 3.3 |
+| Catálogo | Flutter | `0d762685e2044b1da58750a9b667a78c` | `go_router` `/` | FR-1, 2, 3, 9 | 1.3, 1.4, 1.5, 3.2, 3.3, 5.2 |
 | Detalle | Flutter | `b0e799e0db0b4c42be81e70c72658b69` | `/product/:id` | FR-4, 5, 6, 9 | 2.1, 3.1, 3.3 |
 | Carrito | Flutter | `f6db58a53f334618803f46bd60e49ce7` | `/cart` | FR-6 a 9 | 3.2, 3.3 |
 | Órdenes | Angular | `1b9f30e0c87346e89569ed83f17ec75b` | `OrdersPageComponent` (`/`) y detalle en `/orders/:id` | FR-13 a 16 | 4.2, 4.3, 4.4 |
@@ -29,7 +29,7 @@ Sin pantalla en Stitch (solo documentados en `EXPERIENCE.md`): estados de carga,
 ## Transversal: no implementar en ninguna pantalla
 
 Barra inferior, menú lateral o hamburguesa, banners de envío, cupones, subtotales de envío o descuento, sellos de pago,
-favoritos, reseñas, chips de categoría (el filtro de DF-2 es un botón con un modal, story 5.2), "Tramitar pedido" y cualquier ícono de filtros. Además:
+favoritos, reseñas, chips de categoría (el filtro de DF-2 es un botón con un modal, story 5.2), "Tramitar pedido" y cualquier ícono de filtros fuera del botón de categoría de la story 5.2. Además:
 
 - Importes siempre sin símbolo de moneda y con 2 decimales.
 - Ids reales de DummyJSON; no inventar formatos como `#ORD-001` o `usr_…`.

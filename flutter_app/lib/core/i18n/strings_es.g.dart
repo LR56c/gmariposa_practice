@@ -51,6 +51,18 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Buscar productos'
 	String get searchHint => 'Buscar productos';
 
+	/// es: 'Categoría'
+	String get category => 'Categoría';
+
+	/// es: 'Todas'
+	String get allCategories => 'Todas';
+
+	/// es: 'Categoría: $name'
+	String categoryFilter({required Object name}) => 'Categoría: ${name}';
+
+	/// es: 'Sin resultados para "$term"'
+	String noResults({required Object term}) => 'Sin resultados para "${term}"';
+
 	/// es: 'Reintentar'
 	String get retry => 'Reintentar';
 
@@ -140,6 +152,10 @@ extension on Translations {
 			'appTitle' => 'Mini Catálogo',
 			'emptyCatalog' => 'No hay productos',
 			'searchHint' => 'Buscar productos',
+			'category' => 'Categoría',
+			'allCategories' => 'Todas',
+			'categoryFilter' => ({required Object name}) => 'Categoría: ${name}',
+			'noResults' => ({required Object term}) => 'Sin resultados para "${term}"',
 			'retry' => 'Reintentar',
 			'noMoreProducts' => 'No hay más productos',
 			'addToCart' => 'Agregar al carrito',
