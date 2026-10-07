@@ -3,17 +3,19 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_app/features/cart/domain/cart_item.dart';
+import 'package:flutter_app/features/cart/domain/cart_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// The only place that reads and writes the saved Cart (AD-3).
-class CartStorage {
+/// [CartRepository] backed by `shared_preferences`: the Cart saved as JSON.
+class SharedPreferenceCartData implements CartRepository {
   const new(this._prefs);
 
   static const key = 'cart';
 
   final SharedPreferences _prefs;
 
-  /// The saved Cart; a corrupt or outdated value is discarded and reads empty.
+  /// A corrupt or outdated value is discarded and reads empty.
+  @override
   List<CartItem> read() {
     final raw = _prefs.getString(key);
     if (raw == null) return const [];
@@ -28,6 +30,7 @@ class CartStorage {
     }
   }
 
+  @override
   Future<void> write(List<CartItem> items) =>
       _prefs.setString(key, jsonEncode([for (final i in items) i.toJson()]));
 }
