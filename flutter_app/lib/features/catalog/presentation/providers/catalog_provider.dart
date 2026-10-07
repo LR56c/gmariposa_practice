@@ -80,10 +80,12 @@ class Catalog extends _$Catalog {
         : repository.search(term, skip: skip, cancel: cancel);
   }
 
-  /// Appends the next page; ignored while one is in flight or none is left.
+  /// Appends the next page; ignored while one is in flight, none is left, or
+  /// the Catalog itself is reloading (it still holds the previous value).
   Future<void> loadMore() async {
     final current = state.value;
     if (current == null ||
+        state.isLoading ||
         current.loadMore.isLoading ||
         current.items.length >= current.total) {
       return;
@@ -95,7 +97,9 @@ class Catalog extends _$Catalog {
       cancel: _cancel,
       skip: current.items.length,
     );
-    if (epoch != _epoch) return;
+    // A disposed or superseded build, or a cancelled request, is not a result.
+    if (epoch != _epoch || !ref.mounted) return;
+    if (result.fold((errors) => errors.isCancelled, (_) => false)) return;
     // Re-read: the list is only ever replaced, never mutated (AD-5).
     final latest = state.requireValue;
     state = AsyncData(

@@ -68,7 +68,11 @@ class _CatalogBody extends ConsumerWidget {
           skipLoadingOnRefresh: false,
           loading: () => Skeletonizer(
             child: _ProductList(
-              state: CatalogState(items: _skeletonProducts, total: 99),
+              // total == items: the skeleton never asks for another page.
+              state: CatalogState(
+                items: _skeletonProducts,
+                total: _skeletonProducts.length,
+              ),
             ),
           ),
           error: (error, _) => ErrorView(
@@ -285,7 +289,7 @@ class _ProductList extends ConsumerWidget {
         ),
         newPageErrorIndicatorBuilder: (_) => _FooterPadding(
           child: ErrorView(
-            error: loadMore.error!,
+            error: loadMore.error ?? const Object(),
             onRetry: () =>
                 unawaited(ref.read(catalogProvider.notifier).loadMore()),
           ),

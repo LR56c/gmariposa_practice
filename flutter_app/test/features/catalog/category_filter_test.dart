@@ -65,6 +65,7 @@ void main() {
       ),
     ).thenAnswer((_) => slow.future);
     final container = ProviderContainer(
+      retry: (_, _) => null,
       overrides: [
         productRepositoryProvider.overrideWithValue(repository),
         await prefsOverride(),
