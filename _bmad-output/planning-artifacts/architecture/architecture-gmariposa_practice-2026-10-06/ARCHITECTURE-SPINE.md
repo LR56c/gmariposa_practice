@@ -201,7 +201,7 @@ flowchart LR
   - Un único servicio-store `providedIn: 'root'` (no registrado en rutas lazy) con signals: estado privado, lectura `readonly`, y valores derivados con `computed`. Guarda el mapa de Orders por `id` con `upsert`, `listStatus`/`listError`, `byIdStatus`/`byIdError` y `minTotal`.
   - Solo el store llama a `OrdersService`. Los componentes leen signals y llaman a sus métodos (`loadOrders`, `loadOrder(id)`, `setMinTotal`); el flujo del `FormControl` al store es unidireccional.
   - Una nueva carga de la lista se ignora si hay una en vuelo (equivale a `exhaustMap`); el detalle admite cargas concurrentes por `id` (equivale a `mergeMap`). Las suscripciones se limpian con `takeUntilDestroyed`.
-  - `@ngrx/*` queda instalado sin uso, por decisión de Mauri; se justifica en el README (choca con NFR-5, sin código muerto, y debe poder defenderse).
+  - NgRx no se instala (RxJS ya viene con Angular y basta para el store manual); evita una dependencia sin uso (NFR-5).
 
 ### AD-17 — Angular: Tailwind en lugar de CSS propio [ADOPTED]
 
@@ -237,7 +237,6 @@ flowchart LR
 | fpdart · dio · go_router | 1.2.0 · 5.11.1 · 18.0.2 |
 | stream_transform · mocktail · very_good_analysis | 2.1.2 · 1.0.5 · 11.0.0 |
 | Angular (CLI y core) · TypeScript · Node | 22.2.1 · ~6.0 · 24.16 |
-| @ngrx/store · @ngrx/effects · @ngrx/store-devtools | 22.0.1 (instalados sin uso, AD-16) |
 | tailwindcss · @tailwindcss/postcss · postcss | confirmar al hacer el scaffold (AD-17) |
 | toastification · wolt_modal_sheet · shared_preferences | 3.2.0 · 0.11.0 (solo bonus DF-2) · confirmar (solo bonus DF-3) (AD-18) |
 | effect · Vitest | 4.0.1 · 5.0.3 |

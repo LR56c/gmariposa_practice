@@ -22,6 +22,8 @@ Proyecto Stitch: `projects/475278247836846461` · Design system: `assets/1560818
 | Carrito | Flutter | `f6db58a53f334618803f46bd60e49ce7` | `/cart` | FR-6 a 9 | 3.2, 3.3 |
 | Órdenes | Angular | `1b9f30e0c87346e89569ed83f17ec75b` | `OrdersPageComponent` (`/`) y detalle en `/orders/:id` | FR-13 a 16 | 4.2, 4.3, 4.4 |
 
+La story 4.1 solo prepara el shell y el tema de Angular; la pantalla Órdenes se construye desde la 4.2.
+
 Sin pantalla en Stitch (solo documentados en `EXPERIENCE.md`): estados de carga, vacío y error, y carrito vacío.
 
 ## Transversal: no implementar en ninguna pantalla

@@ -54,11 +54,12 @@ development_status:
   3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: done
   epic-3-retrospective: optional
 
-  epic-4: backlog
-  4-1-panel-angular-que-arranca-con-el-tema: backlog
-  4-2-ver-las-orders-en-tarjetas: backlog
-  4-3-filtrar-orders-por-total-mínimo: backlog
-  4-4-ver-el-detalle-de-una-order: backlog
+  epic-4: in-progress
+  4-1-panel-angular-que-arranca-con-el-tema: done
+  4-2-ver-las-orders-en-tarjetas: done
+  4-3-filtrar-orders-por-total-mínimo: done
+  4-4-ver-el-detalle-de-una-order: done
+  4-5-bonus-i18n-es-en-con-angular-localize: done
   epic-4-retrospective: optional
 
   epic-5: backlog

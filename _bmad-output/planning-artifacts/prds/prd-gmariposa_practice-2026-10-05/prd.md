@@ -335,7 +335,7 @@ El Repo público contiene `flutter_app/` y `angular_app/` y un historial de comm
 - Navegación con `go_router` (decisión de Mauri, 2026-10-06; antes DF-4). Rutas `/`, `/product/:id` y `/cart`.
 - Paginación infinita en el Catalog y en la búsqueda (DF-1 promovido al MVP, decisión de Mauri, 2026-10-06).
 - Deep link a `/product/:id` verificado en el emulador Android con `adb` (decisión de arquitectura AD-9).
-- Angular: estado con un store manual con signals (sin NgRx, `@ngrx/*` instalado sin uso), estilos con Tailwind, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md` (AD-16, AD-17). Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
+- Angular: estado con un store manual con signals (sin NgRx), estilos con Tailwind, y validación y errores con `effect` (solo `Schema` y `Result`), según `ARCHITECTURE-SPINE.md` (AD-16, AD-17). Flutter: `dio`, `stream_transform` para el debounce, `mocktail` y `very_good_analysis`.
 - Apoyo de UX: dirección visual con `bmad-ux` y un Stitch pequeño con 4 pantallas (listado, detalle, carrito y panel de órdenes), con un índice pantalla ↔ story que actúa como gate en las stories de UI.
 
 **Angular priorizado.** Lo que el PDF pide para Angular se prioriza. Estos deseables se hacen apenas se cierran los obligatorios de Angular, antes que cualquier deseable o bonus de Flutter:
