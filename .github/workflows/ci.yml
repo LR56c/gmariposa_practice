@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# One run per branch: a push to a PR branch fires both push and pull_request,
+# and a newer commit makes the older run pointless.
+concurrency:
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   flutter:
     runs-on: ubuntu-latest
@@ -66,5 +72,6 @@ jobs:
           cache: npm
           cache-dependency-path: angular_app/package-lock.json
       - run: npm ci
+      - run: npx ng lint
       - run: npx ng test --no-watch
       - run: npx ng build
