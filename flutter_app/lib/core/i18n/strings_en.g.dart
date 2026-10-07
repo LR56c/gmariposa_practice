@@ -41,6 +41,10 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 	@override String get appTitle => 'Mini Catalog';
 	@override String get emptyCatalog => 'No products';
 	@override String get searchHint => 'Search products';
+	@override String get category => 'Category';
+	@override String get allCategories => 'All';
+	@override String categoryFilter({required Object name}) => 'Category: ${name}';
+	@override String noResults({required Object term}) => 'No results for "${term}"';
 	@override String get retry => 'Retry';
 	@override String get noMoreProducts => 'No more products';
 	@override String get addToCart => 'Add to cart';
@@ -88,6 +92,10 @@ extension on TranslationsEn {
 			'appTitle' => 'Mini Catalog',
 			'emptyCatalog' => 'No products',
 			'searchHint' => 'Search products',
+			'category' => 'Category',
+			'allCategories' => 'All',
+			'categoryFilter' => ({required Object name}) => 'Category: ${name}',
+			'noResults' => ({required Object term}) => 'No results for "${term}"',
 			'retry' => 'Retry',
 			'noMoreProducts' => 'No more products',
 			'addToCart' => 'Add to cart',

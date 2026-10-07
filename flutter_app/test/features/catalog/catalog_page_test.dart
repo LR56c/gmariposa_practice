@@ -48,6 +48,8 @@ Future<_MockRepository> _pump(
   final repository = _MockRepository();
   when(() => repository.list(cancel: any(named: 'cancel')))
       .thenAnswer((_) async => answer());
+  when(() => repository.categories(cancel: any(named: 'cancel')))
+      .thenAnswer((_) async => const Right([]));
   await tester.pumpWidget(
     TranslationProvider(
       child: ProviderScope(
