@@ -16,3 +16,7 @@ Hallazgos de la review por lotes que se dejan para después. Cada lote añade su
 
 - **Toast: reemplazo con doble tap y "reduce motion" sin test** [`flutter_app/lib/features/product_detail/presentation/widgets/added_to_cart_toast.dart`] — `dismissAll(delayForAnimation: false)` y `animationDuration` con `disableAnimationsOf` implementan UX-DR9, pero el test solo toca una vez, así que no distingue "reemplaza" de "apila". Pulido de UX; añadir un test de doble tap y otro con `disableAnimations: true` si se vuelve a tocar el toast.
 - **Evidencia de la verificación del deep link** [`README.md`, sección "Deep link en Android"] — AD-9 y la story 2.2 piden registrar con `adb` los casos `5`, `abc`, `99999`, una ruta desconocida y la app ya abierta, o marcar como "no verificado" los que no se probaron. El README solo documenta el caso `5`. Se resuelve en R8 (entrega), con un emulador.
+
+## Deferred from: code review R4, stories 3.1 + 3.2 + 3.3 (2026-10-07)
+
+- **Un carrito guardado con `quantity <= 0` o ids duplicados se carga tal cual** [`flutter_app/lib/features/cart/data/shared_preference_cart_data.dart`, `flutter_app/lib/features/cart/domain/cart_item.dart`] — `read()` solo descarta un valor que no se puede parsear; `CartItem` documenta `quantity >= 1` pero no lo refuerza al deserializar. Solo ocurre si alguien edita el almacenamiento a mano, porque la app siempre escribe cantidades válidas. Si se vuelve a tocar la persistencia: filtrar en `read()` o validar en `fromJson`, con un test.
