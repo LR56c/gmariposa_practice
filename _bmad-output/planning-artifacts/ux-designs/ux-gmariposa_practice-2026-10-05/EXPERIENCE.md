@@ -35,7 +35,7 @@ código. El texto literal de la UI va entre comillas rectas. Lo marcado `[ASSUMP
 
 | Pantalla | Ruta | Contenido | Sale hacia |
 |---|---|---|---|
-| Catálogo | `/` | Buscador, lista de productos, contador del carrito | `/product/:id`, `/cart` |
+| Catálogo | `/` | Buscador, botón de categoría, lista de productos, contador del carrito | `/product/:id`, `/cart` |
 | Detalle | `/product/:id` | Producto por `id` (consulta propia), "Agregar al carrito" | atrás, `/cart` |
 | Carrito | `/cart` | Ítems, cantidades, quitar, total | atrás |
 
@@ -79,6 +79,7 @@ error se derivan de `Errors` en Flutter (FR-12) y de `OrdersService` en Angular;
 |---|---|
 | Título Flutter | Mini Catálogo |
 | Placeholder del buscador | Buscar productos |
+| Botón de categoría | Categoría (sin elegir) · nombre de la categoría elegida · opción "Todas" en el modal |
 | Catálogo vacío (sin término) | No hay productos |
 | Búsqueda sin resultados | Sin resultados para "{término}" |
 | Imagen faltante | Sin foto |
