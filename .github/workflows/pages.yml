@@ -1,0 +1,47 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: angular_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: angular_app/package-lock.json
+      - run: npm ci
+      - run: npx ng build --base-href /gmariposa_practice/
+      # The build is localized (es/ en/): add a locale redirect at the root and a deep-link fallback.
+      - run: cp ../.github/pages/index.html ../.github/pages/404.html dist/angular_app/browser/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: angular_app/dist/angular_app/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
