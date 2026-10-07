@@ -36,6 +36,10 @@ Extras hechos: filtro por categoría, carrito persistente (`shared_preferences`)
 - **Dos apps independientes**, sin código compartido: cada una con su lint, sus pruebas y su lockfile.
 - **Flutter, capas por feature:** `domain` (modelos e interfaces) / `data` (implementaciones) / `presentation` (providers y widgets).
   Los Repository son interfaces con una implementación: `DioProductData`, `SharedPreferenceCartData` y `SharedPreferenceSettingsData`.
+- **Riverpod con generador (`riverpod_generator`)**, un tipo de provider para cada necesidad:
+  `AsyncNotifier` para el catálogo (`Catalog`, con búsqueda y paginación), `Notifier` para el estado síncrono (`Cart`, `SearchTerm`,
+  `SelectedCategory`, `ThemeModeChoice`), `FutureProvider` para cargas de una vez (`categories`, `productDetail` con `family`),
+  `StreamProvider` para el debounce (`debouncedTerm`) y `Provider` para dependencias (`dio`, los Repository, `cartTotal`, `cartCount`).
 - **Errores tipados:** los métodos del Repository devuelven `Either<Errors, T>` (`fpdart`) y la UI traduce el error a un mensaje; las
   excepciones solo existen en el borde de red.
 - **Modelos con `freezed`:** inmutables, con `==`, `copyWith` y `fromJson` generados, para no escribir ese código a mano. Los archivos generados
