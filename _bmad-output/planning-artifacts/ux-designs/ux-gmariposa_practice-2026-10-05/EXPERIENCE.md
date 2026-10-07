@@ -20,8 +20,8 @@ código. El texto literal de la UI va entre comillas rectas. Lo marcado `[ASSUMP
 
 - **Dos superficies independientes**: app **Flutter** móvil vertical (emulador) y panel **Angular** de escritorio
   (navegador). Cada una tiene su código; comparten solo la identidad visual.
-- **Datos**: DummyJSON. Sin cuentas, pagos, envíos ni backend propio. El carrito vive en memoria y se pierde al cerrar la
-  app (DF-3, persistencia, queda fuera).
+- **Datos**: DummyJSON. Sin cuentas, pagos, envíos ni backend propio. El carrito se guarda en el dispositivo con `shared_preferences` y
+  sigue ahí al reabrir la app (DF-3, story 5.3).
 - **UI system**: Material 3 en Flutter (`ThemeData` con el `ColorScheme` de `DESIGN.md`); Angular con Tailwind y los
   mismos tokens. Este documento solo especifica el comportamiento.
 - **Idioma de la UI**: español [ASSUMPTION; el PRD no lo define]. Código en inglés.
@@ -130,7 +130,7 @@ Los mismos cuatro estados rigen Catálogo y búsqueda (FR-2, FR-3), Detalle (FR-
 |---|---|---|---|---|
 | Catálogo / búsqueda | Indicador o skeleton centrado | Lista de hasta 20 productos | "No hay productos" o "Sin resultados para…"; nunca una lista en blanco | Mensaje + **Reintentar** (repite la consulta vigente) |
 | Detalle | Indicador de progreso | Producto | n/a | Mensaje + **Reintentar** (incluye `id` inexistente) |
-| Carrito | n/a (memoria) | Ítems + total | "Tu carrito está vacío" | n/a |
+| Carrito | n/a (local) | Ítems + total | "Tu carrito está vacío" | n/a |
 | Órdenes | Indicador de progreso | Tarjetas | "Ninguna orden alcanza ese total" | Mensaje + **Reintentar** (recarga `/carts`) |
 
 - Sin red: error con **Reintentar**. No hay modo offline ni caché.
