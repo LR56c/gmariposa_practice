@@ -21,7 +21,7 @@ This document provides the complete epic and story breakdown for gmariposa_pract
 2. La paginación infinita (DF-1) SÍ entra al MVP (PRD §6.1, AD-6).
 3. El total del Cart es `double` redondeado solo al mostrar (AD-7), no centavos enteros.
 5. **Angular: Tailwind en lugar de CSS propio** (decisión de Mauri, posterior al spine y a `DESIGN.md`). Los tokens de `DESIGN.md` se definen en `@theme`, y el estilado va en utilidades de Tailwind. Afecta a la story 4.1 (instalación y tema) y a UX-DR1, UX-DR20; `DESIGN.md` y `EXPERIENCE.md` aún dicen "variables CSS" y "CSS propio" para Angular y se actualizan al empezar la 4.1.
-4. **Angular: store manual, sin NgRx** (decisión de Mauri, posterior al spine). Un servicio-store propio lleva el mismo estado (mapa de Orders por `id`, `listStatus`/`listError`, `byIdStatus`, `minTotal`). `@ngrx/*` queda instalado en `package.json` sin uso y se justifica en el README (FR20). Esto **sustituye** a T-7 y a las partes de AD-10, AD-11 y FR-14 que nombran Store, actions, reducer, selectors y effects; el spine y el PRD aún dicen NgRx y deben alinearse (ver nota de cierre).
+4. **Angular: store manual, sin NgRx** (decisión de Mauri, posterior al spine). Un servicio-store propio lleva el mismo estado (mapa de Orders por `id`, `listStatus`/`listError`, `byIdStatus`, `minTotal`). `@ngrx/*` no se instala (Mauri se refería a RxJS, que ya viene con Angular). Esto **sustituye** a T-7 y a las partes de AD-10, AD-11 y FR-14 que nombran Store, actions, reducer, selectors y effects; el spine y el PRD aún dicen NgRx y deben alinearse (ver nota de cierre).
 
 ## Requirements Inventory
 
@@ -159,7 +159,7 @@ Lucía agrega Products, cambia cantidades, quita ítems y ve total y contador de
 ### Epic 4: Panel de órdenes (Angular)
 Lucía ve las Orders, filtra por total mínimo y abre el detalle de una, con estados de carga y error.
 **FRs covered:** FR13, FR14, FR15, FR16, FR17 (y DA-1)
-**Notas:** scaffold Angular, `Errors`, `OrdersService` con `Schema`/`Result`, store manual (sin NgRx, `@ngrx/*` instalado sin uso), filtro, tarjeta presentacional, ruta lazy `/orders/:id`. Aplica DA-2, DA-3 y DA-5. Gate Stitch: Órdenes.
+**Notas:** scaffold Angular, `Errors`, `OrdersService` con `Schema`/`Result`, store manual (sin NgRx), filtro, tarjeta presentacional, ruta lazy `/orders/:id`. Aplica DA-2, DA-3 y DA-5. Gate Stitch: Órdenes.
 
 ### Epic 5: Verificación del MVP y bonus
 El evaluador clona el repo, ejecuta ambas apps y comprueba que cumplen lo pedido; después se suman los bonus elegidos (DF-2, DF-3, B-1, B-2), solo con el MVP verificado.
@@ -839,7 +839,7 @@ So that revise el panel sobre una base reproducible, estricta y con la identidad
 
 **Given** `package.json`
 **When** se inspecciona
-**Then** `@ngrx/store`, `@ngrx/effects` y `@ngrx/store-devtools` están instalados y no se importan en ningún archivo (resolución 4 de este documento)
+**Then** `package.json` no incluye ningún paquete `@ngrx/*` (resolución 4 de este documento)
 **And** `effect` y las demás dependencias llegan en la story que las usa (4.2), no aquí
 
 **Given** el proyecto generado y la elección de Tailwind (decisión de Mauri, en lugar de CSS propio)
@@ -888,7 +888,7 @@ So that revise el panel sobre una base reproducible, estricta y con la identidad
 **Given** el README en la raíz
 **When** se lee tras esta story
 **Then** incluye los comandos para instalar y ejecutar `angular_app/` desde un clon limpio: `npm install`, `ng serve`, `ng test` y `ng build` (NFR8)
-**And** deja una nota provisional de que `@ngrx/*` está instalado sin uso, con la justificación completa para el Epic 5 (FR20)
+**And** no menciona `@ngrx/*`, que no se instala
 
 ### Story 4.2: Ver las Orders en tarjetas
 
@@ -1184,7 +1184,7 @@ So that vea una entrega reproducible, honesta sobre lo pendiente y con historial
 **Then** explica cómo ejecutar `flutter_app/` y `angular_app/`, documenta las decisiones de arquitectura, lo pendiente y lo que se mejoraría con más tiempo (FR20, SM-5)
 **And** justifica la construcción de modelos con `freezed` (T-4) y menciona los paralelos Flutter↔Angular: servicio ≈ Repository, signal/store ≈ provider, componente presentacional ≈ widget sin estado (FR20)
 **And** incluye el resultado de la verificación del deep link con `adb` de la story 2.2, o dice que no se verificó (AD-9)
-**And** documenta que Angular usa un store manual y que `@ngrx/*` está instalado sin uso, con la razón (resolución 4)
+**And** documenta que Angular usa un store manual (sin NgRx, con RxJS), con la razón (resolución 4)
 **And** si `ARCHITECTURE-SPINE.md`, el PRD o el addendum aún dicen NgRx, lo lista como pendiente o los actualiza en esta story
 **And** si se aplicó el plan B del PRD §8 (modelos manuales o Riverpod sin generador), lo documenta
 **And** anota las versiones reales de Flutter, Dart, Angular, TypeScript y Node

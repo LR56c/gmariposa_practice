@@ -20,5 +20,3 @@ Si no tienes el CLI global, usa `npx ng <comando>`.
 
 - **Tailwind 4.3** (`tailwindcss`, `@tailwindcss/postcss`, `postcss`): estilado con utilidades y los tokens de
   `DESIGN.md` en un bloque `@theme`, para compartir identidad visual con la app Flutter sin escribir CSS propio.
-- **`@ngrx/store`, `@ngrx/effects`, `@ngrx/store-devtools`**: instaladas, sin uso por ahora. El estado del panel es un
-  servicio-store manual; la justificación completa llega con el Epic 5.
