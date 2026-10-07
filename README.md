@@ -9,6 +9,7 @@ Prueba técnica Jr Flutter (Riverpod) + Angular. Cada carpeta es independiente (
 `.github/workflows/ci.yml` corre en cada `push` y `pull_request` hacia `main`, con dos jobs independientes:
 
 - **flutter** (Flutter 3.47.6): `flutter pub get`, `dart format --set-exit-if-changed .`, `flutter analyze`, `flutter test`.
+- **flutter-apk** (tras `flutter`): `flutter build apk --release` y sube `app-release.apk` como artifact (firmado con la clave debug, solo para probar).
 - **angular** (Node 24): `npm ci`, `npx ng test --no-watch`, `npx ng build`.
 
 No ejecuta la prueba de integración de Flutter (`integration_test/`), porque requiere emulador o dispositivo.
