@@ -9,7 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  LocaleSettings.useDeviceLocaleSync();
+  // Async: a non-base locale (en) is a deferred library that must be loaded.
+  await LocaleSettings.useDeviceLocale();
   final prefs = await SharedPreferences.getInstance();
   runApp(
     TranslationProvider(
