@@ -13,6 +13,7 @@ import 'package:flutter_app/features/products/presentation/providers/product_rep
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../support/prefs.dart';
@@ -190,7 +191,10 @@ void main() {
     }
 
     Future<void> scrollToEnd(WidgetTester tester) async {
-      await tester.drag(find.byType(ListView), const Offset(0, -20000));
+      await tester.drag(
+        find.byType(PagedListView<int, Product>),
+        const Offset(0, -20000),
+      );
       await tester.pump();
     }
 
@@ -220,7 +224,8 @@ void main() {
         total: 25,
         next: (skip) async => fail
             ? const Left(Errors([NetworkException()]))
-            : Right(Page(items: [p(20)], total: 25)),
+            // Keeps loading while the end is visible: one item per skip.
+            : Right(Page(items: [p(skip)], total: 25)),
       );
       await scrollToEnd(tester);
       await tester.pump();
