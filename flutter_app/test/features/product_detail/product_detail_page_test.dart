@@ -15,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../support/prefs.dart';
@@ -59,7 +60,7 @@ void main() {
   ) async {
     answer(1, () => Right(_product(1)));
     await tester.pumpWidget(_app(repository, const ProductDetailPage(id: 1)));
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.bySubtype<Skeletonizer>(), findsOneWidget);
     await tester.pump();
 
     expect(find.text('Product 1'), findsOneWidget);
