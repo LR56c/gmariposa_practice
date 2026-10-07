@@ -2,6 +2,10 @@
   "appTitle": "Mini Catalog",
   "emptyCatalog": "No products",
   "searchHint": "Search products",
+  "category": "Category",
+  "allCategories": "All",
+  "categoryFilter": "Category: $name",
+  "noResults": "No results for \"$term\"",
   "retry": "Retry",
   "noMoreProducts": "No more products",
   "addToCart": "Add to cart",
@@ -21,6 +25,12 @@
     "other": "$n units"
   },
   "total": "Total $amount",
+  "settings": "Settings",
+  "theme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
   "errors": {
     "network": "Couldn't connect. Check your connection.",
     "server": "Something went wrong. Please try again.",

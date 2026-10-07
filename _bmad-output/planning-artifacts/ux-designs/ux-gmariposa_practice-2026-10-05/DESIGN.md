@@ -160,6 +160,9 @@ botones, buscador y badge, y `{rounded.sm}` en miniaturas.
 
 - **app-bar**: título, flecha atrás cuando aplica y el carrito con **badge**.
 - **search-field**: píldora tonal con ícono de lupa y sin ícono de filtros.
+- **category-button** (DF-2, story 5.2): botón tonal bajo el buscador, de 48 px de alto, con ícono de filtro y la
+  categoría elegida ("Categoría" si es "Todas"). Abre un modal (`wolt_modal_sheet`) con "Todas" y las categorías; la
+  opción elegida lleva un check además del color.
 - **list-item** (producto): miniatura, título de una línea, precio y `★ rating`. Sin botón por ítem.
 - **image-placeholder**: bloque `{colors.placeholder}` con ícono de imagen y el texto "Sin foto"; se usa en lista,
   detalle y carrito.

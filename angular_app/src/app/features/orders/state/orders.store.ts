@@ -2,9 +2,9 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Result } from 'effect';
 import { Subject, exhaustMap, map, mergeMap } from 'rxjs';
-import { ErrorInfo, toErrorInfo } from '../../core/errors/errors';
-import { Order } from './order.schema';
-import { OrdersService } from './orders.service';
+import { ErrorInfo, toErrorInfo } from '../../../core/errors/errors';
+import { Order } from '../data/order.schema';
+import { OrdersService } from '../data/orders.service';
 
 export type ListStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -28,7 +28,10 @@ export function parseMinTotal(raw: string): number | null {
 @Injectable({ providedIn: 'root' })
 export class OrdersStore {
   private readonly service = inject(OrdersService);
-  private readonly state = signal<OrdersState>({ byId: {}, listStatus: 'idle', listError: null,
+  private readonly state = signal<OrdersState>({
+    byId: {},
+    listStatus: 'idle',
+    listError: null,
     minTotal: null,
     byIdStatus: {},
     byIdError: {},

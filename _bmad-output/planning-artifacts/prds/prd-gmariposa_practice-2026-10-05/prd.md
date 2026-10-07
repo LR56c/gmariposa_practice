@@ -136,7 +136,7 @@ El Usuario ve cargando, datos o error al abrir un detalle. Realiza UJ-1.
 **Notas:** el detalle no reutiliza los datos del Catalog; siempre consulta por `id`, porque así lo pide el PDF.
 
 ### 4.4 Cart (Flutter)
-**Descripción:** el Usuario agrega Products al Cart desde el detalle, cambia cantidades, quita ítems y ve el total. El contador del AppBar es visible desde cualquier pantalla. El Cart vive solo en memoria en el MVP. Realiza UJ-1.
+**Descripción:** el Usuario agrega Products al Cart desde el detalle, cambia cantidades, quita ítems y ve el total. El contador del AppBar es visible desde cualquier pantalla. El Cart vive en memoria y, desde la story 5.3 (DF-3), se guarda también en el dispositivo. Realiza UJ-1.
 
 **Requisitos funcionales:**
 
@@ -169,7 +169,7 @@ El Usuario ve el total del Cart y un contador en el AppBar, desde cualquier pant
 - El contador del AppBar muestra la cantidad total de unidades, no la de Cart items distintos.
 - El contador es visible en el Catalog, el detalle y el Cart.
 
-**Fuera de alcance:** persistencia del Cart entre sesiones (deseable, ver §6.2).
+**Fuera de alcance:** ninguno. La persistencia del Cart entre sesiones (DF-3, §6.2) se hizo en la story 5.3 con `shared_preferences`.
 
 **NFR específicos de esta funcionalidad:**
 - La lógica del Cart (agregar, cambiar cantidad, quitar, total) no depende de la UI, para poder probarla con pruebas unitarias. El estado cumple NFR-5 (inmutable).

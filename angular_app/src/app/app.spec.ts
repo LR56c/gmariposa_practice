@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
-import { ORDERS_URL } from './features/orders/orders.service';
+import { ORDERS_URL } from './features/orders/data/orders.service';
 
 describe('App', () => {
   beforeEach(() => {
@@ -20,7 +20,8 @@ describe('App', () => {
     return fixture;
   }
 
-  const text = (f: { nativeElement: unknown }) => (f.nativeElement as HTMLElement).textContent ?? '';
+  const text = (f: { nativeElement: unknown }) =>
+    (f.nativeElement as HTMLElement).textContent ?? '';
 
   it('shows the title and a loading state while the list loads', async () => {
     const fixture = await render();
@@ -30,7 +31,13 @@ describe('App', () => {
 
   it('renders one card per order, sorted by id', async () => {
     const fixture = await render();
-    const order = (id: number, extra = {}) => ({ id, userId: 7, total: 1234.5, products: [], ...extra });
+    const order = (id: number, extra = {}) => ({
+      id,
+      userId: 7,
+      total: 1234.5,
+      products: [],
+      ...extra,
+    });
     TestBed.inject(HttpTestingController)
       .expectOne(ORDERS_URL)
       .flush({ carts: [order(2, { discountedTotal: 999 }), order(1)] });

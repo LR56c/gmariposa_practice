@@ -51,6 +51,18 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Buscar productos'
 	String get searchHint => 'Buscar productos';
 
+	/// es: 'Categoría'
+	String get category => 'Categoría';
+
+	/// es: 'Todas'
+	String get allCategories => 'Todas';
+
+	/// es: 'Categoría: $name'
+	String categoryFilter({required Object name}) => 'Categoría: ${name}';
+
+	/// es: 'Sin resultados para "$term"'
+	String noResults({required Object term}) => 'Sin resultados para "${term}"';
+
 	/// es: 'Reintentar'
 	String get retry => 'Reintentar';
 
@@ -102,6 +114,24 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// es: 'Total $amount'
 	String total({required Object amount}) => 'Total ${amount}';
 
+	/// es: 'Ajustes'
+	String get settings => 'Ajustes';
+
+	/// es: 'Tema'
+	String get theme => 'Tema';
+
+	/// es: 'Sistema'
+	String get themeSystem => 'Sistema';
+
+	/// es: 'Claro'
+	String get themeLight => 'Claro';
+
+	/// es: 'Oscuro'
+	String get themeDark => 'Oscuro';
+
+	/// es: 'Idioma'
+	String get language => 'Idioma';
+
 	late final Translations$errors$es errors = Translations$errors$es._(_root);
 }
 
@@ -140,6 +170,10 @@ extension on Translations {
 			'appTitle' => 'Mini Catálogo',
 			'emptyCatalog' => 'No hay productos',
 			'searchHint' => 'Buscar productos',
+			'category' => 'Categoría',
+			'allCategories' => 'Todas',
+			'categoryFilter' => ({required Object name}) => 'Categoría: ${name}',
+			'noResults' => ({required Object term}) => 'Sin resultados para "${term}"',
 			'retry' => 'Reintentar',
 			'noMoreProducts' => 'No hay más productos',
 			'addToCart' => 'Agregar al carrito',
@@ -156,6 +190,12 @@ extension on Translations {
 			'increaseQuantity' => ({required Object title}) => 'Aumentar cantidad de ${title}',
 			'units' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: '${n} unidad', other: '${n} unidades', ), 
 			'total' => ({required Object amount}) => 'Total ${amount}',
+			'settings' => 'Ajustes',
+			'theme' => 'Tema',
+			'themeSystem' => 'Sistema',
+			'themeLight' => 'Claro',
+			'themeDark' => 'Oscuro',
+			'language' => 'Idioma',
 			'errors.network' => 'No se pudo conectar. Revisa tu conexión.',
 			'errors.server' => 'Algo salió mal. Inténtalo de nuevo.',
 			'errors.parse' => 'No se pudo leer la respuesta. Inténtalo de nuevo.',

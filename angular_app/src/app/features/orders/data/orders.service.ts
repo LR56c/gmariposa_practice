@@ -2,7 +2,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Result, Schema } from 'effect';
 import { Observable, catchError, map, of } from 'rxjs';
-import { Errors, NetworkException, ParseException, ServerException } from '../../core/errors/errors';
+import {
+  Errors,
+  NetworkException,
+  ParseException,
+  ServerException,
+} from '../../../core/errors/errors';
 import { Order, OrderSchema, OrdersResponseSchema } from './order.schema';
 
 export const ORDERS_URL = 'https://dummyjson.com/carts?limit=0';
@@ -13,7 +18,9 @@ const decodeOrder = Schema.decodeUnknownResult(OrderSchema);
 
 const toFailure = (e: HttpErrorResponse) =>
   of(
-    Result.fail(new Errors([e.status === 0 ? new NetworkException() : new ServerException(e.status)])),
+    Result.fail(
+      new Errors([e.status === 0 ? new NetworkException() : new ServerException(e.status)]),
+    ),
   );
 
 @Injectable({ providedIn: 'root' })

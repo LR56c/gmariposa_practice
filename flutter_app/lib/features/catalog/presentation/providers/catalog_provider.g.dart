@@ -8,19 +8,22 @@ part of 'catalog_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// First page of the Catalog, or of the search for the debounced term (AD-6).
+/// First page of the Catalog, or of the search for the debounced term, within
+/// the selected category if any (AD-6).
 ///
 /// A failure ends as `AsyncError(Errors)`.
 
 @ProviderFor(Catalog)
 final catalogProvider = CatalogProvider._();
 
-/// First page of the Catalog, or of the search for the debounced term (AD-6).
+/// First page of the Catalog, or of the search for the debounced term, within
+/// the selected category if any (AD-6).
 ///
 /// A failure ends as `AsyncError(Errors)`.
 final class CatalogProvider
     extends $AsyncNotifierProvider<Catalog, CatalogState> {
-  /// First page of the Catalog, or of the search for the debounced term (AD-6).
+  /// First page of the Catalog, or of the search for the debounced term, within
+  /// the selected category if any (AD-6).
   ///
   /// A failure ends as `AsyncError(Errors)`.
   CatalogProvider._()
@@ -42,9 +45,10 @@ final class CatalogProvider
   Catalog create() => Catalog();
 }
 
-String _$catalogHash() => r'3524dc477ff7598245305942828e0cc3ef2c7dc5';
+String _$catalogHash() => r'5b1c306c58d0a0e852fc7a691f9c377de78f51d6';
 
-/// First page of the Catalog, or of the search for the debounced term (AD-6).
+/// First page of the Catalog, or of the search for the debounced term, within
+/// the selected category if any (AD-6).
 ///
 /// A failure ends as `AsyncError(Errors)`.
 

@@ -9,8 +9,19 @@ import 'package:flutter_app/features/catalog/presentation/widgets/product_thumbn
 import 'package:flutter_app/features/product_detail/presentation/providers/product_detail_provider.dart';
 import 'package:flutter_app/features/product_detail/presentation/widgets/added_to_cart_toast.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
+import 'package:flutter_app/features/settings/presentation/widgets/settings_icon_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+/// Layout the skeleton is drawn from while the Product loads.
+const _skeletonProduct = Product(
+  id: 0,
+  title: 'Product title',
+  price: 0,
+  rating: 0,
+  imageUrl: '',
+);
 
 /// `/product/:id`: loads the Product by [id] with its loading and error states.
 class ProductDetailPage extends ConsumerWidget {
@@ -26,14 +37,16 @@ class ProductDetailPage extends ConsumerWidget {
           onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
         title: Text(context.t.productDetail),
-        actions: const [CartIconButton()],
+        actions: const [SettingsIconButton(), CartIconButton()],
       ),
       body: ref
           .watch(productDetailProvider(id))
           .when(
             // A retry from an error goes back to the loading state.
             skipLoadingOnRefresh: false,
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Skeletonizer(
+              child: _DetailBody(product: _skeletonProduct),
+            ),
             // A missing product stays missing: offer the way back, not a retry.
             error: (error, _) => error is Errors && error.isNotFound
                 ? const NotFoundView()

@@ -4,9 +4,11 @@
 import 'package:flutter_app/core/cancel_signal.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/page.dart';
+import 'package:flutter_app/features/catalog/presentation/providers/category_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/search_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
 import 'package:flutter_app/features/products/presentation/providers/product_repository_provider.dart';
+import 'package:flutter_app/features/products/utils/product_filter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -25,7 +27,8 @@ abstract class CatalogState with _$CatalogState {
   }) = _CatalogState;
 }
 
-/// First page of the Catalog, or of the search for the debounced term (AD-6).
+/// First page of the Catalog, or of the search for the debounced term, within
+/// the selected category if any (AD-6).
 ///
 /// A failure ends as `AsyncError(Errors)`.
 @riverpod
@@ -33,6 +36,7 @@ class Catalog extends _$Catalog {
   // Bumped on every build(); a late page from an older build is dropped.
   var _epoch = 0;
   late String _term;
+  late String? _category;
   late CancelSignal _cancel;
 
   @override
@@ -43,6 +47,7 @@ class Catalog extends _$Catalog {
     final term = _term = ref.watch(
       debouncedTermProvider.select((a) => a.value ?? ''),
     );
+    _category = ref.watch(selectedCategoryProvider);
     final result = await _fetch(term, cancel: cancel);
     final page = result.getOrThrow();
     return CatalogState(items: page.items, total: page.total);
@@ -54,6 +59,22 @@ class Catalog extends _$Catalog {
     int skip = 0,
   }) {
     final repository = ref.read(productRepositoryProvider);
+    final category = _category;
+    if (category != null) {
+      if (term.isEmpty) {
+        return repository.byCategory(category, skip: skip, cancel: cancel);
+      }
+      // The API can't combine `q` with a category: the whole category is
+      // fetched and filtered here, so this mode has no further pages.
+      return repository
+          .byCategory(category, limit: 0, cancel: cancel)
+          .then(
+            (all) => all.map((page) {
+              final items = filterByTitle(page.items, term);
+              return Page(items: items, total: items.length);
+            }),
+          );
+    }
     return term.isEmpty
         ? repository.list(skip: skip, cancel: cancel)
         : repository.search(term, skip: skip, cancel: cancel);
