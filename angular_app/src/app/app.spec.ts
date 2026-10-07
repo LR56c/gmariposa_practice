@@ -63,4 +63,26 @@ describe('App', () => {
     await fixture.whenStable();
     expect(text(fixture)).toContain('No se pudo conectar');
   });
+
+  it('filters by minimum total without a second request, and shows the empty message', async () => {
+    const fixture = await render();
+    const http = TestBed.inject(HttpTestingController);
+    const order = (id: number, total: number) => ({ id, userId: 7, total, products: [] });
+    http.expectOne(ORDERS_URL).flush({ carts: [order(1, 50), order(2, 100)] });
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const input = root.querySelector<HTMLInputElement>('#min-total')!;
+    const type = async (v: string) => {
+      input.value = v;
+      input.dispatchEvent(new Event('input'));
+      await fixture.whenStable();
+    };
+    await type('100');
+    expect(root.querySelectorAll('app-order-card').length).toBe(1);
+    await type('30,5');
+    expect(root.querySelectorAll('app-order-card').length).toBe(2);
+    await type('101');
+    expect(text(fixture)).toContain('Ninguna orden alcanza ese total');
+    http.expectNone(ORDERS_URL);
+  });
 });
