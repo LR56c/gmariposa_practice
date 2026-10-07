@@ -12,10 +12,7 @@ Future<void> showSettingsSheet(BuildContext context) =>
       context: context,
       pageListBuilder: (_) => [
         SliverWoltModalSheetPage(
-          topBarTitle: Text(
-            context.t.settings,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          topBarTitle: const _SheetTitle(),
           isTopBarLayerAlwaysVisible: true,
           mainContentSliversBuilder: (_) => const [
             SliverPadding(
@@ -26,6 +23,15 @@ Future<void> showSettingsSheet(BuildContext context) =>
         ),
       ],
     );
+
+/// Built inside the sheet so it follows a theme or language change.
+class _SheetTitle extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) =>
+      Text(context.t.settings, style: Theme.of(context).textTheme.titleMedium);
+}
 
 class _SettingsBody extends ConsumerWidget {
   const new();
