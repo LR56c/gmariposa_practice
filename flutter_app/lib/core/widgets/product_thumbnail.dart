@@ -55,9 +55,13 @@ class _NoPhoto extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.image_outlined, size: 20, color: color),
-          Text(
-            context.t.noPhoto,
-            style: theme.textTheme.labelMedium?.copyWith(color: color),
+          // "No photo" is longer than "Sin foto": shrink, do not wrap.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              context.t.noPhoto,
+              style: theme.textTheme.labelMedium?.copyWith(color: color),
+            ),
           ),
         ],
       ),
