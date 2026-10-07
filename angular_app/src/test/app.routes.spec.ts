@@ -15,7 +15,7 @@ describe('orderId resolver', () => {
   });
 
   it('turns anything else into null so no request is made', () => {
-    for (const raw of ['abc', '0', '-5', '1.5', '0x10', '1e0', ' 1', '']) {
+    for (const raw of ['abc', '0', '-5', '1.5', '0x10', '1e0', ' 1', '', '99999999999999999999']) {
       expect(resolve(raw)).toBeNull();
     }
     expect(resolve(null)).toBeNull();

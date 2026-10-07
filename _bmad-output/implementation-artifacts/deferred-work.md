@@ -25,3 +25,7 @@ Hallazgos de la review por lotes que se dejan para después. Cada lote añade su
 
 - **Sin script `lint` en el Angular, y `effect` fijado en un candidato** [`angular_app/package.json`] — AD-1 pide lint propio por carpeta y no hay `lint` (ni ESLint) en `angular_app/`. `effect` está en `4.0.0-rc.112` mientras el Stack del spine lista `4.0.1`. Se resuelve junto a la justificación de dependencias en R8 (README / `RESPUESTAS.md`).
 - **El selector de idioma no tiene test** [`angular_app/src/app/core/toolbar/toolbar.component.ts`] — `setLanguage` reescribe `pathname` y llama a `location.assign`; no hay test de que conserve `search` y `hash`, ni de que no haga nada sin segmento de locale. Un test con un `DOCUMENT` falso es barato; es pulido de la story 4.5.
+
+## Deferred from: code review R6, stories 4.4 + 4.5 (2026-10-07)
+
+- **Notas `location` obsoletas en `messages.en.xlf`** [`angular_app/src/locale/messages.en.xlf`] — varias apuntan a rutas que ya no existen (`order-detail.component.ts:17,19`, `orders-page.component.ts:11,12`, `errors.ts:42-45`) porque las plantillas pasaron a `templateUrl`. Es solo higiene: la traducción al inglés funciona (el paquete `en` muestra "1 order / N orders"). Regenerarlas con `ng extract-i18n` obliga a volver a fusionar a mano los `<target>` en inglés; hacerlo en una pasada de i18n.
