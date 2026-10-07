@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart' hide Page;
 import 'package:flutter_app/core/cancel_signal.dart';
+import 'package:flutter_app/core/errors/base_exception.dart';
 import 'package:flutter_app/core/errors/errors.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
 import 'package:flutter_app/core/page.dart';
@@ -118,6 +119,44 @@ void main() {
     await tester.tap(find.text('Beauty'));
     await tester.pumpAndSettle();
     await tester.tap(find.text(_t.allCategories));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Any product'), findsOneWidget);
+    expect(find.text(_t.category), findsOneWidget);
+  });
+
+  testWidgets('"Reintentar" brings back the selector if categories failed', (
+    tester,
+  ) async {
+    final repository = _repository();
+    var online = false;
+    when(() => repository.list(cancel: any(named: 'cancel'))).thenAnswer(
+      (_) async => online
+          ? _page([_p(1, 'Any product')])
+          : const Left(Errors([NetworkException()])),
+    );
+    when(() => repository.categories(cancel: any(named: 'cancel'))).thenAnswer(
+      (_) async => online
+          ? const Right(_categories)
+          : const Left(Errors([NetworkException()])),
+    );
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: ProviderScope(
+          retry: (_, _) => null,
+          overrides: [
+            productRepositoryProvider.overrideWithValue(repository),
+            await prefsOverride(),
+          ],
+          child: const MaterialApp(home: CatalogPage()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text(_t.category), findsNothing);
+
+    online = true;
+    await tester.tap(find.text(_t.retry));
     await tester.pumpAndSettle();
 
     expect(find.text('Any product'), findsOneWidget);

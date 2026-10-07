@@ -74,7 +74,13 @@ class _CatalogBody extends ConsumerWidget {
           ),
           error: (error, _) => ErrorView(
             error: error,
-            onRetry: () => ref.invalidate(catalogProvider),
+            onRetry: () {
+              ref.invalidate(catalogProvider);
+              // The selector is gone if its own request failed too.
+              if (ref.read(categoriesProvider).hasError) {
+                ref.invalidate(categoriesProvider);
+              }
+            },
           ),
           data: (state) => state.items.isEmpty
               ? Center(
