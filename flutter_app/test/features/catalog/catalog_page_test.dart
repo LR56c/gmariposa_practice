@@ -15,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../support/prefs.dart';
 
@@ -253,7 +254,7 @@ void main() {
       await scrollToEnd(tester);
       await scrollToEnd(tester);
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.bySubtype<Skeletonizer>(), findsOneWidget);
       verify(() => repository.list(skip: 20, cancel: any(named: 'cancel')))
           .called(1);
       completer.complete(const Right(Page(items: [], total: 100)));

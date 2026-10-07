@@ -17,17 +17,16 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-/// Layout the skeleton is drawn from while the first page loads.
-final List<Product> _skeletonProducts = List.filled(
-  6,
-  const Product(
-    id: 0,
-    title: 'Product title',
-    price: 0,
-    rating: 0,
-    imageUrl: '',
-  ),
+/// Layout the skeleton is drawn from while a page loads.
+const _skeletonProduct = Product(
+  id: 0,
+  title: 'Product title',
+  price: 0,
+  rating: 0,
+  imageUrl: '',
 );
+
+final List<Product> _skeletonProducts = List.filled(6, _skeletonProduct);
 
 /// `/`: the Catalog with its loading, empty, error and data states.
 class CatalogPage extends StatelessWidget {
@@ -274,8 +273,15 @@ class _ProductList extends ConsumerWidget {
       separatorBuilder: (_, _) => const SizedBox(height: 8),
       builderDelegate: PagedChildBuilderDelegate<Product>(
         itemBuilder: (_, product, _) => ProductListItem(product: product),
-        newPageProgressIndicatorBuilder: (_) => const _FooterPadding(
-          child: Center(child: CircularProgressIndicator()),
+        newPageProgressIndicatorBuilder: (_) => const Skeletonizer(
+          child: Column(
+            children: [
+              SizedBox(height: 8),
+              ProductListItem(product: _skeletonProduct),
+              SizedBox(height: 8),
+              ProductListItem(product: _skeletonProduct),
+            ],
+          ),
         ),
         newPageErrorIndicatorBuilder: (_) => _FooterPadding(
           child: ErrorView(
