@@ -1,5 +1,5 @@
 import 'package:flutter_app/features/products/domain/product.dart';
-import 'package:flutter_app/features/products/domain/product_filter.dart';
+import 'package:flutter_app/features/products/utils/product_filter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Product _p(String title) =>

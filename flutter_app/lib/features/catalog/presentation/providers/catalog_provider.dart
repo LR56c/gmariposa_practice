@@ -7,7 +7,7 @@ import 'package:flutter_app/core/page.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/category_provider.dart';
 import 'package:flutter_app/features/catalog/presentation/providers/search_provider.dart';
 import 'package:flutter_app/features/products/domain/product.dart';
-import 'package:flutter_app/features/products/domain/product_filter.dart';
+import 'package:flutter_app/features/products/utils/product_filter.dart';
 import 'package:flutter_app/features/products/presentation/providers/product_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
