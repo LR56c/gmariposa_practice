@@ -1,6 +1,18 @@
 # gmariposa_practice
 
+[![CI](https://github.com/LR56c/gmariposa_practice/actions/workflows/ci.yml/badge.svg)](https://github.com/LR56c/gmariposa_practice/actions/workflows/ci.yml)
+
 Prueba técnica Jr Flutter (Riverpod) + Angular. Cada carpeta es independiente (lint, test y lockfile propios).
+
+## CI
+
+`.github/workflows/ci.yml` corre en cada `push` y `pull_request` hacia `main`, con dos jobs independientes:
+
+- **flutter** (Flutter 3.47.6): `flutter pub get`, `dart format --set-exit-if-changed .`, `flutter analyze`, `flutter test`.
+- **angular** (Node 24): `npm ci`, `npx ng test --no-watch`, `npx ng build`.
+
+No ejecuta la prueba de integración de Flutter (`integration_test/`), porque requiere emulador o dispositivo.
+Para reproducirlo en local, corre esos mismos comandos dentro de `flutter_app/` y `angular_app/`.
 
 ## angular_app
 
