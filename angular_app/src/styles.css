@@ -42,6 +42,31 @@
   --radius-full: 9999px;
 }
 
+:root {
+  color-scheme: light;
+}
+
+/* Dark theme: the app only uses semantic tokens, so overriding them is enough. */
+:root.dark {
+  color-scheme: dark;
+  --color-primary: #4fdbc8;
+  --color-on-primary: #003731;
+  --color-background: #0f1513;
+  --color-surface: #171d1b;
+  --color-surface-tonal: #1f2926;
+  --color-on-surface: #e0e4e1;
+  --color-on-surface-muted: #b0bab5;
+  --color-outline: #8a9490;
+  --color-divider: #2e3835;
+  --color-focus: #8ab4f8;
+  --color-danger: #f2b8b5;
+  --color-on-danger: #601410;
+  --color-star: #f0b429;
+  --color-placeholder: #1f3a35;
+  --color-on-placeholder: #e0e4e1;
+  --color-skeleton: #2e3835;
+}
+
 @layer base {
   body {
     @apply bg-background font-sans text-body-md text-on-surface;
