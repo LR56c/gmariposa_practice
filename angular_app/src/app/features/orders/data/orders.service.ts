@@ -27,7 +27,7 @@ const toFailure = (e: HttpErrorResponse) =>
 export class OrdersService {
   private readonly http = inject(HttpClient);
 
-  getOrders(): Observable<Result.Result<ReadonlyArray<Order>, Errors>> {
+  getOrders(): Observable<Result.Result<readonly Order[], Errors>> {
     return this.http.get<unknown>(ORDERS_URL).pipe(
       map((body) => {
         const decoded = decode(body);
