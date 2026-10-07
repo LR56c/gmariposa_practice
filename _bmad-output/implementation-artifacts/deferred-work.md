@@ -20,3 +20,8 @@ Hallazgos de la review por lotes que se dejan para después. Cada lote añade su
 ## Deferred from: code review R4, stories 3.1 + 3.2 + 3.3 (2026-10-07)
 
 - **Un carrito guardado con `quantity <= 0` o ids duplicados se carga tal cual** [`flutter_app/lib/features/cart/data/shared_preference_cart_data.dart`, `flutter_app/lib/features/cart/domain/cart_item.dart`] — `read()` solo descarta un valor que no se puede parsear; `CartItem` documenta `quantity >= 1` pero no lo refuerza al deserializar. Solo ocurre si alguien edita el almacenamiento a mano, porque la app siempre escribe cantidades válidas. Si se vuelve a tocar la persistencia: filtrar en `read()` o validar en `fromJson`, con un test.
+
+## Deferred from: code review R5, stories 4.1 + 4.2 + 4.3 (2026-10-07)
+
+- **Sin script `lint` en el Angular, y `effect` fijado en un candidato** [`angular_app/package.json`] — AD-1 pide lint propio por carpeta y no hay `lint` (ni ESLint) en `angular_app/`. `effect` está en `4.0.0-rc.112` mientras el Stack del spine lista `4.0.1`. Se resuelve junto a la justificación de dependencias en R8 (README / `RESPUESTAS.md`).
+- **El selector de idioma no tiene test** [`angular_app/src/app/core/toolbar/toolbar.component.ts`] — `setLanguage` reescribe `pathname` y llama a `location.assign`; no hay test de que conserve `search` y `hash`, ni de que no haga nada sin segmento de locale. Un test con un `DOCUMENT` falso es barato; es pulido de la story 4.5.
