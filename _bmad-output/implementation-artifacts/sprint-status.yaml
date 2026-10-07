@@ -35,7 +35,7 @@ project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
 development_status:
-  epic-1: in-progress
+  epic-1: done
   1-1-repo-base-y-app-flutter-que-arranca: done
   1-2-capa-de-datos-y-errores-tipados: done
   1-3-ver-el-catalog-con-sus-estados: done
@@ -48,13 +48,13 @@ development_status:
   2-2-abrir-un-producto-desde-un-deep-link: done
   epic-2-retrospective: optional
 
-  epic-3: in-progress
+  epic-3: done
   3-1-agregar-productos-al-carrito-desde-el-detalle: done
   3-2-revisar-y-editar-el-carrito: done
   3-3-ver-el-contador-del-carrito-en-todas-las-pantallas: done
   epic-3-retrospective: optional
 
-  epic-4: in-progress
+  epic-4: done
   4-1-panel-angular-que-arranca-con-el-tema: done
   4-2-ver-las-orders-en-tarjetas: done
   4-3-filtrar-orders-por-total-mínimo: done
@@ -62,8 +62,8 @@ development_status:
   4-5-bonus-i18n-es-en-con-angular-localize: done
   epic-4-retrospective: optional
 
-  epic-5: backlog
-  5-1-verificación-de-la-app-mvp: backlog
+  epic-5: in-progress
+  5-1-verificación-de-la-app-mvp: in-progress
   5-2-bonus-filtrar-el-catálogo-por-categoría-df-2: done
   5-3-bonus-conservar-el-carrito-entre-sesiones-df-3: done
   5-4-bonus-prueba-de-integración-del-flujo-principal-b-1: done
