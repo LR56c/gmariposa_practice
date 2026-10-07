@@ -8,11 +8,13 @@ import { Order } from './order.schema';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article class="rounded-lg bg-surface-tonal p-4">
-      <h2 class="text-title-md">Orden {{ order().id }}</h2>
-      <p class="text-on-surface-muted">Usuario {{ order().userId }}</p>
-      <p class="text-price">Total {{ order().total | amount }}</p>
+      <h2 class="text-title-md" i18n="@@order.title">Orden {{ order().id }}</h2>
+      <p class="text-on-surface-muted" i18n="@@order.user">Usuario {{ order().userId }}</p>
+      <p class="text-price" i18n="@@order.total">Total {{ order().total | amount }}</p>
       @if (order().discountedTotal; as discounted) {
-        <p class="text-body-md text-on-surface-muted">Con descuento {{ discounted | amount }}</p>
+        <p class="text-body-md text-on-surface-muted" i18n="@@order.discounted">
+          Con descuento {{ discounted | amount }}
+        </p>
       }
     </article>
   `,

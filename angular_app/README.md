@@ -64,3 +64,12 @@ For more information on using the Angular CLI, including detailed command refere
 `Result` (en v3 era `Either`), `Result.succeed` / `Result.fail`, `Result.isSuccess` / `Result.isFailure`
 (campos `.success` / `.failure`, en v3 `.right` / `.left`), `Schema.decodeUnknownResult`, `Schema.optionalKey`.
 No se usa el runtime `Effect` (fibers, layers, `Effect.gen`).
+
+## i18n (`@angular/localize`, bonus)
+
+Idioma fuente `es`, traducción `en` (`src/locale/messages.en.xlf`). Un build por idioma: `ng build` (producción)
+genera `dist/angular_app/browser/{es,en}`. `ng serve` y `ng test` usan el idioma fuente.
+Los textos de `toErrorInfo` usan `$localize` con id fijo, así que `ErrorInfo` sigue siendo `{ message, code }` (AD-11).
+Para añadir o cambiar textos: marcar con `i18n="@@id"` / `$localize`, correr
+`ng extract-i18n --format xlf2 --output-path src/locale` y actualizar `messages.en.xlf`.
+`AmountPipe` no depende del idioma (UX-DR15).

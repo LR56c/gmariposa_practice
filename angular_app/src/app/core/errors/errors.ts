@@ -39,9 +39,9 @@ export class Errors {
 
 // Texts from EXPERIENCE.md (error table); components never build them.
 const messages: Record<ErrorCode, string> = {
-  network: 'No se pudo conectar. Revisa tu conexión.',
-  server: 'Algo salió mal. Inténtalo de nuevo.',
-  parse: 'No se pudo leer la respuesta. Inténtalo de nuevo.',
+  network: $localize`:@@error.network:No se pudo conectar. Revisa tu conexión.`,
+  server: $localize`:@@error.server:Algo salió mal. Inténtalo de nuevo.`,
+  parse: $localize`:@@error.parse:No se pudo leer la respuesta. Inténtalo de nuevo.`,
 };
 
 export function toErrorInfo(errors: Errors): ErrorInfo {

@@ -8,7 +8,7 @@ import { OrdersStore } from './orders.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main class="mx-auto max-w-5xl p-4">
-      <h1 class="mb-4 text-title-lg">Órdenes</h1>
+      <h1 class="mb-4 text-title-lg" i18n="@@orders.title">Órdenes</h1>
       <div aria-live="polite">
         @switch (store.listStatus()) {
           @case ('loading') {
@@ -17,7 +17,7 @@ import { OrdersStore } from './orders.store';
                 class="size-4 animate-spin rounded-full border-2 border-outline border-t-primary"
                 aria-hidden="true"
               ></span>
-              Cargando órdenes
+              <span i18n="@@orders.loading">Cargando órdenes</span>
             </p>
           }
           @case ('error') {
@@ -27,6 +27,7 @@ import { OrdersStore } from './orders.store';
                 type="button"
                 class="rounded-full bg-placeholder px-4 py-2 text-label-md text-on-placeholder focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                 (click)="store.load()"
+                i18n="@@orders.retry"
               >
                 Reintentar
               </button>
