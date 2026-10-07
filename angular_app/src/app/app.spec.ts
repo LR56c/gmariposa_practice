@@ -1,11 +1,66 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Router, provideRouter } from '@angular/router';
 import { App } from './app';
+import { routes } from './app.routes';
+import { ORDERS_URL } from './features/orders/orders.service';
 
 describe('App', () => {
-  it('renders the Órdenes title', async () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()],
+    });
+  });
+
+  async function render() {
     const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/');
     await fixture.whenStable();
-    const title = (fixture.nativeElement as HTMLElement).querySelector('h1');
-    expect(title?.textContent).toContain('Órdenes');
+    return fixture;
+  }
+
+  const text = (f: { nativeElement: unknown }) => (f.nativeElement as HTMLElement).textContent ?? '';
+
+  it('shows the title and a loading state while the list loads', async () => {
+    const fixture = await render();
+    expect(text(fixture)).toContain('Órdenes');
+    expect(text(fixture)).toContain('Cargando');
+  });
+
+  it('renders one card per order, sorted by id', async () => {
+    const fixture = await render();
+    const order = (id: number, extra = {}) => ({ id, userId: 7, total: 1234.5, products: [], ...extra });
+    TestBed.inject(HttpTestingController)
+      .expectOne(ORDERS_URL)
+      .flush({ carts: [order(2, { discountedTotal: 999 }), order(1)] });
+    await fixture.whenStable();
+    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('app-order-card');
+    expect(cards.length).toBe(2);
+    expect(cards[0].textContent).toContain('Orden 1');
+    expect(cards[0].textContent).toContain('1234.50');
+    expect(cards[0].textContent).not.toContain('descuento');
+    expect(cards[1].textContent).toContain('999.00');
+  });
+
+  it('shows the error message and retries', async () => {
+    const fixture = await render();
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne(ORDERS_URL).flush('boom', { status: 500, statusText: 'Server Error' });
+    await fixture.whenStable();
+    expect(text(fixture)).toContain('Algo salió mal');
+    (fixture.nativeElement as HTMLElement).querySelector('button')!.click();
+    await fixture.whenStable();
+    expect(text(fixture)).toContain('Cargando');
+    http.expectOne(ORDERS_URL).flush({ carts: 'bad' });
+    await fixture.whenStable();
+    expect(text(fixture)).toContain('No se pudo leer la respuesta');
+  });
+
+  it('maps a connection failure to the network message', async () => {
+    const fixture = await render();
+    TestBed.inject(HttpTestingController).expectOne(ORDERS_URL).error(new ProgressEvent('error'));
+    await fixture.whenStable();
+    expect(text(fixture)).toContain('No se pudo conectar');
   });
 });

@@ -57,3 +57,10 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## effect v4 (solo `Schema` y `Result`)
+
+`effect` está fijado en `4.0.0-rc.112` (sin `^`). Nombres de la API v4 confirmados contra la documentación vigente:
+`Result` (en v3 era `Either`), `Result.succeed` / `Result.fail`, `Result.isSuccess` / `Result.isFailure`
+(campos `.success` / `.failure`, en v3 `.right` / `.left`), `Schema.decodeUnknownResult`, `Schema.optionalKey`.
+No se usa el runtime `Effect` (fibers, layers, `Effect.gen`).
