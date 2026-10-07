@@ -11,3 +11,8 @@ Hallazgos de la review por lotes que se dejan para después. Cada lote añade su
 ## Deferred from: code review R2, stories 1.3 + 1.4 + 1.5 (2026-10-07)
 
 - **Test del debounce con timers reales** [`flutter_app/test/features/catalog/search_provider_test.dart`] — espera con `Future.delayed` de 50 ms y 10 ms contra un debounce de 400 ms y llega a esperar los 400 ms completos. Es lento y puede ser flaky en CI. Se resuelve con `fakeAsync` o con una duración de debounce inyectable; hoy pasa.
+
+## Deferred from: code review R3, stories 2.1 + 2.2 (2026-10-07)
+
+- **Toast: reemplazo con doble tap y "reduce motion" sin test** [`flutter_app/lib/features/product_detail/presentation/widgets/added_to_cart_toast.dart`] — `dismissAll(delayForAnimation: false)` y `animationDuration` con `disableAnimationsOf` implementan UX-DR9, pero el test solo toca una vez, así que no distingue "reemplaza" de "apila". Pulido de UX; añadir un test de doble tap y otro con `disableAnimations: true` si se vuelve a tocar el toast.
+- **Evidencia de la verificación del deep link** [`README.md`, sección "Deep link en Android"] — AD-9 y la story 2.2 piden registrar con `adb` los casos `5`, `abc`, `99999`, una ruta desconocida y la app ya abierta, o marcar como "no verificado" los que no se probaron. El README solo documenta el caso `5`. Se resuelve en R8 (entrega), con un emulador.
