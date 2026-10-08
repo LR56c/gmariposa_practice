@@ -12,7 +12,6 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/product/:id',
       builder: (_, state) {
-        // Parsed once here; a non-numeric id never reaches the network.
         final id = int.tryParse(state.pathParameters['id']!);
         return id == null ? const NotFoundPage() : ProductDetailPage(id: id);
       },
