@@ -20,14 +20,22 @@ class SharedPreferenceCartData implements CartRepository {
     final raw = _prefs.getString(key);
     if (raw == null) return const [];
     try {
-      return List.unmodifiable([
-        for (final item in jsonDecode(raw) as List<Object?>)
-          CartItem.fromJson(item! as Map<String, dynamic>),
-      ]);
+      final decoded = jsonDecode(raw);
+      if (decoded is List<Object?>) {
+        final items = [
+          for (final item in decoded)
+            if (item is Map<String, dynamic>)
+              CartItem.fromJson(item)
+            else
+              throw const FormatException('not a Cart item'),
+        ];
+        return List.unmodifiable(items);
+      }
     } on Object {
-      unawaited(_prefs.remove(key));
-      return const [];
+      // Falls through to discard the value below.
     }
+    unawaited(_prefs.remove(key));
+    return const [];
   }
 
   @override

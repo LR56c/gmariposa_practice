@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "gmariposa_practice — arquitectura construida",
+    "output": "current-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "flutterPresentation", "type": "frontend", "label": "presentation", "sublabel": "pages, notifiers, go_router, i18n", "tag": "Riverpod", "pos": [40, 100], "size": [160, 64] },
+    { "id": "flutterDomain", "type": "backend", "label": "domain", "sublabel": "freezed + 3 contratos Repository", "tag": "Dart puro", "pos": [270, 100], "size": [160, 64] },
+    { "id": "flutterData", "type": "backend", "label": "data", "sublabel": "DioProductData, prefs cart/tema", "tag": "Either", "pos": [500, 100], "size": [160, 64] },
+    { "id": "flutterCore", "type": "cloud", "label": "core", "sublabel": "Dio, Errors, CancelSignal, Page", "pos": [730, 100], "size": [160, 64] },
+    { "id": "prefs", "type": "database", "label": "SharedPreferences", "sublabel": "Cart y tema persistidos", "pos": [500, 215], "size": [160, 64] },
+    { "id": "dummyjson", "type": "external", "label": "DummyJSON", "sublabel": "API pública", "pos": [980, 215], "size": [140, 64] },
+    { "id": "ngPage", "type": "frontend", "label": "OrdersPage", "sublabel": "contenedor + detalle lazy", "pos": [40, 330], "size": [160, 64] },
+    { "id": "ngCard", "type": "frontend", "label": "OrderCard", "sublabel": "presentacional, OnPush", "pos": [40, 470], "size": [160, 64] },
+    { "id": "ngStore", "type": "backend", "label": "OrdersStore", "sublabel": "signals + RxJS, sin NgRx", "tag": "AD-16", "pos": [384, 330], "size": [160, 64] },
+    { "id": "ngService", "type": "backend", "label": "OrdersService", "sublabel": "HttpClient, Schema, Result", "tag": "effect", "pos": [730, 330], "size": [160, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "flutter_app", "wraps": ["flutterPresentation", "flutterDomain", "flutterData", "flutterCore", "prefs"] },
+    { "kind": "region", "label": "angular_app", "wraps": ["ngPage", "ngCard", "ngStore", "ngService"] }
+  ],
+  "connections": [
+    { "id": "pres-domain", "from": "flutterPresentation", "to": "flutterDomain", "label": "usa", "variant": "emphasis" },
+    { "id": "data-domain", "from": "flutterData", "to": "flutterDomain", "label": "implementa", "fromSide": "left", "toSide": "right" },
+    { "id": "data-core", "from": "flutterData", "to": "flutterCore", "label": "Dio" },
+    { "id": "data-prefs", "from": "flutterData", "to": "prefs", "label": "lee / escribe", "labelDy": 24 },
+    { "id": "core-api", "from": "flutterCore", "to": "dummyjson", "label": "HTTP", "variant": "emphasis" },
+    { "id": "page-store", "from": "ngPage", "to": "ngStore", "label": "métodos y signals" },
+    { "id": "page-card", "from": "ngPage", "to": "ngCard", "label": "input / output", "fromSide": "bottom", "toSide": "top", "labelDy": 24 },
+    { "id": "store-service", "from": "ngStore", "to": "ngService", "label": "llama" },
+    { "id": "service-api", "from": "ngService", "to": "dummyjson", "label": "HTTP", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Flutter: cambios", "items": ["Settings: tema e idioma persistidos (AD-19)", "Cart persiste vía CartRepository", "Catalog: filtro por categoría + infinite_scroll_pagination", "ProductThumbnail compartido en core/widgets"] },
+    { "dot": "violet", "title": "Angular: cambios", "items": ["Sin NgRx ni Effects: store manual con signals", "Detalle lazy; las rutas desconocidas vuelven al listado", "i18n es/en con @angular/localize", "Lint con angular-eslint"] },
+    { "dot": "amber", "title": "Se mantiene", "items": ["Dos apps independientes, sin código común", "Mismo patrón de errores: BaseException y Errors", "CI: format, analyze y test; APK release; lint, test y build de Angular"] }
+  ]
+}

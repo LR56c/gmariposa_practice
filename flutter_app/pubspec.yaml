@@ -1,5 +1,5 @@
 name: flutter_app
-description: "A new Flutter project."
+description: "Mini Catálogo: Flutter test app with Riverpod."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -104,5 +104,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
+# freezed 4 needs the analyzer 14.x line (AD-18); drop once pub resolves it.
 dependency_overrides:
   analyzer: ">=14.0.0 <14.5.0"

@@ -7,7 +7,7 @@ paradigm: 'Flutter: arquitectura por capas feature-first con regla de dependenci
 scope: 'Repo completo: flutter_app/ (Mini Catálogo) y angular_app/ (Panel de Orders) sobre la API pública DummyJSON. Sin backend propio.'
 status: final
 created: '2026-10-06'
-updated: '2026-10-06'
+updated: '2026-10-07'
 binds: [FR-1..FR-21, NFR-1..NFR-9, T-1..T-5]
 sources:
   - _bmad-output/planning-artifacts/prds/prd-gmariposa_practice-2026-10-05/prd.md
@@ -41,7 +41,8 @@ Equivalencias entre apps (vocabulario de entrevista, no código compartido): `Or
 - **Prevents:** `presentation` hablando con `dio`; ciclos entre features y `core`; dos dueños de un modelo.
 - **Rule:**
   - El sentido de importación es el del diagrama. `domain` solo importa `core/errors`, `fpdart`, `freezed_annotation` y `json_annotation`. `core/` nunca importa features. Ni `domain` ni `presentation` importan `dio`.
-  - Entre features solo se permiten estos imports: `catalog/presentation` y `product_detail/presentation` → `products`; `product_detail/presentation` → `cart/presentation` (botón agregar); `cart/domain` → `products/domain`. `products` no importa ninguna otra feature.
+  - Entre features solo se permiten estos imports: `catalog/presentation` y `product_detail/presentation` → `products`; `product_detail/presentation` → `cart/presentation` (botón agregar); `catalog/presentation` y `product_detail/presentation` → `cart/presentation` y `settings/presentation`, solo para los botones de la AppBar (`CartIconButton`, `SettingsIconButton`); `cart/domain` → `products/domain`. `products` no importa ninguna otra feature. Un widget compartido por varias features (`ProductThumbnail`) vive en `core/widgets/`, no dentro de una feature.
+  - Desviación aceptada: `settings/domain` importa `package:flutter/material.dart` por `ThemeMode`. Queda diferida (ver `deferred-work.md`); lo correcto sería un enum propio.
   - El cumplimiento se revisa con `very_good_analysis` y en el code review de cada story.
 
 ```mermaid
@@ -60,10 +61,10 @@ flowchart LR
 - **Prevents:** dos clientes HTTP, dos modelos `Product`, dos formas de mapear errores.
 - **Rule:**
   - `core/` crea el único `Dio` (URL base de DummyJSON como constante, sin `envied`; `connectTimeout` y `receiveTimeout` de 10 s como constantes).
-  - `data/` implementa el Repository y es el único lugar que captura `DioException`: timeouts y fallos de conexión → `NetworkException`; respuesta no exitosa → `ServerException(status)`; JSON inválido → `ParseException`; una petición cancelada no es un error.
+  - `data/` implementa el Repository y es el único lugar que captura `DioException`: timeouts y fallos de conexión → `NetworkException`; respuesta no exitosa → `ServerException(status)`, y un 404 → `NotFoundException`; JSON inválido, incluido un cuerpo que no es JSON → `ParseException`; una petición cancelada → `Errors([CancelledException()])`, que quien llama descarta y nunca se muestra.
   - `core/` expone un `CancelSignal` propio, y los métodos del Repository lo aceptan opcional. Así `presentation` cancela sin importar `dio`.
   - `features/products/{data,domain}` es el único dueño de `Product` y `ProductRepository`. `Page<T>` es genérico y vive en `core/` (`core/page.dart`). `catalog` y `product_detail` solo tienen `presentation`.
-  - `data/` implementa el Repository en `DioProductData` (sin sufijo `Impl`). `productRepositoryProvider` se declara en `products/presentation/provider/` y es el único lugar de `presentation` que importa `data`; `catalog` y `product_detail` solo importan ese provider.
+  - `data/` implementa el Repository en `DioProductData` (sin sufijo `Impl`). Cada Repository tiene su provider en `<feature>/presentation/providers/` (`productRepositoryProvider`, `cartRepositoryProvider`, `settingsRepositoryProvider`), y esos providers son los únicos lugares de `presentation` que importan `data`; el resto solo importa el provider.
   - Los modelos `freezed` con `fromJson` viven en `domain/` (sin DTO aparte). Un campo requerido ausente o de tipo erróneo produce `ParseException`.
 
 ### AD-4 — Capa de errores de Flutter: `Either` en el contrato, excepción en el borde [ADOPTED]
@@ -71,7 +72,7 @@ flowchart LR
 - **Binds:** FR-2, FR-5, FR-12, T-1, T-2, T-3
 - **Prevents:** excepciones crudas de `dio` en la UI; `fold` repetido en cada notifier; mensajes armados en widgets; una acción que borra la lista al fallar.
 - **Rule:**
-  - `Errors` y `BaseException(message, code)` están en `core/errors/`, con una subclase por falla (`NetworkException`, `ServerException`, `ParseException`).
+  - `Errors` y `BaseException(message, code)` están en `core/errors/`, con una subclase por falla (`NetworkException`, `ServerException`, `NotFoundException`, `ParseException` y `CancelledException`).
   - Los métodos del Repository devuelven `Future<Either<Errors, T>>` (`fpdart`).
   - La **carga inicial** desenvuelve con `getOrThrow()` (extensión propia en `core`, porque `fpdart` no la trae) dentro de `build()`. Riverpod la guarda como `AsyncError(Errors)`.
   - Las acciones que fallan **sin reemplazar el estado** (`loadMore`) hacen `fold` y escriben el error en el campo `loadMore` del estado de datos (un `AsyncValue<void>`). No usan `AsyncValue.guard`.
@@ -85,7 +86,7 @@ flowchart LR
 - **Rule:**
   - `riverpod_generator` en todos los providers. `ref.watch` en `build`, `ref.read` solo en callbacks. Estado inmutable (cada cambio crea una nueva colección).
   - El reintento automático de Riverpod 3 se desactiva: `ProviderScope(retry: (_, __) => null)` y el mismo `retry` en cada `ProviderContainer` de test.
-  - Los providers son autoDispose por defecto. Llevan `keepAlive: true` el del Cart, `searchTerm`, el de `Dio` y el del Repository.
+  - Los providers son autoDispose por defecto. Llevan `keepAlive: true` el del Cart (con `cartTotal` y `cartCount`), `searchTerm`, `debouncedTerm`, `selectedCategory` y `categories` del Catalog, el de `Dio`, los de los Repository, `sharedPreferences` y los de ajustes (`themeModeChoice`).
   - Los notifiers no navegan ni muestran UI; la UI reacciona con `ref.listen`.
 
 ### AD-6 — Catalog, búsqueda y paginación son un solo mecanismo [ADOPTED]
@@ -99,6 +100,7 @@ flowchart LR
   - Descarte de respuestas tardías: el notifier lleva un contador de época que se incrementa en cada `build()`. Toda respuesta (inicial o de `loadMore`) compara su época al volver y se descarta si cambió. La petición pendiente se corta con el `CancelSignal` en `ref.onDispose`.
   - `loadMore()` usa `skip = items.length`; hay más páginas mientras `items.length < total`; se ignora si `loadMore.isLoading`; conserva la lista y, si falla, deja `loadMore` en `AsyncError` con un reintento al final. El pie de la lista lee `loadMore.when(...)`.
   - "Reintentar" de la carga inicial es siempre `ref.invalidate(catalogProvider)`. El de `loadMore` vuelve a llamar a `loadMore()`.
+  - `loadMore()` se ignora mientras el Catalog se recarga (`state.isLoading`; en una recarga el estado conserva el valor anterior), tras un dispose (`!ref.mounted`) y ante una cancelación. El esqueleto de carga no pagina (`total == items.length`). La carga inicial no compara la época: se apoya en que Riverpod descarta el resultado de un `build()` ya desechado.
   - El gatillo de `loadMore()` es `PagedListView` (`infinite_scroll_pagination`), que solo pide la página y no guarda estado: el estado sigue en `Catalog` (antes era un `ScrollController` propio).
 
 ### AD-7 — Cart sin red y con la lógica en su Notifier [ADOPTED]
@@ -110,6 +112,7 @@ flowchart LR
   - El `Notifier` del Cart vive en `presentation/`, con `keepAlive`, es el único dueño del estado y contiene la lógica de agregar, cambiar cantidad y quitar (sin archivo de lógica aparte; decisión de Mauri). `cartTotalProvider` es derivado.
   - `cartCountProvider` se deriva de ese estado (suma de unidades). El total es la suma de precio × cantidad en `double`, y solo se redondea al mostrarlo, con dos decimales y sin símbolo de moneda.
   - El detalle del Product siempre consulta por `id`, sin reutilizar datos del Catalog.
+  - Persistencia (DF-3): el Cart se guarda con `shared_preferences` mediante `CartRepository` (`cart/domain`) y `SharedPreferenceCartData` (`cart/data`). `SharedPreferences` se inyecta en `main()`, así que la lectura es síncrona. Un valor corrupto o desactualizado se descarta y el Cart arranca vacío. El guardado es de mejor esfuerzo: un fallo no rompe el Cart (manda el estado en memoria).
 
 ### AD-8 — Navegación por `context`, rutas autosuficientes [ADOPTED]
 
@@ -178,7 +181,7 @@ flowchart LR
 - **Binds:** NFR-8
 - **Prevents:** una entrega que no compila en un clon limpio; una app que funciona en debug y no en release.
 - **Rule:**
-  - Plataforma objetivo de Flutter: Android (emulador). No hay despliegue ni entornos: ambas apps corren en local contra DummyJSON.
+  - Plataforma objetivo de Flutter: Android (emulador). No hay entornos: ambas apps corren en local contra DummyJSON. Única excepción: la demo de Angular (es/en) se publica en GitHub Pages desde `main` (`.github/workflows/pages.yml`), sin secretos.
   - `AndroidManifest.xml` principal declara el permiso `INTERNET`, y no solo el de debug.
   - Paso 0 del scaffold de Flutter: `flutter upgrade` hasta tener Dart ≥ 3.13. El spine cita la versión de Flutter y de Dart resultantes en el Stack.
   - Angular exige TypeScript `~6.0`.
@@ -202,6 +205,8 @@ flowchart LR
   - Solo el store llama a `OrdersService`. Los componentes leen signals y llaman a sus métodos (`loadOrders`, `loadOrder(id)`, `setMinTotal`); el flujo del `FormControl` al store es unidireccional.
   - Una nueva carga de la lista se ignora si hay una en vuelo (equivale a `exhaustMap`); el detalle admite cargas concurrentes por `id` (equivale a `mergeMap`). Las suscripciones se limpian con `takeUntilDestroyed`.
   - NgRx no se instala (RxJS ya viene con Angular y basta para el store manual); evita una dependencia sin uso (NFR-5).
+  - Los métodos del store son `load()`, `loadOrder(id)` y `setMinTotal(raw)`. Un detalle que se reintenta limpia su error previo.
+  - `parseMinTotal` y el resolver `orderId` aceptan solo números simples: decimales sin signo, hex ni exponente, y enteros positivos seguros para el `id`. La ruta `**` redirige al listado.
 
 ### AD-17 — Angular: Tailwind en lugar de CSS propio [ADOPTED]
 
@@ -217,6 +222,30 @@ flowchart LR
   - `toastification` para el aviso "Agregado al carrito", con `ToastificationWrapper` en el shell y la llamada desde el callback de la UI, nunca desde el Notifier.
   - `wolt_modal_sheet` solo si se hace el bonus DF-2 (modal del selector de categoría); si no resuelve con `pub get`, se usa `showModalBottomSheet`. Su último release es de febrero de 2025.
   - `shared_preferences` solo si se hace el bonus DF-3. `isar_community` se descartó: `isar_community_generator` 3.3.2 exige `analyzer >=8.0.0 <11.0.0` y `freezed` 4.0.2 exige `>=14.0.0 <15.0.0` (rangos de pub.dev, sin `pub get` real). `hive_ce` es clave-valor, no un ORM, y añadiría adaptadores generados.
+
+### AD-19 — Ajustes: tema e idioma [ADOPTED; bonus fuera de los obligatorios]
+
+- **Binds:** DF-6.
+- **Prevents:** dos dueños del tema; un guardado que rompa la app.
+- **Rule:**
+  - La feature `settings/{data,domain,presentation}` guarda el tema y el idioma con `shared_preferences` (`SettingsRepository`). `ThemeModeChoice` (Notifier `keepAlive`) es el único dueño del tema; el idioma lo mantiene `slang` (`LocaleSettings`) y la hoja de ajustes lo persiste.
+  - `main()` lee el idioma guardado y lo aplica antes de `runApp`; un código desconocido cae al idioma base (`slang` elige la mejor coincidencia).
+  - El guardado es de mejor esfuerzo (como en AD-7). La hoja se abre con `wolt_modal_sheet` desde un botón de la AppBar.
+
+### AD-20 — i18n en ambas apps [ADOPTED; bonus]
+
+- **Rule:**
+  - **Flutter:** `slang`, con `es` como idioma base y `en` como biblioteca diferida. Los textos viven en `core/i18n/`; ningún widget lleva un texto literal de usuario.
+  - **Angular:** `@angular/localize` en tiempo de compilación. El español es la fuente, la traducción está en `src/locale/messages.en.xlf`, y el build produce `/es/` y `/en/`. El selector del toolbar cambia de paquete reescribiendo la ruta (no hace nada en `ng serve`, que sirve un solo idioma).
+
+### AD-21 — Calidad y CI [ADOPTED]
+
+- **Binds:** NFR-2, NFR-3, NFR-4, AD-1, AD-13.
+- **Rule:**
+  - `.github/workflows/ci.yml` corre en cada `push` y en PRs a `main` y `dev`, con una cancelación por rama (`concurrency`). Jobs: `flutter` (`dart format`, `flutter analyze`, `flutter test`), `flutter-apk` (build release) y `angular` (`ng lint`, `ng test`, `ng build`).
+  - **Angular:** el lint es `angular-eslint` (`npm run lint`).
+  - La prueba de integración de Flutter (`integration_test/`) necesita emulador y **no corre en CI**: es la puerta manual antes de `main`.
+  - Los hallazgos de la review por lotes (R1–R8) que quedaron pendientes están en `_bmad-output/implementation-artifacts/deferred-work.md`.
 
 ## Consistency Conventions
 
@@ -239,7 +268,10 @@ flowchart LR
 | Angular (CLI y core) · TypeScript · Node | 22.2.1 · ~6.0 · 24.16 |
 | tailwindcss · @tailwindcss/postcss · postcss | confirmar al hacer el scaffold (AD-17) |
 | toastification · wolt_modal_sheet · shared_preferences | 3.2.0 · 0.11.0 (solo bonus DF-2) · confirmar (solo bonus DF-3) (AD-18) |
-| effect · Vitest | 4.0.1 · 5.0.3 |
+| effect · Vitest | 4.0.0-rc.112 (el Stack original decía 4.0.1) · 5.0.3 |
+| angular-eslint · eslint · typescript-eslint | 22.5.0 · ^10.9.1 · 8.69.0 (AD-21) |
+| skeletonizer · cached_network_image · infinite_scroll_pagination | ^3.0.0 · ^4.0.4 · ^5.1.1 (AD-6, AD-18) |
+| slang · slang_flutter · shared_preferences | ^4.19.2 · ^4.19.0 · ^2.5.6 (AD-19, AD-20) |
 
 ## Structural Seed
 
@@ -279,16 +311,17 @@ erDiagram
 
 ```text
 flutter_app/lib/
-  core/            # Dio, CancelSignal, errors/, theme, extensiones
+  core/            # Dio, CancelSignal, errors/, i18n/, logging/, theme/, widgets/ (compartidos)
   presentation/    # shell: app, router, tema aplicado
   features/
-    products/{data,domain}      # Product, ProductRepository (único dueño); Page<T> está en core/
+    products/{data,domain,presentation,utils}  # Product, ProductRepository (único dueño); Page<T> está en core/
     catalog/presentation
     product_detail/presentation
-    cart/{domain,presentation}  # CartItem en domain; lógica en el Notifier
+    cart/{data,domain,presentation}            # CartItem en domain; lógica en el Notifier (AD-7)
+    settings/{data,domain,presentation}        # tema e idioma (AD-19)
 angular_app/src/app/
-  core/            # errors, tipos compartidos, OrdersService
-  features/orders/ # components/, store/ (servicio-store manual, AD-16)
+  core/            # errors, toolbar (tema e idioma)
+  features/orders/ # components/, data/ (OrdersService, esquema), pipes/, state/ (servicio-store, AD-16)
 ```
 
 ## Capability → Architecture Map

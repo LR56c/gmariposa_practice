@@ -6,7 +6,7 @@ Future<void> _wait(int ms) => Future<void>.delayed(Duration(milliseconds: ms));
 
 void main() {
   test('debounces typing, trims, and passes an empty term at once', () async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(retry: (_, _) => null);
     addTearDown(container.dispose);
     final emitted = <String>[];
     container.listen(

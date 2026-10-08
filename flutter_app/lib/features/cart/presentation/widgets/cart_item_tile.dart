@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/i18n/strings.g.dart';
+import 'package:flutter_app/core/widgets/product_thumbnail.dart';
 import 'package:flutter_app/features/cart/domain/cart_item.dart';
 import 'package:flutter_app/features/cart/presentation/providers/cart_provider.dart';
-import 'package:flutter_app/features/catalog/presentation/widgets/product_thumbnail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// One Cart row: thumbnail, title, unit price, −/+ and a separate "Quitar".

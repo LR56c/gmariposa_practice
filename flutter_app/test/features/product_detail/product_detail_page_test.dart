@@ -143,10 +143,13 @@ void main() {
   testWidgets('/product/abc goes to the error screen without a request', (
     tester,
   ) async {
+    // The router is a global: put it back so other tests start at `/`.
+    addTearDown(() => appRouter.go('/'));
     appRouter.go('/product/abc');
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
+          retry: (_, _) => null,
           overrides: [
             productRepositoryProvider.overrideWithValue(repository),
             prefs,

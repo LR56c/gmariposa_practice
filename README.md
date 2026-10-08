@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/LR56c/gmariposa_practice/actions/workflows/ci.yml/badge.svg)](https://github.com/LR56c/gmariposa_practice/actions/workflows/ci.yml)
 
-Prueba técnica Jr Flutter (Riverpod) + Angular. Cada carpeta es independiente (lint, test y lockfile propios).
+Prueba técnica Jr Flutter (Riverpod) + Angular.
 
 ## Ver la entrega
 
@@ -11,97 +11,86 @@ Prueba técnica Jr Flutter (Riverpod) + Angular. Cada carpeta es independiente (
   [pestaña Actions](https://github.com/LR56c/gmariposa_practice/actions/workflows/ci.yml), abre el último run en verde y baja
   `app-release-apk` desde **Artifacts** (GitHub lo conserva 90 días). Está firmado con la clave debug, solo para probar.
 
+- **Respuestas escritas (Partes 1 y 4):** [`RESPUESTAS.md`](RESPUESTAS.md).
+
 ## Cómo ejecutar
 
-- **flutter_app/:** ver [`flutter_app/README.md`](flutter_app/README.md) (fvm, `flutter run`, checks y prueba de integración).
-- **angular_app/:** `npm install`, `ng serve`, `ng test`, `ng build` (detalle más abajo y en [`angular_app/README.md`](angular_app/README.md)).
+- **flutter_app/:** con un emulador Android abierto (o un dispositivo conectado):
+
+  ```bash
+  cd flutter_app
+  flutter pub get
+  flutter run
+  ```
+
+  Más detalle en [`flutter_app/README.md`](flutter_app/README.md).
+- **angular_app/:** ver [`angular_app/README.md`](angular_app/README.md) (`npm install`, `ng serve`, `ng test`, `ng build`).
 
 Versiones: Flutter 3.47.6 (stable), Dart 3.13.5, Angular 22.2, TypeScript 6.0, Node 24.
 
-## Estado de la entrega
+## Deseables y bonus hechos
 
-| Parte | Entregable | Estado |
-| --- | --- | --- |
-| Flutter | Catálogo con carga, vacío y error con reintento; búsqueda con debounce de 400 ms; scroll infinito; detalle; carrito con cantidades, total y contador; `go_router`; estado solo con Riverpod | Cumplido |
-| Angular | Lista de órdenes en tarjetas, filtro por total mínimo, detalle en `/orders/:id` con lazy loading, store con signals, pipe propio, `OnPush`, `@if`/`@for` | Cumplido |
-| Pruebas | Flutter: 25 unitarias y 19 de widget, más 1 de integración; Angular: pruebas con Vitest | Cumplido |
-| Calidad | `dart format`, `flutter analyze` sin issues, `ng build` sin warnings; todo en el CI | Cumplido |
-| Partes 1 y 4 | `RESPUESTAS.md` (preguntas conceptuales y code review) | **Pendiente**: se está redactando aparte; se enlazará aquí |
+- **Flutter, deseables:** paginación infinita, filtro por categoría, carrito persistente (`shared_preferences`), `go_router` y tema claro/oscuro.
+- **Flutter, bonus:** `riverpod_generator`, prueba de integración del flujo buscar → detalle → carrito y GitHub Action (analyze y test).
+- **Angular, deseables:** ruta de detalle con lazy loading, signals, control flow nuevo (`@if` / `@for`), pipe propio y `OnPush`.
+- **Errores tipados** en las dos apps (`Either` en Flutter, `Result` en Angular).
 
-Extras hechos: filtro por categoría, carrito persistente (`shared_preferences`), prueba de integración, GitHub Actions
-(analyze, test y APK como artifact), i18n es/en y modo oscuro en las dos apps, demo en GitHub Pages.
+## Extras propios
+
+- i18n es/en y modo oscuro en Angular, y modal de ajustes (tema e idioma) en Flutter.
+- Filas esqueleto al cargar más productos.
+- Deep link en Android.
+- APK de release como artifact del CI.
+- Demo Angular en GitHub Pages.
 
 ## Decisiones de arquitectura
 
-- **Dos apps independientes**, sin código compartido: cada una con su lint, sus pruebas y su lockfile.
 - **Flutter, capas por feature:** `domain` (modelos e interfaces) / `data` (implementaciones) / `presentation` (providers y widgets).
   Los Repository son interfaces con una implementación: `DioProductData`, `SharedPreferenceCartData` y `SharedPreferenceSettingsData`.
 - **Riverpod con generador (`riverpod_generator`)**, un tipo de provider para cada necesidad:
   `AsyncNotifier` para el catálogo (`Catalog`, con búsqueda y paginación), `Notifier` para el estado síncrono (`Cart`, `SearchTerm`,
   `SelectedCategory`, `ThemeModeChoice`), `FutureProvider` para cargas de una vez (`categories`, `productDetail` con `family`),
-  `StreamProvider` para el debounce (`debouncedTerm`) y `Provider` para dependencias (`dio`, los Repository, `cartTotal`, `cartCount`).
+  `StreamProvider` para el debounce (`debouncedTerm`) y `Provider` para dependencias (`dio`, los Repository).
+- **Providers derivados:** `cartTotal` y `cartCount` se calculan a partir del estado de `Cart`, así que no se guardan aparte.
 - **Paginación infinita con `infinite_scroll_pagination`:** la librería solo dibuja la lista y pide la siguiente página; el estado
-  (`items`, `total`, `loadMore`) sigue en el `Catalog` de Riverpod, con descarte de respuestas tardías y cancelación. Mientras carga muestra filas esqueleto.
+  (`items`, `total`, `loadMore`) sigue en el `Catalog` de Riverpod. Mientras carga muestra filas esqueleto.
 - **Errores tipados:** los métodos del Repository devuelven `Either<Errors, T>` (`fpdart`) y la UI traduce el error a un mensaje; las
   excepciones solo existen en el borde de red.
 - **Modelos con `freezed`:** inmutables, con `==`, `copyWith` y `fromJson` generados, para no escribir ese código a mano. Los archivos generados
   están commiteados, así que la app compila sin ejecutar `build_runner`.
-- **Angular, store manual sin NgRx:** un servicio `root` con signals (estado privado, lectura `readonly`, `computed` para lo derivado).
-  RxJS ya viene con Angular y basta para este alcance; NgRx habría sido una dependencia sin uso real. Validación y errores con `effect` (`Schema` y `Result`).
+- **Angular, store manual:** un servicio `root` con signals (estado privado, lectura `readonly`, `computed` para lo derivado).
+- **Angular, validación y errores:** con `effect` (`Schema` y `Result`).
 - **Tailwind sobre tokens de diseño:** los mismos colores y medidas de `DESIGN.md` en las dos apps, y el modo oscuro solo redefine esos tokens.
 
 Paralelos Flutter ↔ Angular: servicio ≈ Repository · store con signals ≈ provider / Notifier · componente presentacional ≈ widget sin estado.
 
-## Deep link en Android
-
-`adb shell am start -a android.intent.action.VIEW -d "gmariposa://app/product/5"` abre el detalle del producto 5. Verificado en el emulador.
-
-## Pendientes
-
-- `RESPUESTAS.md` (Partes 1 y 4), en redacción.
-- Ensayo de explicación del flujo de providers y de Orders, antes de entregar.
-
 ## Con más tiempo
 
-- Pruebas de widget del modal de ajustes y del cambio de idioma.
-- Firmar el APK con una clave propia en vez de la de debug.
-- Un caché de respuestas de red y una prueba de integración también para Angular.
+- Caché offline del catálogo
+- Favoritos
+- Notificaciones push
+- Historial de búsquedas y pedidos
+- Compartir producto con deep link
+- Panel de métricas de ventas
+- Exportar órdenes a CSV
+- Edición del estado de una orden
+
+## Flujo de ramas
+
+Modelo `main ← dev ← sprint/<epic> ← story`:
+
+- **`main`:** solo versiones verificadas (`dart format`, `flutter analyze`, `flutter test` y prueba en emulador). Nunca se commitea directo.
+- **`dev`:** integración; recibe cada sprint ya cerrado.
+- **`sprint/<epic>`** (ej. `sprint/e2`): se crea desde `dev` al empezar el epic y recibe las stories.
+- **Una rama por story**, desde su sprint: `<tipo>/<epic>-<story>-<slug>` (ej. `feat/e2-s3-cart-notifier`). Al cerrar la story se
+  fusiona con `--no-ff` al sprint, para conservar el historial real.
+- **Cierre de sprint:** se verifica en la rama del sprint, se fusiona a `dev` y luego a `main` (mensaje `merge: sprint/<epic>`).
+  Un fix posterior va en `fix/...` desde `dev`.
+- **Commits:** Conventional Commits (`feat|fix|docs|test|refactor|chore|ci(scope): resumen`), pequeños y frecuentes.
+
+Al trabajar solo no abrí pull requests; el merge `--no-ff` de cada story cumple ese papel, y en equipo sería el PR hacia la rama del sprint.
+El Epic 1 se fusionó directo a `main`, antes de adoptar este modelo.
 
 ## CI
 
-`.github/workflows/ci.yml` corre en cada `push` y en cada `pull_request` hacia `main` o `dev`, con jobs independientes:
-
-- **flutter** (Flutter 3.47.6): `flutter pub get`, `dart format --set-exit-if-changed .`, `flutter analyze`, `flutter test`.
-- **flutter-apk** (tras `flutter`): `flutter build apk --release` y sube `app-release.apk` como artifact (firmado con la clave debug, solo para probar).
-- **angular** (Node 24): `npm ci`, `npx ng test --no-watch`, `npx ng build`.
-
-No ejecuta la prueba de integración de Flutter (`integration_test/`), porque requiere emulador o dispositivo.
-Para reproducirlo en local, corre esos mismos comandos dentro de `flutter_app/` y `angular_app/`.
-
-## Demo (GitHub Pages)
-
-La app Angular se despliega en https://lr56c.github.io/gmariposa_practice/ con `.github/workflows/pages.yml` (en cada push a `main`
-o a mano). Es un extra de demostración, no parte del CI. El build está localizado: la raíz redirige a `/es/` o `/en/` según el
-idioma del navegador, y `404.html` carga el `index.html` del idioma para que los enlaces profundos (`/es/orders/3`) funcionen al recargar.
-
-Para verlo en local como en producción: `cd angular_app && npx ng build` y servir `dist/angular_app/browser/es` con un servidor estático
-(por ejemplo `npx http-server dist/angular_app/browser/es -p 8080 --proxy http://localhost:8080?`).
-
-## angular_app
-
-Panel de Órdenes. Angular 22.2 (standalone, zoneless, TypeScript 6.0 `strict`), runner de pruebas Vitest, Node 24.
-
-```bash
-cd angular_app
-npm install
-ng serve      # http://localhost:4200
-ng test
-ng build
-```
-
-Si no tienes el CLI global, usa `npx ng <comando>`.
-
-### Dependencias
-
-- **Tailwind 4.3** (`tailwindcss`, `@tailwindcss/postcss`, `postcss`): estilado con utilidades y los tokens de
-  `DESIGN.md` en un bloque `@theme`, para compartir identidad visual con la app Flutter sin escribir CSS propio.
+`.github/workflows/ci.yml` corre en cada `push` y en cada `pull_request` hacia `main` o `dev`

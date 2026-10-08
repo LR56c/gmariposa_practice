@@ -1,24 +1,24 @@
 # flutter_app
 
-Product catalog built with Flutter and Riverpod (Android).
+Catálogo de productos hecho con Flutter y Riverpod (Android).
 
-## Versions
+## Versiones
 
-| Tool | Version |
+| Herramienta | Versión |
 | --- | --- |
-| Flutter | 3.47.6 (stable), pinned in `.fvmrc` |
+| Flutter | 3.47.6 (stable), fijada en `.fvmrc` |
 | Dart | 3.13.5 |
 
-## Run
+## Ejecutar
 
 ```sh
-dart pub global activate fvm   # skip if fvm is already installed
-fvm install                    # reads .fvmrc
+dart pub global activate fvm   # omitir si fvm ya está instalado
+fvm install                    # lee .fvmrc
 fvm flutter pub get
-fvm flutter run               # with an Android emulator running
+fvm flutter run               # con un emulador Android abierto
 ```
 
-Without fvm, any Flutter 3.47.x stable works.
+Sin fvm sirve cualquier Flutter 3.47.x stable.
 
 ## Checks
 
@@ -28,28 +28,35 @@ fvm flutter analyze
 fvm flutter test
 ```
 
-## Integration test
+## Prueba de integración
 
-`integration_test/main_flow_test.dart` covers search → detail → add to cart → cart, with a fake repository (no network).
-It needs an emulator or device, so CI does not run it.
+`integration_test/main_flow_test.dart` cubre búsqueda → detalle → agregar al carrito → carrito, con un repositorio falso (sin red).
+Necesita un emulador o dispositivo, por eso el CI no la ejecuta.
 
 ```sh
-fvm flutter test integration_test -d emulator-5554   # any running device id
+fvm flutter test integration_test -d emulator-5554   # id de cualquier dispositivo abierto
 ```
 
-Verified twice in a row on an Android emulator (`sdk gphone16k x86 64`, API 36).
+Verificada dos veces seguidas en un emulador Android (`sdk gphone16k x86 64`, API 36).
 
-## Settings
+## Extras
 
-The gear icon next to the cart opens a modal with the theme (system, light, dark) and the language (Español, English).
-Both choices are saved with `shared_preferences` through `SettingsRepository`; the Cart uses the same pattern
-(`CartRepository` and `SharedPreferenceCartData`).
+- Filtro por categoría.
+- Carrito persistente (`shared_preferences`).
+- Modal de ajustes: tema (sistema, claro, oscuro) e idioma (es, en), con persistencia.
+- Filas esqueleto al cargar más productos.
+- Prueba de integración.
+- Deep link en Android.
+- APK de release construido por el CI (artifact `app-release-apk`, firmado con la clave debug, solo para probar).
 
-## Release APK
+## Librerías
 
-CI builds `app-release.apk` and uploads it as the `app-release-apk` artifact (signed with the debug key, for testing only).
-
-## Extra dependencies
-
-- `toastification`: the brief "Agregado al carrito" toast (UX-DR9). It shows from the button callback via `ToastificationWrapper`, with no provider and no `SnackBar`.
-- `infinite_scroll_pagination`: renders the Catalog list and asks for the next page. It does not own the state: `Catalog` (Riverpod) keeps `items`, `total` and `loadMore`, and the page builds a `PagingState` from it. While a page loads it shows skeleton rows, not a spinner.
+- **Estado y navegación:** `flutter_riverpod`, `riverpod_annotation` / `riverpod_generator`, `go_router`.
+- **Red y errores:** `dio`, `fpdart` (`Either` para errores tipados).
+- **Modelos:** `freezed`, `json_annotation` / `json_serializable`.
+- **Persistencia:** `shared_preferences`.
+- **UI:** `infinite_scroll_pagination` (dibuja la lista y pide la siguiente página; el estado sigue en `Catalog`), `skeletonizer`,
+  `cached_network_image`, `toastification`, `wolt_modal_sheet`.
+- **i18n y assets:** `slang` / `slang_flutter`, `flutter_gen_runner`.
+- **Utilidades:** `stream_transform` (debounce de la búsqueda).
+- **Pruebas y lint:** `flutter_test`, `integration_test`, `mocktail`, `very_good_analysis`.
