@@ -19,7 +19,6 @@ Future<void> main() async {
   runApp(
     TranslationProvider(
       child: ProviderScope(
-        retry: (_, _) => null,
         overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
         observers: const [if (!kReleaseMode) LoggingProviderObserver()],
         child: const App(),
